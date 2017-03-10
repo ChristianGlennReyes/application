@@ -188,6 +188,8 @@ class Start extends CI_Controller {
 		}
 	}
 
+	// practice lang
+
 	
 }
 
