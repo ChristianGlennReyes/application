@@ -1,0 +1,114 @@
+
+				// Project Reassign
+				echo '<div class="modal fade" id="assign'.$btn.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									<center><h2 class="modal-title">Available Translators</h2></center>
+								</div>
+								<div class="modal-body col-md-12">
+									<div class="form-group col-md-12">
+										<form action="'.$_SERVER['PHP_SELF'].'" method="post">';
+											if ($row11['translatorid'] == NULL || $row12['projectstatus'] == 'Closed') {
+												echo '<div>
+														<center><p>Project cannot be re-assigned!</p></center>
+													  </div>';
+											} else {
+												$projdeet = "SELECT language from projectdetails where projectcode = '{$_SESSION[$project]}'";
+												$getprojdeet = mysqli_query($dbc, $projdeet);
+												$row15 = mysqli_fetch_array($getprojdeet,MYSQL_ASSOC);
+
+												$translator = "SELECT T.translatorid, T.fullname from translator T join translatorlanguage TL
+															   on T.translatorid = TL.translatorid where TL.language = '{$row15['language']}'
+															   and T.translatorstatus = 'Active'";
+												$gettrans = mysqli_query($dbc,$translator);	
+												$num_rows = $gettrans->num_rows;
+
+												$details2 = "SELECT startdate, deadline from projectdetails where projectcode = '{$_SESSION[$project]}'";
+												$get2 = mysqli_query($dbc, $details2);
+												$row13 = mysqli_fetch_array($get2,MYSQL_ASSOC);
+
+
+												if (!empty($num_rows)) {
+													echo '<div class="col-md-6">
+														  	<select name = "translator" class="form-control" required>
+														  	<option value="">Select Translator</option>';
+													while ($row12 = mysqli_fetch_array($gettrans,MYSQL_ASSOC)) {
+														$event2 = "SELECT startdate, enddate from event where translatorid = '{$row12['translatorid']}'";
+														$get3 = mysqli_query($dbc, $event2);
+														$row14 = mysqli_fetch_array($get3, MYSQL_ASSOC);
+
+														if ($row14['startdate'] < $row13['startdate'] || $row14['startdate'] > $row13['deadline'] || 
+															$row14['enddate'] < $row13['startdate'] || $row14['enddate'] > $row13['deadline']){
+																$trans = $row12['translatorid'];
+																echo '<option value="'. $trans . '">';
+																echo $row12['fullname'];
+																echo '</option>';
+														}
+														
+													}
+													echo '	</select>
+														 </div>
+														 <div class="col-md-4 col-md-offset-2">
+															<button type="submit" class="btn btn-primary btn-s" name="reassign'.$btn.'">Add Translator</button>
+														 </div>';
+												} else {
+													echo '<div class="col-md-8 col-md-offset-2">
+															<p>There are no available translators!</p>
+														  </div>';
+												}
+											}
+											
+			echo '						</form>
+			    				</div>										
+	        		        </div>
+								<div class="modal-footer">
+									
+								</div>
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
+					</div>';
+
+				if (isset($_POST['reassign'.$btn])){
+					$store = "SELECT projectcode, managerid, translatorid, clientid, language, startdate, deadline, totalnumofwords
+							  from projectdetails where projectcode ='{$_SESSION[$project]}'";
+					$getstore = mysqli_query($dbc, $store);
+					$row9 = mysqli_fetch_array($getstore,MYSQL_ASSOC);
+
+					$projectcode = $row9['projectcode'];
+					$managerid = $row9['managerid'];
+					$translatorid = $row9['translatorid'];
+					$clientid = $row9['clientid'];
+					$language = $row9['language'];
+					$startdate = $row9['startdate'];
+					$deadline = $row9['deadline'];
+					$totalnumofwords = $row9['totalnumofwords'];
+
+					$delete = "DELETE from projectdetails where projectcode = '{$_SESSION[$project]}'";
+					$deleete = mysqli_query($dbc,$delete);
+
+					$insertnew = "INSERT into projectdetails (projectcode, managerid, translatorid, clientid, language, startdate, deadline, totalnumofwords) 
+								  VALUES ('$projectcode','$managerid', '{$_POST['translator']}', '$clientid','$language','$startdate','$deadline','$totalnumofwords')";
+					$getinsert = mysqli_query($dbc, $insertnew);
+
+					$getdetails = "SELECT projectcode, translatorid from projectdetails where projectcode = '$projectcode'";
+					$getdet = mysqli_query($dbc, $getdetails);
+					$details2 = mysqli_fetch_array($getdet, MYSQL_ASSOC);
+
+					$insertaudit = "insert into projectaudit(projectcode, date,formertranslator, newtranslator, typeofaudit)
+					values ('{$details2['projectcode']}',NOW(),'$translatorid','{$details2['translatorid']}','UPDATE')";
+					$auditres = mysqli_query($dbc, $insertaudit);
+
+					if ($getinsert){
+						$message.='<p> Project has been successfully re-assigned! </p>';
+					} 
+			
+				}
+
+
+				
+
+
+<button type="submit" name="activate'.$cnt.'" class="btn btn-default"> Activate Project </button>
+<button type="button" class="btn btn-default" data-toggle="modal" data-target="#cancel'.$cnt.'"> Cancel Project </button>
