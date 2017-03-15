@@ -202,8 +202,6 @@ class ProjectManager extends CI_Controller {
 		$this->session->unset_userdata('sentagreementform');
 	}
 
-	
-
 	public function DownloadTranslatedDocument() {
 		$data = $this->ProjectManager_model->getTranslatedDocument($this->session->userdata('projectcode'));
 
@@ -219,8 +217,6 @@ class ProjectManager extends CI_Controller {
 		flush();
 		echo $file;
 	}
-
-
 }
 
 ?>
