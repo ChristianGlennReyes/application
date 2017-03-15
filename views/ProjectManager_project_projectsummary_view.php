@@ -229,8 +229,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				
 				$close = 'close'.$btn;
 				$former = 'former'.$btn;
-
+				$purchase = 'purchase'.$btn;
+				$invoice = 'invoice'.$btn;
 				$project = 'project'.$btn;
+
 				// If there is no Translator, Project status cannot be changed
 				$checktranslator = "SELECT translatorid from projectdetails where projectcode = '{$_SESSION[$project]}'";
 				$translator1 = mysqli_query($dbc,$checktranslator);
@@ -239,6 +241,257 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				$checkstatus = "SELECT projectstatus from project where projectcode = '{$_SESSION[$project]}'";
 				$status1 = mysqli_query($dbc, $checkstatus);
 				$row12 = mysqli_fetch_array($status1, MYSQL_ASSOC);
+
+				// Purchase Order View
+				$getdetailsofpurchase = "SELECT t.fullname as translator, d.deliverfromcountry as country, pm.fullname as projectman, 
+				d.delivertomanageremail as email, d.projectcode as projectcode, j.job as jobtype, l.languagedesc as language,
+				d.startdate as startdate, d.deadline as deadline, d.totalnumofwords as totalnum, ROUND(t.priceperword, 2) as price,
+				te.term as term, ROUND(d.po_total,2) as amount, d.po_no as purchasenum from projectdetails d JOIN translator t on d.translatorid = t.translatorid JOIN projectmanager PM
+				on d.managerid = pm.managerid JOIN job_ref j on d.jobno = j.jobno JOIN language_ref l on d.language = l.language
+				JOIN term_ref te on d.termno = te.termno where d.projectcode = '{$_SESSION[$project]}'";
+				$detailsofpurchase = mysqli_query($dbc, $getdetailsofpurchase);
+				$row30 = mysqli_fetch_array($detailsofpurchase, MYSQL_ASSOC);
+
+				$getcountryname = "SELECT country from countryaddress_ref where countrycode = '{$row30['country']}'";
+				$countryname = mysqli_query($dbc, $getcountryname);
+				$row31 = mysqli_fetch_array($countryname,MYSQL_ASSOC);
+
+				echo '<div class="modal fade" id="'.$purchase.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									<h2 class="modal-title"><center>View Purchase Order</center></h2>
+								</div>
+								<div class="modal-body col-md-12">';
+									echo '<div style="float: right;font-size: 50%;">
+												<b>Orange Translations Ltd.</b><br>
+												7/F., Hong Kong Trade Centre<br>
+												161-7 Des Voeux Road Central<br>
+												Hong Kong<br>
+												36892487
+												Phone +852-5808-0576<br>
+												pm@orangetranslations.com<br> 
+												www.orangetranslations.com<br>
+											</div>
+
+											<br><br><br><br>
+											
+											<h5 align = "center">Purchase Order # '.$row30['purchasenum'].'</h5>
+											
+											<hr>
+												<div style ="float:right;font-size: 60%;">
+												<b>Deliver to</b><br>
+												'.$row30['projectman'].'<br>
+												'.$row30['email'].'<br>
+												</div>
+												
+												<div style="font-size: 60%;">
+												<b>For the attention of</b><br>
+												'.$row30['translator'].'<br>
+												From '.$row31['country'].'<br>
+												</div>
+											<hr>
+											
+												<table width = 70% align = "center">
+										            <tr>
+										                <th style="font-size: 50%;" align = left>Summary</th>
+										                <td style="font-size: 50%;"align = right>'.$row30['projectcode'].'</td>
+										            </tr>
+										            <tr>
+										                <th style="font-size: 50%;" align = left>Job Type</th>
+										                <td style="font-size: 50%;" align = right>'.$row30['jobtype'].'</td>
+										            </tr>
+										            <tr>
+										                <th style="font-size: 50%;" align = left>Language Pair</th>
+										                <td style="font-size: 50%;" align = right>'.$row30['language'].'</td>
+										            </tr>
+													<tr>
+										                <th style="font-size: 50%;" align = left>Start Date</th>
+										                <td style="font-size: 50%;" align = right>'.$row30['startdate'].'</td>
+										            </tr>
+													<tr>
+										                <th style="font-size: 50%;" align = left>Deadline</th>
+										                <td style="font-size: 50%;" align = right>'.$row30['deadline'].'</td>
+										            </tr>
+										        </table>
+												
+											<br>
+												
+												<table width = 40% align = right>
+													<tr>
+														<th style="font-size: 50%;"><center>Quantity</center></th>
+														<th style="font-size: 50%;"><center>Price</center></th>
+														<th style="font-size: 50%;"><center>Amount</center></th>
+													</tr>
+													<tr>
+														<td style="font-size: 50%;" align = center>'.$row30['totalnum'].'</td>
+														<td style="font-size: 50%;" align = center>'.$row30['price'].'</td>
+														<td style="font-size: 50%;" align = center>'.$row30['amount'].'</td>
+													<tr>
+													<tr>
+														<td></td>
+														<td style="font-size: 50%;" align = center>SUBTOTAL</td>
+														<td style="font-size: 50%;" align = center>'.$row30['amount'].'</td>
+													</tr>
+													<tr>
+														<td></td>
+													</tr>
+													<tr>
+														<td></td>
+														<td style="font-size: 50%;" align = center><b>TOTAL</b>
+														<td style="font-size: 50%;" align = center><b>'.$row30['amount'].'</b>
+												</table>
+												
+												<br><br><br><br>
+												
+												<div style="font-size: 50%;">
+												Payment terms: '.$row30['term'].'<br><br>
+												Payment options:<br><br>
+												1.) If you are billing us in EUR:<br>
+												<p align="justify">
+												a) Bank Transfer (from our bank account in Germany): Please provide your IBAN and BIC (or account number and Swift code if you are located outside of the SEPA areas).<br>
+												b) Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.
+												</p>
+												<br>
+												2.) If you are billing us in USD:<br>
+												<p align="justify">
+												a) Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and
+												SWIFT code.<br>
+												b) Paypal: Please provide your Paypal email address.<br>
+												c) Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.<br>
+												d) If you are located in the US we can pay you by check through our North Carolina office. Please email us your W9
+												form.
+												</p>
+												<br>
+												3) If your are billing us in HKD:<br>
+												<p align="justify">
+												Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and SWIFT code.
+												</p>
+		    		      						</div>
+		    		      						<br>
+		    		      						<form method="post">
+		    		      							<button type="submit" name="settle" class="btn btn-primary col-md-2 col-md-offset-5"> Settled </button>
+		    		      						<form>';
+		    		      echo '</div><!-- /.modal-body -->
+								<div class="modal-footer">
+									
+								</div><!-- /.modal-footer -->
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
+					</div>';
+
+
+				// Invoice View
+				$getdetailsofinvoice = "SELECT c.fullname as client, c.countrycode as countrycode, MONTH(i.invoicedate) as invoicedatemonth,
+				DAY(i.invoicedate) as invoicedateday, YEAR(i.invoicedate) as invoicedateyear, d.invoice_no as invoice_no, p.projectname as name,
+				d.startdate as startdate, d.invoicetotal as total, te.term as term from projectdetails d JOIN client c on d.clientid = c.clientid JOIN invoice i on 
+				d.invoice_no = i.invoice_no JOIN project p on d.projectcode = p.projectcode JOIN term_ref te on d.termno = te.termno
+				where d.projectcode = '{$_SESSION[$project]}' ";
+				$detailsofinvoice = mysqli_query($dbc, $getdetailsofinvoice);
+				$row32 = mysqli_fetch_array($detailsofinvoice, MYSQL_ASSOC);
+
+				$getcountryclient = "SELECT country from countryaddress_ref where countrycode = '{$row32['countrycode']}'";
+				$countryclient = mysqli_query($dbc, $getcountryclient);
+				$row33 = mysqli_fetch_array($countryclient, MYSQL_ASSOC);
+
+				$getdelivery = "SELECT datedelivered from projectdetails where projectcode = '{$_SESSION[$project]}' ";
+				$delivery = mysqli_query($dbc, $getdelivery);
+				$row34 = mysqli_fetch_array($delivery, MYSQL_ASSOC);
+
+				echo '<div class="modal fade" id="'.$invoice.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									<h2 class="modal-title"><center>View Invoice</center></h2>
+								</div>
+								<div class="modal-body col-md-12">';
+									echo '<div style="float:right;font-size:50%">
+											Orange Translations Ltd.<br>
+											7/F Hong Kong Trade Centre<br>
+											161 Des Voeux Road Central<br>
+											Hong Kong<br>
+											Tel +852-5808-0576<br>
+											info@orangetranslations.com<br> 
+											</div>
+											
+											<br><br><br><br>
+											
+											<div align = "left" style="font-size:60%">
+											<b>'.$row32['client'].'</b><br>
+											'.$row33['country'].'<br>	
+											</div>
+											
+											<br>
+											
+											<div align = "right" style="font-size:60%">
+											'.date('F j Y', mktime(0,0,0, $row32['invoicedatemonth'], $row32['invoicedateday'],$row32['invoicedateyear'])).'<br>
+											Invoice # '.$row32['invoice_no'].'<br>
+											</div>
+											
+											<br>
+											
+											<h4><center> Invoice </center></h4>
+											<h5><b><center> Translation of files </center></b></h5>
+											
+											<br>
+											
+											<table width="100%" align = "center" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
+												<tr>
+													<th style="font-size:50%">Subject/Filename</th>
+													<th style="font-size:50%">Requested by</th>
+													<th style="font-size:50%">Date Requested</th>
+													<th style="font-size:50%">Date Delivered</th>
+													<th style="font-size:50%">Amount</th>	
+												</tr>
+												<tr>
+													<td align = "center" style="font-size:50%">'.$row32['name'].'</td>
+													<td align = "center" style="font-size:50%">'.$row32['client'].'</td>
+													<td align = "center" style="font-size:50%">'.$row32['startdate'].'</td>
+													<td align = "center" style="font-size:50%">';
+													if ($row34['datedelivered'] == NULL) {
+														echo 'Not yet delivered';
+													} else {
+														echo $row34['datedelivered'];
+													}
+											   echo '</td>
+													<td align = "right" style="font-size:50%"> PHP '.$row32['total'].'</td>
+												</tr>
+											</table>
+											<br>
+											
+											<h6><b> Grand Total: </b></h6> <div style="float:right;font-size:50%;"> PHP '.$row32['total'].'</div>
+
+											<br><br>
+											
+											<div style="font-size:50%">
+											Payment terms: '.$row32['term'].'<br>
+											<br>
+											Bank information: 
+											<br>
+											HSBC Hong Kong<br>
+											Account number 400-301990-838<br>
+											Swift Code HSBCHKHHHKH
+											
+											<br><br>
+											
+											Thank you for your business!
+											</div>
+											<br>
+	    		      						<form method="post">
+	    		      							<button type="submit" name="settle" class="btn btn-primary col-md-2 col-md-offset-5"> Settled </button>
+	    		      						<form>';
+
+		    		      echo '</div><!-- /.modal-body -->
+								<div class="modal-footer">
+									
+								</div><!-- /.modal-footer -->
+							</div><!-- /.modal-content -->
+						</div><!-- /.modal-dialog -->
+					</div>';
+			
+
 
 				//Former Translators
 				
@@ -1294,8 +1547,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<form action="'.$_SERVER['PHP_SELF'].'" method="post">
 								
 								<button type="submit" name="close'.$cnt.'" class="btn btn-default"> Close Project </button>
-								<button type="submit" name="purchase"'.$cnt.'" class="btn btn-default"> View Purchase Order </button>
-								<button type="submit" name="invoice"'.$cnt.'" class="btn btn-default"> View Invoice </button>
+								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#purchase'.$cnt.'"> View Purchase Order </button>
+								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#invoice'.$cnt.'"> View Invoice </button>
 								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#former'.$cnt.'"> View Former Translators </button>
 								<a href="'.site_url("ProjectManager/DownloadTranslatedDocument").'"><button type="button" name="download'.$cnt.'" class="btn btn-default"> Download Translated Document </button></a>
 								</form>
