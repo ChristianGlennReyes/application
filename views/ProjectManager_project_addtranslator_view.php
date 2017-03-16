@@ -233,14 +233,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 						if ($dbc->query($updateproj) == TRUE) {
-							$getdetails = "SELECT projectcode, translatorid,totalnumofwords from projectdetails where projectcode = '{$_SESSION[$code]}'";
+							$getdetails = "SELECT projectcode, translatorid, totalnumofwords from projectdetails where projectcode = '{$_SESSION[$code]}'";
 							$getdet = mysqli_query($dbc, $getdetails);
 							$details2 = mysqli_fetch_array($getdet, MYSQL_ASSOC);
 
+							$getdetails3 = "SELECT p.projectname as projname, from projectdetails d
+							JOIN project p on d.projectcode = p.projectcode WHERE d.projectcode = '{$_SESSION[$code]}' ";
+							$getdet3 = mysqli_query($dbc, $getdetails3);
+							$details3 = mysqli_fetch_array($getdet3, MYSQL_ASSOC);
+
+							// Audit Trail
 							$insertaudit = "insert into projectaudit(projectcode, date, newtranslator, typeofaudit)
 							values ('{$details2['projectcode']}',NOW(),'{$details2['translatorid']}','UPDATE')";
 							$auditres = mysqli_query($dbc, $insertaudit);
 
+							// Notification
+							date_default_timezone_set('Asia/Manila');
+							$time = date('H:i:s');
+							$date = date('Y-m-d');
+							$text = "You have been assigned to Project ".$details3['projname']."!";
+
+							$inserttranslatorassigned = "INSERT INTO notifications (time, date, notificationtext, translatorid) 
+							VALUES ('$time', '$date', '$text', '{$details2['translatorid']}')";
+							$translatorassigned = mysqli_query($dbc, $inserttranslatorassigned);
+
+							// Purchase Order
 							$gettranslator = "SELECT priceperword from translator where translatorid = '{$details2['translatorid']}'";
 							$translatorget = mysqli_query($dbc, $gettranslator);
 							$translator1 = mysqli_fetch_array($translatorget, MYSQL_ASSOC);

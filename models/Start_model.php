@@ -150,6 +150,48 @@ class Start_model extends CI_model {
 	public function updateProjectStatus($projectcode, $projectstatus) {
 		$this->db->where('projectcode', $projectcode)->update("project", array('projectstatus' => $projectstatus));
 	}
+
+	public function gettranslator($projectcode){
+		$query = $this->db->select("translatorid")->where(array('projectcode' => $projectcode))->get("projectdetails");
+		
+			$data = $query->result_array();
+			return ($data[0]['translatorid']);
+				
+	}
+
+	public function insertaudit($projectcode, $projectstatus) {
+		date_default_timezone_set('Asia/Manila');
+
+		$translator = $this->gettranslator($projectcode);
+
+		$auditdata  = array(
+			'projectcode' => $projectcode,
+			'date' => date('Y-m-d H:i:s'),
+			'newtranslator' => $translator,
+			'typeofaudit' => $projectstatus
+		);
+		$this->db->insert("projectaudit", $auditdata);
+	}
+
+	public function getprojectmanager($projectcode){
+		$query = $this->db->select("managerid")->where(array('projectcode' => $projectcode))->get("projectdetails");
+		$data = $query->result_array();
+
+		return ($data[0]['managerid']);
+	}
+
+
+	public function insertprogressionnotification($projectcode, $status){
+		date_default_timezone_set('Asia/Manila');
+
+		$notifdata  = array(
+			'time' => date('H:i:s'),
+			'date' => date('Y-m-d'),
+			'notificationtext' => "The client has said ".$status." to the project progression",
+			'managerid' => $this->Start_model->getprojectmanager($projectcode)
+		);
+		$this->db->insert("notifications", $notifdata);
+	}
 }
 
 

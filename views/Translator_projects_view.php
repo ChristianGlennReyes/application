@@ -270,9 +270,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								$docures = mysqli_query($dbc, $docu2);
 								$row = mysqli_fetch_array($docures,MYSQL_ASSOC);
 
-								$updatedocu = "update project set translatedid = '{$row['docuid']}' where projectcode = '$_SESSION[$project]'";
+								$updatedocu = "update project set translatedid = '{$row['docuid']}' where projectcode = '{$_SESSION[$project]}'";
 
 								if ($dbc->query($updatedocu) == TRUE){
+
+									// Notification
+									$getdetails = "SELECT d.managerid as managerid, t.fullname as translator, p.projectname as projectname
+									FROM projectdetails d JOIN translator t on d.translatorid = t.translatorid JOIN project p on d.projectcode = p.projectcode
+									where d.projectcode = '{$_SESSION[$project]}' ";
+									$details = mysqli_query($dbc, $getdetails);
+									$row1 = mysqli_fetch_array($details, MYSQL_ASSOC);
+
+									date_default_timezone_set('Asia/Manila');
+									$time = date('H:i:s');
+									$date = date('Y-m-d');
+									$text = "Translator ".$row1['translator']." has uploaded a file to Project ".$row1['projectname']."";
+
+									$insertuploadnotification = "INSERT INTO notifications (time, date, notificationtext, managerid) 
+									VALUES ('$time', '$date', '$text', '{$row1['managerid']}')";
+									$uploadnotification = mysqli_query($dbc, $insertuploadnotification);
+
+
 									$message.="Translated Document Uploaded!";
 								}
 

@@ -143,6 +143,9 @@ class Start extends CI_Controller {
 			$mailer -> Send();
 
 			$this->Start_model->updateProjectStatus($this->session->userdata("pprogressionprojectcode"), "Active");
+			$this->Start_model->insertaudit($this->session->userdata("pprogressionprojectcode"), "ACTIVE"); 
+			$this->Start_model->insertprogressionnotification($this->session->userdata("pprogressionprojectcode"), "Yes");
+
 		}
 	}
 
@@ -185,6 +188,8 @@ class Start extends CI_Controller {
 			$mailer -> Send();
 
 			$this->Start_model->updateProjectStatus($this->session->userdata("pprogressionprojectcode"), "Cancelled");
+			$this->Start_model->insertaudit($this->session->userdata("pprogressionprojectcode"), "CANCELLED");
+			$this->Start_model->insertprogressionnotification($this->session->userdata("pprogressionprojectcode"), "No");
 		}
 	}
 
