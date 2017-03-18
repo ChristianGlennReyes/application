@@ -30,8 +30,38 @@ class Translator_model extends CI_model {
 		}
 	}
 
+	public function gettranslatorname($id){
+		$query = $this->db->select("fullname")->where(array('translatorid' => $id))->get("translator");
+		
+		$data = $query->result_array();
+		return ($data[0]['fullname']);
+				
+	}
+
+	public function getmanagerid($transid){
+		$query = $this->db->select("potentialid")->where(array('translatorid' => $transid))->get("translator");
+		$data = $query->result_array();
+
+		$potential = $data[0]['potentialid'];
+		$query2 = $this->db->select("managerid")->where(array('potentialid' => $potential))->get("potentialtranslator");
+
+		$data2 = $query2->result_array();
+		return ($data2[0]['managerid']);
+	}
+
+	public function insertregisterednotification($id){
+		date_default_timezone_set('Asia/Manila');
+
+		$notifdata  = array(
+			'time' => date('H:i:s'),
+			'date' => date('Y-m-d'),
+			'notificationtext' => "Translator ".$this->gettranslatorname($id)." has succesfully registered their account!",
+			'managerid' => $this->getmanagerid($id)
+		);
+		$this->db->insert("notifications", $notifdata);
+	}
 	public function updateEmployeeStatus($id) {
-		$this->db->where('translatorid', $id)->update("translator", array('employeestatus' => 1));
+		$this->db->where('translatorid', $id)->update("translator", array('employeestatus' => 1));		
 	}
 
 	public function getEvent($id) {

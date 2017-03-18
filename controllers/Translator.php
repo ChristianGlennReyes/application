@@ -91,6 +91,7 @@ class Translator extends CI_Controller {
 			$this->Translator_model->insertTranslatorLanguage($this->session->userdata("id"), $language);
 		}
 		$this->Translator_model->updateEmployeeStatus($this->session->userdata("id"));
+		$this->Translator_model->insertregisterednotification($this->session->userdata("id"));
 		$this->session->set_userdata("translatoremployeestatus", 1);
 		redirect("Translator");
 	}

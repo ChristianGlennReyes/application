@@ -369,10 +369,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 												Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and SWIFT code.
 												</p>
 		    		      						</div>
-		    		      						<br>
-		    		      						<form method="post">
-		    		      							<button type="submit" name="settle" class="btn btn-primary col-md-2 col-md-offset-5"> Settled </button>
-		    		      						<form>';
+		    		      						<br>';
+
+		    		      						$getpurchaseorderdetails = "SELECT purchaseorderstatus from purchaseorder where po_no = '{$row30['purchasenum']}' ";
+		    		      						$purchaseorderdetails = mysqli_query($dbc, $getpurchaseorderdetails);
+		    		      						$row35 = mysqli_fetch_array($purchaseorderdetails, MYSQL_ASSOC);
+
+		    		      				echo 	'<div class="col-md-12">
+		    		      							<form method="post">';
+		    		      								$status = null;
+		    		      								if ($row35['purchaseorderstatus'] == 0){
+		    		      									$status = "Unsettled";
+		    		      								} else {
+		    		      									$status = "Settled";
+		    		      								}
+		    		      						echo 	'Transaction Status: '.$status.'';
+		    		      								if ($status == "Unsettled") {
+		    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary"> Settle </button></p>';
+		    		      								} else {
+		    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary" disabled> Settle </button></p>';
+		    		      								}
+		    		      								
+		    		      						echo '<form>
+		    		      						</div>';
 		    		      echo '</div><!-- /.modal-body -->
 								<div class="modal-footer">
 									
@@ -381,6 +400,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</div><!-- /.modal-dialog -->
 					</div>';
 
+				// Purchaseorder Settle
+				if (isset($_POST['settlePO'])){
+					$updatepurchaseorderstatus = "update purchaseorder set purchaseorderstatus = TRUE where 
+					po_no = '{$row30['purchasenum']}'";
+
+					if ($dbc->query($updatepurchaseorderstatus) == TRUE ){
+						$message = 'Transaction Settled!';
+					}
+
+				}
 
 				// Invoice View
 				$getdetailsofinvoice = "SELECT c.fullname as client, c.countrycode as countrycode, MONTH(i.invoicedate) as invoicedatemonth,
@@ -478,11 +507,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											
 											Thank you for your business!
 											</div>
-											<br>
-	    		      						<form method="post">
-	    		      							<button type="submit" name="settle" class="btn btn-primary col-md-2 col-md-offset-5"> Settled </button>
-	    		      						<form>';
+											<br>';
 
+	    		      						$getinvoicedetails = "SELECT invoicestatus from invoice where invoice_no = '{$row32['invoice_no']}' ";
+	    		      						$invoicedetails = mysqli_query($dbc, $getinvoicedetails);
+	    		      						$row36 = mysqli_fetch_array($invoicedetails, MYSQL_ASSOC);
+
+	    		      				echo 	'<div class="col-md-12">
+	    		      							<form method="post">';
+	    		      								$status = null;
+	    		      								if ($row36['invoicestatus'] == 0){
+	    		      									$status = "Unsettled";
+	    		      								} else {
+	    		      									$status = "Settled";
+	    		      								}
+	    		      						echo 	'Transaction Status: '.$status.'';
+	    		      								if ($status == "Unsettled") {
+	    		      									echo '<p align="right"><button type="submit" name="settleInvoice" class="btn btn-primary"> Settle </button></p>';
+	    		      								} else {
+	    		      									echo '<p align="right"><button type="submit" name="settleInvoice" class="btn btn-primary" disabled> Settle </button></p>';
+	    		      								}
+	    		      								
+	    		      						echo '<form>
+	    		      						</div>';
 		    		      echo '</div><!-- /.modal-body -->
 								<div class="modal-footer">
 									
@@ -491,6 +538,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</div><!-- /.modal-dialog -->
 					</div>';
 			
+				// Invoice Settle
+				if (isset($_POST['settleInvoice'])){
+					$updateinvoicestatus = "update invoice set invoicestatus = TRUE where 
+					invoice_no = '{$row32['invoice_no']}'";
+
+					if ($dbc->query($updateinvoicestatus) == TRUE ){
+						$message = 'Transaction Settled!';
+					}
+
+				}
 
 
 				//Former Translators
