@@ -5,6 +5,10 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE HTML>
+<?php
+// HI I REMOVED YUNG ../ ng mysql connect then it worked on mine so yeah 
+require_once('mysql_connect.php');
+?>
 <html>
 <head>
 <title>Orange Translations</title>
@@ -235,39 +239,55 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		    </div>
 		<!--//banner-->
 
+		<?php 
+
+			$projectmanager = $this->session->userdata("id");
+
+
+			$getproject = "SELECT count(d.projectcode) as count1 from projectdetails d join project p on p.projectcode = d.projectcode
+			where d.managerid = '{$projectmanager}' and MONTH(d.startdate) = MONTH(CURRENT_TIMESTAMP) and p.projectstatus = 'Active'";
+			$project = mysqli_query($dbc, $getproject);
+			$row1 = mysqli_fetch_array($project, MYSQL_ASSOC);
+
+			$getproject2 = "SELECT count(d.projectcode) as count2 from projectdetails d join project p on p.projectcode = d.projectcode
+			where d.managerid = '{$projectmanager}' and MONTH(d.startdate) = MONTH(CURRENT_TIMESTAMP)";
+			$project2 = mysqli_query($dbc, $getproject2);
+			$row2 = mysqli_fetch_array($project2, MYSQL_ASSOC);
+
+			$percentagecurrentprojects = ($row1['count1'] / $row2['count2']) * 100;
+
+			$getdone = "SELECT count(d.projectcode) as count3 from projectdetails d join project p on p.projectcode = d.projectcode
+			where d.managerid = '{$projectmanager}' and  MONTH(d.startdate) = MONTH(CURRENT_TIMESTAMP) and p.projectstatus = 'Closed'";
+			$done = mysqli_query($dbc, $getdone);
+			$row3 = mysqli_fetch_array($done, MYSQL_ASSOC);
+
+			$percentagecompletedprojects = ($row3['count3'] / $row2['count2']) * 100;
+
+		?>
 		<!--content-->
 		<div class="content-top">
 			<div class="col-md-4 ">
 				<div class="content-top-1">
 				<div class="col-md-6 top-content">
 					<h4>Projects Done</h4>
-					<label>61</label>
+					<label><?php echo $row3['count3']; ?></label>
 				</div>
 				<div class="col-md-6 top-content1">	   
-					<div id="demo-pie-1" class="pie-title-center" data-percent="25"> <span class="pie-value"></span> </div>
+					<div id="demo-pie-1" class="pie-title-center" data-percent="<?php echo $percentagecompletedprojects; ?>"> <span class="pie-value"></span> </div>
 				</div>
 				 <div class="clearfix"> </div>
 				</div>
 				<div class="content-top-1">
 				<div class="col-md-6 top-content">
 					<h4>Current Projects</h4>
-					<label>29</label>
+					<label><?php echo $row1['count1']; ?></label>
 				</div>
 				<div class="col-md-6 top-content1">	   
-					<div id="demo-pie-2" class="pie-title-center" data-percent="50"> <span class="pie-value"></span> </div>
+					<div id="demo-pie-2" class="pie-title-center" data-percent="<?php echo $percentagecurrentprojects; ?>"> <span class="pie-value"></span> </div>
 				</div>
 				 <div class="clearfix"> </div>
 				</div>
-				<div class="content-top-1">
-				<div class="col-md-6 top-content">
-					<h4>Active Translators</h4>
-					<label>3401</label>
-				</div>
-				<div class="col-md-6 top-content1">	   
-					<div id="demo-pie-3" class="pie-title-center" data-percent="75"> <span class="pie-value"></span> </div>
-				</div>
-				 <div class="clearfix"> </div>
-				</div>
+				
 			</div>
 			<div class="col-md-8 content-top-2">
 				<!---start-chart---->
