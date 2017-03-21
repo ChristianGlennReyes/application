@@ -57,6 +57,12 @@ class ProjectManager extends CI_Controller {
 		else redirect("Login");
 	}
 
+	public function PerformanceReport() {
+		if($this->session->userdata("projectmanager") == TRUE)
+			$this->load->view("ProjectManager_translator_performancereport_view");
+		else redirect("Login");
+	}
+
 	public function TransactionSummary() {
 		if($this->session->userdata("projectmanager") == TRUE)
 			$this->load->view("ProjectManager_transactionsummary_view");
