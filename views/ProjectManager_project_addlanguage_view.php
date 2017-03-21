@@ -277,7 +277,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							$getcopy1 = mysqli_query($dbc, $copyproj);
 							$row5 = mysqli_fetch_array($getcopy1,MYSQL_ASSOC);
 
-							$copydetails = "SELECT clientid, totalnumofwords from projectdetails where projectcode = '{$_SESSION[$code]}'";
+							$copydetails = "SELECT clientid, totalnumofwords, jobno from projectdetails where projectcode = '{$_SESSION[$code]}'";
 							$getcopy2 = mysqli_query($dbc, $copydetails);
 							$row6 = mysqli_fetch_array($getcopy2,MYSQL_ASSOC);
 
@@ -289,8 +289,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							$maxproj = mysqli_query($dbc,$getmax);
 							$row7 = mysqli_fetch_array($maxproj,MYSQL_ASSOC);
 							
-							$addnewlang2 = "INSERT INTO projectdetails (projectcode, managerid, clientid, language, deadline, totalnumofwords, startdate) 
-							values ('{$row7['projcode']}', 'PM00001', '{$row6['clientid']}', '{$_SESSION['newlang']}', '{$_SESSION['duedate']}', '{$row6['totalnumofwords']}', curdate())";
+							$projectmanager = $this->session->userdata('id');
+							$addnewlang2 = "INSERT INTO projectdetails (projectcode, managerid, clientid, language, deadline, totalnumofwords, startdate, jobno) 
+							values ('{$row7['projcode']}', 'PM00001', '{$row6['clientid']}', '{$_SESSION['newlang']}', '{$_SESSION['duedate']}', '{$row6['totalnumofwords']}', curdate(), '{$row6['jobno']}')";
 							$insert2 = mysqli_query($dbc, $addnewlang2);
 
 							$getdetails = "select projectcode, translatorid from projectdetails where projectcode = (SELECT MAX(projectcode) from projectdetails)";

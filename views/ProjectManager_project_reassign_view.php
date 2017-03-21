@@ -304,156 +304,171 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								$gettrans = mysqli_query($dbc, $trans);
 								$row4 = mysqli_fetch_array($gettrans, MYSQL_ASSOC);
 
-								$event = "SELECT startdate, enddate FROM event where translatorid = '{$row2['translatorid']}'";
-								$getevent = mysqli_query($dbc,$event);
-								
-								$num_rows = $getevent->num_rows;
-
-								if (!empty($num_rows)){
-									while ($row5 = mysqli_fetch_array($getevent,MYSQL_ASSOC)){
-										if ($row5['startdate'] >= $row2['startdate'] && $row5['startdate'] <= $row2['deadline'] || 
-											$row5['enddate'] >= $row2['startdate'] && $row5['enddate'] <= $row2['deadline'] 
-											&& $row5['startdate'] != NULL && $row5['enddate'] != NULL) {
-
-										}
-											if ($row['projectstatus'] != 'Closed' && $row['projectstatus'] != 'Cancelled'
-											&& $row['projectstatus'] != 'Inactive') {
+										
+								if ($row['projectstatus'] != 'Closed' && $row['projectstatus'] != 'Cancelled'
+								&& $row['projectstatus'] != 'Inactive') {
 
 
-												${'project'.$count} = $row['projectcode'];
-												echo "<tr align='center'>";
-												echo "<td align='left'> {$row['projectname']} </td>";
-												echo "<td> {$row3['languagedesc']} </td>";
-												echo "<td> {$row4['fullname']} </td>";
-												echo '<td> 
-														<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal'.$count.'">
-													     	Re Assign 
-													    </button>
-													     <div class="modal fade" id="myModal'.$count.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-															<div class="modal-dialog">
-																<div class="modal-content">
-																	<div class="modal-header">
-																		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-																		<h2 class="modal-title">Available Translators</h2>
-																	</div>
-																	<div class="modal-body col-md-12">
-																		<form action="'.$_SERVER['PHP_SELF'].'" method="post">';
+									${'project'.$count} = $row['projectcode'];
+									echo "<tr align='center'>";
+									echo "<td align='left'> {$row['projectname']} </td>";
+									echo "<td> {$row3['languagedesc']} </td>";
+									echo "<td> {$row4['fullname']} </td>";
+									echo '<td> 
+											<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal'.$count.'">
+										     	Re Assign 
+										    </button>
+										     <div class="modal fade" id="myModal'.$count.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+												<div class="modal-dialog">
+													<div class="modal-content">
+														<div class="modal-header">
+															<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+															<h2 class="modal-title">Available Translators</h2>
+														</div>
+														<div class="modal-body col-md-12">
+															<form action="'.$_SERVER['PHP_SELF'].'" method="post">';
 
-																			$translator = "SELECT T.translatorid, T.fullname from translator T join translatorlanguage TL
-																						   on T.translatorid = TL.translatorid where TL.language = '{$row2['language']}'
-																						   and T.translatorstatus = 'Active'";
-																			$gettrans = mysqli_query($dbc,$translator);	
-																			$num_rows = $gettrans->num_rows;
+																$translator = "SELECT T.translatorid as translatorid, T.fullname as fullname from translator T join translatorlanguage TL
+																			   on T.translatorid = TL.translatorid where TL.language = '{$row2['language']}'
+																			   and T.translatorstatus = 'Active'";
+																$gettrans = mysqli_query($dbc,$translator);	
+																$num_rows = $gettrans->num_rows;
 
-																			$details2 = "SELECT startdate, deadline from projectdetails where projectcode = '${'project'.$count}'";
-																			$get2 = mysqli_query($dbc, $details2);
-																			$row7 = mysqli_fetch_array($get2,MYSQL_ASSOC);
-
-
-																			if (!empty($num_rows)) {
-																				$cnt = 0;
-
-																				echo '  <div class="col-md-12">
-																					 	<table data-toggle="table" id="specs">
-																					 		<thead>
-																					 			<tr>
-																					 				<th><center>Translator</center></th>
-																					 				<th><center>Number of Projects Ongoing</center></th>
-																					 				<th><center></center></th>
-																					 			</tr>
-																					 		</thead>
-																					 		<tbody>';
-																					 			while ($row6 = mysqli_fetch_array($gettrans,MYSQL_ASSOC)) {
-																									$event2 = "SELECT startdate, enddate from event where translatorid = '{$row6['translatorid']}'";
-																									$get3 = mysqli_query($dbc, $event2);
-																									$row8 = mysqli_fetch_array($get3, MYSQL_ASSOC);
-
-																									if ($row8['startdate'] < $row7['startdate'] || $row8['startdate'] > $row7['deadline'] || 
-																										$row8['enddate'] < $row7['startdate'] || $row8['enddate'] > $row7['deadline']){
-																											$getnumofprojects = "SELECT count(projectcode) as projects from projectdetails 
-																											WHERE translatorid = '{$row6['translatorid']}' ";
-																											$getnum = mysqli_query($dbc, $getnumofprojects);
-																											$row9 = mysqli_fetch_array($getnum, MYSQL_ASSOC);
-
-																							echo        	'<tr>
-																								 				<td><button style="width:175px" type="submit" class="btn btn-default" value="'.$row6['translatorid'].'" name="reassign'.$count.'">'.$row6['fullname'].'</button></td>
-																								 				<td align="right">'.$row9['projects'].'</td>
-																								 				<td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details'.$cnt.'"> 
-																								 						Details
-																								 					 </button>
-																								 				</td>
-																								 			</tr>';
-																									}
-																									$getnumofprojectss = "SELECT projectcode, totalnumofwords as total, deadline from projectdetails 
-																									WHERE translatorid = '{$row6['translatorid']}' ";
-																									$getnumm = mysqli_query($dbc, $getnumofprojectss);
-
-																							   echo '<div class="modal fade" id="details'.$cnt.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-																										<div class="modal-dialog">
-																											<div class="modal-content">
-																												<div class="modal-header">
-																													<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-																													<h2 class="modal-title">Project Details</h2>
-																												</div>
-																												<div class="modal-body col-md-12">
-																													<div class="form-group col-md-12">';
-
-																														if (!empty($getnum)){
-																															while ($row10 = mysqli_fetch_array($getnumm, MYSQL_ASSOC)){
-																																$getname = "SELECT projectname from project where projectcode = '{$row10['projectcode']}' ";
-																																$namee = mysqli_query($dbc, $getname);
-																																$row11 = mysqli_fetch_array($namee, MYSQL_ASSOC);
+																$details2 = "SELECT startdate, deadline from projectdetails where projectcode = '${'project'.$count}'";
+																$get2 = mysqli_query($dbc, $details2);
+																$row7 = mysqli_fetch_array($get2,MYSQL_ASSOC);
 
 
-																																echo '<ul class="list-group">
-																																	<li class="list-group-item"> Project Name: '.$row11['projectname'].'</li>
-																															  		<li class="list-group-item"> Project Deadline: '.$row10['deadline'].'</li>
-																															  		<li class="list-group-item"> Total number of words: '.$row10['total'].'</li>
-																														  		</ul>';
-																															}
-																														} else {
-																															echo '<label> Nothing to show </label>';
-																														}
-																														
-																							   echo 				'</div>					
-																					        		            </div>
-																												<div class="modal-footer">
-																													
-																												</div>
-																											</div><!-- /.modal-content -->
-																										</div><!-- /.modal-dialog -->
-																									</div>';
-																									$cnt++;
-																								}
-																				
-																				echo 		'</tbody>
-																					 	</table>
-																					 </div>';
-											
-																			} else {
-																				echo '<div class="col-md-8 col-md-offset-2">
-																						<p>There are no available translators!</p>
-																					  </div>';
-																			}
-											echo '						</form>
+																if (!empty($num_rows)) {
+																	$cnt = 0;
+
+																	echo '  <div class="col-md-12">
+																		 	<table data-toggle="table" id="specs">
+																		 		<thead>
+																		 			<tr>
+																		 				<th><center>Translator</center></th>
+																		 				<th><center>Projects Ongoing</center></th>
+																		 				<th><center></center></th>
+																		 				<th><center></center></th>
+																		 			</tr>
+																		 		</thead>
+																		 		<tbody>';
+																		 			while ($row6 = mysqli_fetch_array($gettrans,MYSQL_ASSOC)) {
 																					
-										        		            </div>
-																	<div class="modal-footer">
-																		
-																	</div>
-																</div><!-- /.modal-content -->
-															</div><!-- /.modal-dialog -->
-														</div>  
-													  </td>';
-												
-												echo "</tr>";
-												$count++;
-											}
-			
-									}
-								}
-								
+																							$getnumofprojects = "SELECT count(projectcode) as projects from projectdetails 
+																							WHERE translatorid = '{$row6['translatorid']}' ";
+																							$getnum = mysqli_query($dbc, $getnumofprojects);
+																							$row9 = mysqli_fetch_array($getnum, MYSQL_ASSOC);
 
+																			echo        	'<tr>
+																				 				<td><button style="width:175px" type="submit" class="btn btn-default" value="'.$row6['translatorid'].'" name="reassign'.$count.'">'.$row6['fullname'].'</button></td>
+																				 				<td align="right">'.$row9['projects'].'</td>
+																				 				<td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#schedule'.$cnt.'"> 
+																				 						Schedule
+																				 					 </button>
+																				 				</td>
+																				 				<td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details'.$cnt.'"> 
+																				 						Details
+																				 					 </button>
+																				 				</td>
+																				 			</tr>';
+																						
+																						$getnumofprojectss = "SELECT projectcode, totalnumofwords as total, deadline from projectdetails 
+																						WHERE translatorid = '{$row6['translatorid']}' ";
+																						$getnumm = mysqli_query($dbc, $getnumofprojectss);
+
+																				   echo '<div class="modal fade" id="details'.$cnt.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+																							<div class="modal-dialog">
+																								<div class="modal-content">
+																									<div class="modal-header">
+																										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+																										<h2 class="modal-title">Project Details</h2>
+																									</div>
+																									<div class="modal-body col-md-12">
+																										<div class="form-group col-md-12">';
+
+																											if (!empty($getnum)){
+																												while ($row10 = mysqli_fetch_array($getnumm, MYSQL_ASSOC)){
+																													$getname = "SELECT projectname from project where projectcode = '{$row10['projectcode']}' ";
+																													$namee = mysqli_query($dbc, $getname);
+																													$row11 = mysqli_fetch_array($namee, MYSQL_ASSOC);
+
+
+																													echo '<ul class="list-group">
+																														<li class="list-group-item"> Project Name: '.$row11['projectname'].'</li>
+																												  		<li class="list-group-item"> Project Deadline: '.$row10['deadline'].'</li>
+																												  		<li class="list-group-item"> Total number of words: '.$row10['total'].'</li>
+																											  		</ul>';
+																												}
+																											} else {
+																												echo '<label> Nothing to show </label>';
+																											}
+																											
+																				   echo 				'</div>					
+																		        		            </div>
+																									<div class="modal-footer">
+																										
+																									</div>
+																								</div><!-- /.modal-content -->
+																							</div><!-- /.modal-dialog -->
+																						</div>';
+
+																						$event2 = "SELECT startdate, enddate, starttime, endtime from event where translatorid = '{$row6['translatorid']}'";
+																						$get3 = mysqli_query($dbc, $event2);
+																						$num_rows = $get3->num_rows;
+
+																					echo '<div class="modal fade" id="schedule'.$cnt.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+																							<div class="modal-dialog">
+																								<div class="modal-content">
+																									<div class="modal-header">
+																										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+																										<h2 class="modal-title">Schedule of Translator</h2>
+																									</div>
+																									<div class="modal-body col-md-12">
+																										<div class="form-group col-md-12">';
+
+																											if (!empty($num_rows)){
+																												echo'<p> Hi';
+																												
+																											} else {
+																												echo '<p> Nothing to show </p>';
+																											}
+																											
+																				   echo 				'</div>					
+																		        		            </div>
+																									<div class="modal-footer">
+																										
+																									</div>
+																								</div><!-- /.modal-content -->
+																							</div><!-- /.modal-dialog -->
+																						</div>';
+																						$cnt++;
+																					}
+																	
+																	echo 		'</tbody>
+																		 	</table>
+																		 </div>';
+								
+																} else {
+																	echo '<div class="col-md-8 col-md-offset-2">
+																			<p>There are no available translators!</p>
+																		  </div>';
+																}
+								echo '						</form>
+																		
+							        		            </div>
+														<div class="modal-footer">
+															
+														</div>
+													</div><!-- /.modal-content -->
+												</div><!-- /.modal-dialog -->
+											</div>  
+										  </td>';
+									
+									echo "</tr>";
+									$count++;
+								}
+			
 								
 							}
 

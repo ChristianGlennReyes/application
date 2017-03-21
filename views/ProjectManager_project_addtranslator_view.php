@@ -475,7 +475,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 																						$event2 = "SELECT startdate, enddate, starttime, endtime from event where translatorid = '{$row4['translatorid']}'";
 																						$get3 = mysqli_query($dbc, $event2);
-
+																						$num_rows = $get3->num_rows;
 																						
 																				   echo '<div class="modal fade" id="schedule'.$cnt.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 																							<div class="modal-dialog">
@@ -487,10 +487,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																									<div class="modal-body col-md-12">
 																										<div class="form-group col-md-12">';
 																										
-																											if (!empty($get3)){
+																											if (!empty($num_rows)){
 																												while ($row6 = mysqli_fetch_array($get3, MYSQL_ASSOC)){
-																													if ($row6['startdate'] < $row5['startdate'] || $row6['startdate'] > $row5['deadline'] || 
-																														$row6['enddate'] < $row5['startdate'] || $row6['enddate'] > $row5['deadline']){
+																													if ($row6['startdate'] >= $row5['startdate'] && $row6['startdate'] <= $row5['deadline'] || 
+																														$row6['enddate'] >= $row5['startdate'] && $row6['enddate'] <= $row5['deadline']){
 																														
 																															$start = new DateTime($row6['startdate'].'T'.$row6['starttime']);
 																															$end = new DateTime($row6['enddate'].'T'.$row6['endtime']);
