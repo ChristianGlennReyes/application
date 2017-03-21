@@ -408,36 +408,35 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																		 		<thead>
 																		 			<tr>
 																		 				<th><center>Translator</center></th>
-																		 				<th><center>Number of Projects Ongoing</center></th>
+																		 				<th><center>Projects Ongoing</center></th>
+																		 				<th><center></center></th>
 																		 				<th><center></center></th>
 																		 			</tr>
 																		 		</thead>
 																		 		<tbody>';
 																		 			while ($row4 = mysqli_fetch_array($gettrans,MYSQL_ASSOC)) {
-																						$event2 = "SELECT startdate, enddate from event where translatorid = '{$row4['translatorid']}'";
-																						$get3 = mysqli_query($dbc, $event2);
-																						$row6 = mysqli_fetch_array($get3, MYSQL_ASSOC);
+																						
+																						$getnumofprojects = "SELECT count(projectcode) as projects from projectdetails 
+																						WHERE translatorid = '{$row4['translatorid']}' ";
+																						$getnum = mysqli_query($dbc, $getnumofprojects);
+																						$row7 = mysqli_fetch_array($getnum, MYSQL_ASSOC);
 
-																						if ($row6['startdate'] < $row5['startdate'] || $row6['startdate'] > $row5['deadline'] || 
-																							$row6['enddate'] < $row5['startdate'] || $row6['enddate'] > $row5['deadline']){
-																								$getnumofprojects = "SELECT count(projectcode) as projects from projectdetails 
-																								WHERE translatorid = '{$row4['translatorid']}' ";
-																								$getnum = mysqli_query($dbc, $getnumofprojects);
-																								$row7 = mysqli_fetch_array($getnum, MYSQL_ASSOC);
-
-																				echo        	'<tr>
-																					 				<td><button style="width:175px" type="submit" class="btn btn-default" value="'.$row4['translatorid'].'" name="translator'.$count.'">'.$row4['fullname'].'</button></td>
-																					 				<td align="right">'.$row7['projects'].'</td>
-																					 				<td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details'.$cnt.'"> 
-																					 						Details
-																					 					 </button>
-																					 				</td>
-																					 			</tr>';
-																						}
+																		echo        	'<tr>
+																			 				<td><button style="width:175px" type="submit" class="btn btn-default" value="'.$row4['translatorid'].'" name="translator'.$count.'">'.$row4['fullname'].'</button></td>
+																			 				<td align="right">'.$row7['projects'].'</td>
+																			 				<td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#schedule'.$cnt.'"> 
+																			 						Schedule
+																			 					 </button>
+																			 				</td>
+																			 				<td> <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#details'.$cnt.'"> 
+																			 						Details
+																			 					 </button>
+																			 				</td>
+																			 			</tr>';
+																				
 																						$getnumofprojectss = "SELECT projectcode, totalnumofwords as total, deadline from projectdetails 
 																						WHERE translatorid = '{$row4['translatorid']}' ";
 																						$getnumm = mysqli_query($dbc, $getnumofprojectss);
-																						
 																						
 																				   echo '<div class="modal fade" id="details'.$cnt.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 																							<div class="modal-dialog">
@@ -473,6 +472,55 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																								</div><!-- /.modal-content -->
 																							</div><!-- /.modal-dialog -->
 																						</div>';
+
+																						$event2 = "SELECT startdate, enddate, starttime, endtime from event where translatorid = '{$row4['translatorid']}'";
+																						$get3 = mysqli_query($dbc, $event2);
+
+																						
+																				   echo '<div class="modal fade" id="schedule'.$cnt.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+																							<div class="modal-dialog">
+																								<div class="modal-content">
+																									<div class="modal-header">
+																										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+																										<h2 class="modal-title">Translator Schedule</h2>
+																									</div>
+																									<div class="modal-body col-md-12">
+																										<div class="form-group col-md-12">';
+																										
+																											if (!empty($get3)){
+																												while ($row6 = mysqli_fetch_array($get3, MYSQL_ASSOC)){
+																													if ($row6['startdate'] < $row5['startdate'] || $row6['startdate'] > $row5['deadline'] || 
+																														$row6['enddate'] < $row5['startdate'] || $row6['enddate'] > $row5['deadline']){
+																														
+																															$start = new DateTime($row6['startdate'].'T'.$row6['starttime']);
+																															$end = new DateTime($row6['enddate'].'T'.$row6['endtime']);
+
+																															$time = $end->diff($start);
+
+																															$hours = $time->h;
+																															$hours = $hours + ($time->days*24);
+																															echo '<ul class="list-group">
+																																<li class="list-group-item"> Start Date: '.$row6['startdate'].'</li>
+																														  		<li class="list-group-item"> End Date: '.$row6['enddate'].'</li>
+																														  		<li class="list-group-item"> Number of Hours: '.$hours.'</li>
+																													  		</ul>';
+																													}
+																													echo '<br>';
+																													
+																												}
+																											} else {
+																												echo '<label> Nothing to show </label>';
+																											}
+																											  
+																				   echo 				'</div>					
+																		        		            </div>
+																									<div class="modal-footer">
+																										
+																									</div>
+																								</div><!-- /.modal-content -->
+																							</div><!-- /.modal-dialog -->
+																						</div>';
+
 																						$cnt++;
 																					}
 																	
