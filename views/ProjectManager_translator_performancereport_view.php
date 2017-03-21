@@ -20,6 +20,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="<?php echo base_url('assets/css/font-awesome.css')?>" rel="stylesheet"> 
 <script src="<?php echo base_url('assets/js/jquery.min.js')?>"> </script>
 <script src="<?php echo base_url('assets/js/bootstrap.min.js')?>"> </script>
+<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- Mainly scripts -->
 <script src="<?php echo base_url('assets/js/jquery.metisMenu.js')?>"></script>
 <script src="<?php echo base_url('assets/js/jquery.slimscroll.min.js')?>"></script>
@@ -27,6 +28,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="<?php echo base_url('assets/css/custom.css')?>" rel="stylesheet">
 <script src="<?php echo base_url('assets/js/custom.js')?>"></script>
 <script src="<?php echo base_url('assets/js/screenfull.js')?>"></script>
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 		<script>
 		$(function () {
 			$('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
@@ -39,6 +41,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 			$('#toggle').click(function () {
 				screenfull.toggle($('#container')[0]);
+			});
+
+			$(document).ready(function(){
+			    $('#datatable').DataTable();
 			});
 			
 
@@ -152,7 +158,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="clearfix">
        
      </div>
-	  
 		    <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
@@ -202,7 +207,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  	<div class="grid-form">
 
  		<div class="grid-form1" style="margin-bottom: 0px;">
-	 		<h3 id="forms-example" class="">Performance Report</h3>
+
+
+	 		<center><h3 id="forms-example" class="">Performance Report</h3></center>
+	 		<?php date_default_timezone_set('Asia/Manila');?>
+	 		<p align="right"><?php echo date('M d Y D');?></p>
+	 		<p align="right"><?php echo date('h:i A');?></p>
+
+	 		<table id="datatable">
+	 			<thead>
+	 				<tr>
+	 					<th>Name</th>
+	 					<th>Translated Documents</th>
+	 				</tr>
+	 			</thead>
+	 			<tbody>
+	 				<tr>
+	 					<td>Hello</td>
+	 					<td>Hhaha</td>
+	 				</tr>
+	 				<tr>
+		    	 	    <td style='display: none;'> LAST </td>
+		    	 		<td colspan='6' align='center'><b> * END OF REPORT * </b></td>
+		    	 	</tr>
+	 			</tbody>
+	 			
+	 		</table>
 
 			
 		</div>
