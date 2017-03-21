@@ -276,7 +276,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							$updateterm = "update projectdetails set termno = '2' where projectcode = '{$details2['projectcode']}'";
 
 							if ($dbc->query($updatepono) == TRUE && $dbc->query($updatepototal) == TRUE 
-								&& dbc->query($updateterm) == TRUE ){
+								&& $dbc->query($updateterm) == TRUE ){
 								$message.= '<p>Translator has been added to Project!';
 								$message.= '<p>Purchase Order has been created!';
 
