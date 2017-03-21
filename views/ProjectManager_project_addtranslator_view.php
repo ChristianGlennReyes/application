@@ -234,12 +234,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 						if ($dbc->query($updateproj) == TRUE) {
+							$newmessage = NULL;
+
 							$getdetails = "SELECT projectcode, translatorid, totalnumofwords from projectdetails where projectcode = '{$_SESSION[$code]}'";
 							$getdet = mysqli_query($dbc, $getdetails);
 							$details2 = mysqli_fetch_array($getdet, MYSQL_ASSOC);
 
-							$getdetails3 = "SELECT p.projectname as projname, from projectdetails d
-							JOIN project p on d.projectcode = p.projectcode WHERE d.projectcode = '{$_SESSION[$code]}' ";
+							$getdetails3 = "SELECT p.projectname as projname from project p WHERE p.projectcode = '{$_SESSION[$code]}' ";
 							$getdet3 = mysqli_query($dbc, $getdetails3);
 							$details3 = mysqli_fetch_array($getdet3, MYSQL_ASSOC);
 
@@ -278,8 +279,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 							if ($dbc->query($updatepono) == TRUE && $dbc->query($updatepototal) == TRUE 
 								&& $dbc->query($updateterm) == TRUE ){
-								$message.= '<p>Translator has been added to Project!';
-								$message.= '<p>Purchase Order has been created!';
+								$newmessage.= 'Translator has been added to Project!';
+								$newmessage.= 'Purchase Order has been created!';
 
 								$results = $this->ProjectManager_model->getDetailsForProjectProgression($_SESSION[$code]);
 
@@ -318,9 +319,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 								
 								if($mailer -> Send()) {
-									$message.= 'Email has been sent to the client for project progression confirmation.';
+									$newmessage.= "Email has been sent to client for project progression!";
+
+									echo "<div  class=\"grid-form1\">
+				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        				<strong>Well done! </strong>".$newmessage."
+					       				</div>
+				 					  </div>";
 								}
-								else $message.= 'Email did not send.';
+								else $message.= 'There was a problem in sending the file to the client!';
 								}
 
 							
@@ -329,7 +336,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 						if (isset($message)){
-							echo '<font color="green">'.$message. '</font>';
+							echo "<div  class=\"grid-form1\">
+				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        	<strong>Oops! </strong> ".$message."
+					       	</div>
+				 		</div>";
 						}
 					}
 				}

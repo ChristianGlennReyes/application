@@ -257,11 +257,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						values ('{$details2['projectcode']}',NOW(),'$translatorid','{$details2['translatorid']}','UPDATE')";
 						$auditres = mysqli_query($dbc, $insertaudit);
 
+						$newmessage = NULL;
 						if ($getinsert){
-							$message.='<p> Project has been successfully re-assigned! </p>';
+							$newmessage.='Project has been successfully re-assigned!';
+
+							echo "<div  class=\"grid-form1\">
+				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        				<strong>Well done!</strong>".$newmessage."
+					       				</div>
+				 					  </div>";
 						} 
 						if (isset($message)){
-							echo '<font color="green">'.$message. '</font>';
+							echo "<div  class=\"grid-form1\">
+				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        	<strong>Oops!</strong> ".$message."
+					       	</div>
+				 		</div>";
 						}
 
 					}

@@ -224,6 +224,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  	<div class="grid-form">
 		<div class="grid-form1 col-md-12" >
 		<?php
+			$newmessage = NULL;
 			// For loop in checking which button was clicked
 			$message = NULL;
 			for ($btn = 0; $btn < $_SESSION['count']; $btn++){
@@ -407,7 +408,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					po_no = '{$row30['purchasenum']}'";
 
 					if ($dbc->query($updatepurchaseorderstatus) == TRUE ){
-						$message = 'Transaction Settled!';
+						$newmessage = 'Transaction Settled!';
 					}
 
 				}
@@ -545,7 +546,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					invoice_no = '{$row32['invoice_no']}'";
 
 					if ($dbc->query($updateinvoicestatus) == TRUE ){
-						$message = 'Transaction Settled!';
+						$newmessage = 'Transaction Settled!';
 					}
 
 				}
@@ -614,7 +615,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							values ('{$details2['projectcode']}',NOW(),'{$details2['translatorid']}','CLOSED')";
 							$auditres = mysqli_query($dbc, $insertaudit);
 
-							$message.= '<p>Project has been Closed!</p>';
+							$newmessage.= '<p>Project has been Closed!</p>';
 						} 
 
 						$getclient1 = "SELECT clientid from projectdetails where projectcode = '{$_SESSION[$project]}'";
@@ -629,7 +630,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						if ($row10['cstatus'] == 'POTENTIAL'){
 							$statud4 = "UPDATE client set cstatus = 'ACTIVE' where clientid = '{$row10['clientid']}'";
 							if ($dbc->query($statud4) == TRUE) {
-								$message.= '<p>New Client has successfully been recorded!</p>';
+								$newmessage.= '<p>New Client has successfully been recorded!</p>';
 							} 
 
 						}
@@ -812,8 +813,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							/* USED FOR CHECKING*/
 
 							if ($mailer -> Send()){
-								$message.='<p> Purchase Order has been sent to Translator!';
-							}
+								$newmessage.='Purchase Order has been sent to Translator!';
+							} else $message.='Something went wrong with sending the Purchase Order!';
 
 							$mailer->addAddress($row18['clientemail'], $row18['clientfull']);
 
@@ -891,8 +892,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							/* USED FOR CHECKING*/
 
 							if ($mailer -> Send()){
-								$message.='<p> Invoice has been sent to Client!';
-							}
+								$newmessage.='Invoice has been sent to Client!';
+							} else $message.='Something went wrong with sending the invoice';
 
 						} 
 
@@ -909,7 +910,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			}
 
 			if (isset($message)){
-				echo '<font color="green">'.$message.'</font>';
+				echo "<div  class=\"grid-form1\">
+				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        	<strong>Oops! </strong> ".$message."
+					       	</div>
+				 		</div>";
+			} elseif (isset($newmessage)) {
+				echo "<div  class=\"grid-form1\">
+				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        				<strong>Well done! </strong>".$newmessage."
+					       				</div>
+				 					  </div>";
 			}
 		?>
 		<?php

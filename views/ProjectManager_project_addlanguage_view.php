@@ -396,17 +396,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								$mailer -> Body = $mailmessage;
 							}
 
+							$newmessage = NULL;
 							if ($insert1 && $insert2 && $mailer -> Send()){
-								$message.='<p> Language Translation has been sucessfully added!
+								$newmessage.='<p> Language Translation has been sucessfully added!
 								Quotation has been sent to Client!';
-							} 
+
+								echo "<div  class=\"grid-form1\">
+				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        				<strong>Well done!</strong>".$newmessage."
+					       				</div>
+				 					  </div>";
+							} else {
+								$message.="Something went wrong with sending the Quotation to client";
+							}
 
 
 						}
 
 
 						if (isset($message)){
-							echo '<font color="green">'.$message. '</font>';
+							echo "<div  class=\"grid-form1\">
+				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        	<strong>Oops!</strong> ".$message."
+					       	</div>
+				 		</div>";
 						}
 					}
 				}

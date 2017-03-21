@@ -740,10 +740,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								}
 							} 
 
-							
+							$newmessage = NULL;
 							if ($mailer -> Send()){
-								$message.='<p> Quotation Form is sent to Client!</p>
-								<p> Project has been Created!';
+								$newmessage.='<p> Quotation Form is sent to Client! Project has been Created!';
+
+								echo "<div  class=\"grid-form1\">
+				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        				<strong>Well done!</strong>".$newmessage."
+					       				</div>
+				 					  </div>";
 							}
 							$_SESSION['clientemail'] = NULL;
 
@@ -751,8 +756,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 					}
 					if (isset($message)){
-						echo '<font color="green">'.$message.'</font>';
-						echo '<a href="addtranslator.php"> Add a Translator </a>';
+						echo "<div  class=\"grid-form1\">
+				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        	<strong>Oops!</strong> ".$message."
+					       	</div>
+				 		</div>";
 					}
 				?>
 		</div>
