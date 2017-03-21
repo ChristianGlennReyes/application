@@ -240,7 +240,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="col-md-4 ">
 				<div class="content-top-1">
 				<div class="col-md-6 top-content">
-					<h4>Accomplished Projects</h4>
+					<h4>Projects Done</h4>
 					<label>61</label>
 				</div>
 				<div class="col-md-6 top-content1">	   

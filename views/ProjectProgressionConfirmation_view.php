@@ -25,10 +25,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   <div class="login">
     <?php
       $this->session->set_userdata("pprogressionprojectcode", $this->input->get('projectcode'));
+
+      $data = $this->Start_model->getProjectName($this->input->get('projectcode'));
+
+      $this->session->set_userdata("projectname", $data[0]['projectname']);
     ?>
     <h1><img id="logo-clean" src="<?php echo base_url('assets/images/logo-clean-small.png')?>"></h1>
     <div class="login-bottom">
-      <p align="center">Continue with the project?</p>
+      <p align="center">Continue with the project (<?php echo $this->session->userdata('projectname');?>)?</p>
       <br>
       <form action="<?php echo site_url("Start/PProgressionYes"); ?>" method="post">
       <div class="col-md-6 login-do">

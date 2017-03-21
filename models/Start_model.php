@@ -192,6 +192,11 @@ class Start_model extends CI_model {
 		);
 		$this->db->insert("notifications", $notifdata);
 	}
+
+	public function getProjectName($projectcode) {
+		$query = $this->db->select("projectname")->where(array('projectcode' => $projectcode))->get("project");
+		return $query->result_array();
+	}
 }
 
 

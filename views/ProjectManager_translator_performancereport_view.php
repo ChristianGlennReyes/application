@@ -20,7 +20,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="<?php echo base_url('assets/css/font-awesome.css')?>" rel="stylesheet"> 
 <script src="<?php echo base_url('assets/js/jquery.min.js')?>"> </script>
 <script src="<?php echo base_url('assets/js/bootstrap.min.js')?>"> </script>
-<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">
 <!-- Mainly scripts -->
 <script src="<?php echo base_url('assets/js/jquery.metisMenu.js')?>"></script>
 <script src="<?php echo base_url('assets/js/jquery.slimscroll.min.js')?>"></script>
@@ -28,7 +27,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="<?php echo base_url('assets/css/custom.css')?>" rel="stylesheet">
 <script src="<?php echo base_url('assets/js/custom.js')?>"></script>
 <script src="<?php echo base_url('assets/js/screenfull.js')?>"></script>
-<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 		<script>
 		$(function () {
 			$('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
@@ -43,13 +41,134 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				screenfull.toggle($('#container')[0]);
 			});
 
-			$(document).ready(function(){
-			    $('#datatable').DataTable();
-			});
-			
-
 			
 		});
+		</script>
+
+		<script type="text/javascript">
+$(function () {
+    // Create the chart
+    $('#pie-chart').highcharts({
+        chart: {
+            type: 'pie'
+        },
+        title: {
+            text: 'Performance Report: January, 2015 to May, 2015'
+        },
+        subtitle: {
+            text: 'Click the slices to view the projects translated.'
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}: {point.y:.1f}%'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+        },
+        series: [{
+            name: 'Translators',
+            colorByPoint: true,
+            data: [{
+                name: 'Microsoft Internet Explorer',
+                y: 56.33,
+                drilldown: 'Microsoft Internet Explorer'
+            }, {
+                name: 'Chrome',
+                y: 24.03,
+                drilldown: 'Chrome'
+            }, {
+                name: 'Firefox',
+                y: 10.38,
+                drilldown: 'Firefox'
+            }, {
+                name: 'Safari',
+                y: 4.77,
+                drilldown: 'Safari'
+            }, {
+                name: 'Opera',
+                y: 0.91,
+                drilldown: 'Opera'
+            }, {
+                name: 'Proprietary or Undetectable',
+                y: 0.2,
+                drilldown: null
+            }]
+        }],
+        drilldown: {
+            series: [{
+                name: 'Microsoft Internet Explorer',
+                id: 'Microsoft Internet Explorer',
+                data: [
+                    ['v11.0', 24.13],
+                    ['v8.0', 17.2],
+                    ['v9.0', 8.11],
+                    ['v10.0', 5.33],
+                    ['v6.0', 1.06],
+                    ['Project name', 0.5]
+                ]
+            }, {
+                name: 'Chrome',
+                id: 'Chrome',
+                data: [
+                    ['v40.0', 5],
+                    ['v41.0', 4.32],
+                    ['v42.0', 3.68],
+                    ['v39.0', 2.96],
+                    ['v36.0', 2.53],
+                    ['v43.0', 1.45],
+                    ['v31.0', 1.24],
+                    ['v35.0', 0.85],
+                    ['v38.0', 0.6],
+                    ['v32.0', 0.55],
+                    ['v37.0', 0.38],
+                    ['v33.0', 0.19],
+                    ['v34.0', 0.14],
+                    ['v30.0', 0.14]
+                ]
+            }, {
+                name: 'Firefox',
+                id: 'Firefox',
+                data: [
+                    ['v35', 2.76],
+                    ['v36', 2.32],
+                    ['v37', 2.31],
+                    ['v34', 1.27],
+                    ['v38', 1.02],
+                    ['v31', 0.33],
+                    ['v33', 0.22],
+                    ['v32', 0.15]
+                ]
+            }, {
+                name: 'Safari',
+                id: 'Safari',
+                data: [
+                    ['v8.0', 2.56],
+                    ['v7.1', 0.77],
+                    ['v5.1', 0.42],
+                    ['v5.0', 0.3],
+                    ['v6.1', 0.29],
+                    ['v7.0', 0.26],
+                    ['v6.2', 0.17]
+                ]
+            }, {
+                name: 'Opera',
+                id: 'Opera',
+                data: [
+                    ['v12.x', 0.34],
+                    ['v28', 0.24],
+                    ['v27', 0.17],
+                    ['v29', 0.16]
+                ]
+            }]
+        }
+    });
+});
 		</script>
 
 <!----->
@@ -206,34 +325,37 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  	<!--grid-->
  	<div class="grid-form">
 
+ 		<div class="grid-form1">
+ 			<h3>Date Range</h3>
+			<form  class="form-horizontal">
+				<div class="form-group">
+			    	<label class="col-sm-2 control-label hor-form">Start Date</label>
+			    	<div class="col-sm-3">
+			      		<input type="date" class="form-control">
+			    	</div>
+
+			    	<label class="col-sm-2 control-label hor-form">End Date</label>
+			    	<div class="col-sm-3">
+			      		<input type="date" class="form-control">
+			    	</div>
+
+			    	<button type="submit" class="btn btn-primary">Go!</button>
+			  	</div>
+			</form>
+		</div>
+
  		<div class="grid-form1" style="margin-bottom: 0px;">
 
-
-	 		<center><h3 id="forms-example" class="">Performance Report</h3></center>
+	 		<!-- <center><h3 id="forms-example" class="">Performance Report</h3></center>
 	 		<?php date_default_timezone_set('Asia/Manila');?>
 	 		<p align="right"><?php echo date('M d Y D');?></p>
-	 		<p align="right"><?php echo date('h:i A');?></p>
+	 		<p align="right"><?php echo date('h:i A');?></p> -->
 
-	 		<table id="datatable">
-	 			<thead>
-	 				<tr>
-	 					<th>Name</th>
-	 					<th>Translated Documents</th>
-	 				</tr>
-	 			</thead>
-	 			<tbody>
-	 				<tr>
-	 					<td>Hello</td>
-	 					<td>Hhaha</td>
-	 				</tr>
-	 				<tr>
-		    	 	    <td style='display: none;'> LAST </td>
-		    	 		<td colspan='6' align='center'><b> * END OF REPORT * </b></td>
-		    	 	</tr>
-	 			</tbody>
-	 			
-	 		</table>
+	 		<script src="https://code.highcharts.com/highcharts.js"></script>
+			<script src="https://code.highcharts.com/modules/data.js"></script>
+			<script src="https://code.highcharts.com/modules/drilldown.js"></script>
 
+			<div id="pie-chart"></div>
 			
 		</div>
 	<!--//grid-->

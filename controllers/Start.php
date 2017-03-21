@@ -192,10 +192,6 @@ class Start extends CI_Controller {
 			$this->Start_model->insertprogressionnotification($this->session->userdata("pprogressionprojectcode"), "No");
 		}
 	}
-
-	// practice lang
-
-	
 }
 
 ?>
