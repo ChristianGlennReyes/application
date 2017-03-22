@@ -53,7 +53,7 @@ $(function () {
             type: 'pie'
         },
         title: {
-            text: 'Performance Report: January, 2015 to May, 2015'
+            text: 'Performance Report: <?php echo date('Y-m-d', strtotime("-30 days"));?> to <?php echo date('Y-m-d');?>'
         },
         subtitle: {
             text: 'Click the slices to view the projects translated.'
@@ -324,33 +324,30 @@ $(function () {
 		<!--//banner-->
  	<!--grid-->
  	<div class="grid-form">
-
  		<div class="grid-form1">
  			<h3>Date Range</h3>
-			<form  class="form-horizontal">
+ 			<?php echo $this->input->post("startdate");?>
+			<form action="<?php echo site_url('ProjectManager/PerformanceReport');?>" class="form-horizontal" method="post" enctype="multipart/form-data">
 				<div class="form-group">
 			    	<label class="col-sm-2 control-label hor-form">Start Date</label>
 			    	<div class="col-sm-3">
-			      		<input type="date" class="form-control">
+			      		<input type="date" class="form-control" name="startdate" required="" max="<?php echo date('Y-m-d');?>">
 			    	</div>
 
 			    	<label class="col-sm-2 control-label hor-form">End Date</label>
 			    	<div class="col-sm-3">
-			      		<input type="date" class="form-control">
+			      		<input type="date" class="form-control" name="enddate" required="" max="<?php echo date('Y-m-d');?>">
 			    	</div>
 
-			    	<button type="submit" class="btn btn-primary">Go!</button>
+			    	<div class="col-sm-2">
+			    		<button type="submit" class="btn btn-primary">Go!</button>
+			    	</div>
+		
 			  	</div>
 			</form>
 		</div>
 
  		<div class="grid-form1" style="margin-bottom: 0px;">
-
-	 		<!-- <center><h3 id="forms-example" class="">Performance Report</h3></center>
-	 		<?php date_default_timezone_set('Asia/Manila');?>
-	 		<p align="right"><?php echo date('M d Y D');?></p>
-	 		<p align="right"><?php echo date('h:i A');?></p> -->
-
 	 		<script src="https://code.highcharts.com/highcharts.js"></script>
 			<script src="https://code.highcharts.com/modules/data.js"></script>
 			<script src="https://code.highcharts.com/modules/drilldown.js"></script>
