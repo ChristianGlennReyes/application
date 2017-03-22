@@ -262,6 +262,7 @@ $(function () {
 		                	</div>
 		                	<div class="clearfix"> </div>
 		                </a></li>
+                        <li><a href="#" class="view">View all messages</a></li>
 		              </ul>
 		            </li>
 					<li class="dropdown">
