@@ -498,8 +498,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 						if (!isset($message)){
-							$proj = "insert into project (projectname, documentid) 
-							values ('{$_SESSION['projectname']}','{$row['docuid']}')";
+							$proj = "insert into project (projectname, documentid, numberofwordstranslated) 
+							values ('{$_SESSION['projectname']}','{$row['docuid']}', '0')";
 							$projres = mysqli_query($dbc,$proj);
 
 							$getproject = "select MAX(projectcode) as code from project";

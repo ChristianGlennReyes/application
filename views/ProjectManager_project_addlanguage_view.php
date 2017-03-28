@@ -282,8 +282,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							$getcopy2 = mysqli_query($dbc, $copydetails);
 							$row6 = mysqli_fetch_array($getcopy2,MYSQL_ASSOC);
 
-							$addnewlang = "INSERT INTO project (projectname, documentid) 
-							values ('{$row5['projectname']}','{$row5['documentid']}')";
+							$addnewlang = "INSERT INTO project (projectname, documentid, numberofwordstranslated) 
+							values ('{$row5['projectname']}','{$row5['documentid']}', '0')";
 							$insert1 = mysqli_query($dbc, $addnewlang);
 
 							$getmax = "SELECT MAX(projectcode) as projcode from project";

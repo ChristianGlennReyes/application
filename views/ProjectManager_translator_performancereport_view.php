@@ -72,38 +72,30 @@ $(function () {
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
         },
         series: [{
-            name: 'Translators',
+            name: 'Projects',
             colorByPoint: true,
             data: [{
-                name: 'Microsoft Internet Explorer',
+                name: 'Sheila Owens',
                 y: 56.33,
-                drilldown: 'Microsoft Internet Explorer'
+                drilldown: 'Sheila Owens'
             }, {
-                name: 'Chrome',
+                name: 'Marco Ramon',
                 y: 24.03,
-                drilldown: 'Chrome'
+                drilldown: 'Marco Ramon'
             }, {
-                name: 'Firefox',
+                name: 'Marie Matringe',
                 y: 10.38,
-                drilldown: 'Firefox'
+                drilldown: 'Marie Matringe'
             }, {
-                name: 'Safari',
+                name: 'Akira Yuki',
                 y: 4.77,
-                drilldown: 'Safari'
-            }, {
-                name: 'Opera',
-                y: 0.91,
-                drilldown: 'Opera'
-            }, {
-                name: 'Proprietary or Undetectable',
-                y: 0.2,
-                drilldown: null
+                drilldown: 'Akira Yuki'
             }]
         }],
         drilldown: {
             series: [{
-                name: 'Microsoft Internet Explorer',
-                id: 'Microsoft Internet Explorer',
+                name: 'Projects',
+                id: 'Sheila Owens',
                 data: [
                     ['v11.0', 24.13],
                     ['v8.0', 17.2],
@@ -113,8 +105,8 @@ $(function () {
                     ['Project name', 0.5]
                 ]
             }, {
-                name: 'Chrome',
-                id: 'Chrome',
+                name: 'Projects',
+                id: 'Marco Ramon',
                 data: [
                     ['v40.0', 5],
                     ['v41.0', 4.32],
@@ -132,8 +124,8 @@ $(function () {
                     ['v30.0', 0.14]
                 ]
             }, {
-                name: 'Firefox',
-                id: 'Firefox',
+                name: 'Projects',
+                id: 'Marie Matringe',
                 data: [
                     ['v35', 2.76],
                     ['v36', 2.32],
@@ -145,8 +137,8 @@ $(function () {
                     ['v32', 0.15]
                 ]
             }, {
-                name: 'Safari',
-                id: 'Safari',
+                name: 'Projects',
+                id: 'Akira Yuki',
                 data: [
                     ['v8.0', 2.56],
                     ['v7.1', 0.77],
@@ -155,15 +147,6 @@ $(function () {
                     ['v6.1', 0.29],
                     ['v7.0', 0.26],
                     ['v6.2', 0.17]
-                ]
-            }, {
-                name: 'Opera',
-                id: 'Opera',
-                data: [
-                    ['v12.x', 0.34],
-                    ['v28', 0.24],
-                    ['v27', 0.17],
-                    ['v29', 0.16]
                 ]
             }]
         }

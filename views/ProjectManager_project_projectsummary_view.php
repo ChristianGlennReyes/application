@@ -228,687 +228,690 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			$newmessage = NULL;
 			// For loop in checking which button was clicked
 			$message = NULL;
-			for ($btn = 0; $btn < $_SESSION['count']; $btn++){
+			if (isset($_SESSION['count'])){
+				for ($btn = 0; $btn < $_SESSION['count']; $btn++){
 				
-				$close = 'close'.$btn;
-				$former = 'former'.$btn;
-				$purchase = 'purchase'.$btn;
-				$invoice = 'invoice'.$btn;
-				$project = 'project'.$btn;
+					$close = 'close'.$btn;
+					$former = 'former'.$btn;
+					$purchase = 'purchase'.$btn;
+					$invoice = 'invoice'.$btn;
+					$project = 'project'.$btn;
 
-				// If there is no Translator, Project status cannot be changed
-				$checktranslator = "SELECT translatorid from projectdetails where projectcode = '{$_SESSION[$project]}'";
-				$translator1 = mysqli_query($dbc,$checktranslator);
-				$row11 = mysqli_fetch_array($translator1,MYSQL_ASSOC);
+					// If there is no Translator, Project status cannot be changed
+					$checktranslator = "SELECT translatorid from projectdetails where projectcode = '{$_SESSION[$project]}'";
+					$translator1 = mysqli_query($dbc,$checktranslator);
+					$row11 = mysqli_fetch_array($translator1,MYSQL_ASSOC);
 
-				$checkstatus = "SELECT projectstatus from project where projectcode = '{$_SESSION[$project]}'";
-				$status1 = mysqli_query($dbc, $checkstatus);
-				$row12 = mysqli_fetch_array($status1, MYSQL_ASSOC);
+					$checkstatus = "SELECT projectstatus from project where projectcode = '{$_SESSION[$project]}'";
+					$status1 = mysqli_query($dbc, $checkstatus);
+					$row12 = mysqli_fetch_array($status1, MYSQL_ASSOC);
 
-				// Purchase Order View
-				$getdetailsofpurchase = "SELECT t.fullname as translator, d.deliverfromcountry as country, pm.fullname as projectman, 
-				d.delivertomanageremail as email, d.projectcode as projectcode, j.job as jobtype, l.languagedesc as language,
-				d.startdate as startdate, d.deadline as deadline, d.totalnumofwords as totalnum, ROUND(t.priceperword, 2) as price,
-				te.term as term, ROUND(d.po_total,2) as amount, d.po_no as purchasenum from projectdetails d JOIN translator t on d.translatorid = t.translatorid JOIN projectmanager PM
-				on d.managerid = pm.managerid JOIN job_ref j on d.jobno = j.jobno JOIN language_ref l on d.language = l.language
-				JOIN term_ref te on d.termno = te.termno where d.projectcode = '{$_SESSION[$project]}'";
-				$detailsofpurchase = mysqli_query($dbc, $getdetailsofpurchase);
-				$row30 = mysqli_fetch_array($detailsofpurchase, MYSQL_ASSOC);
+					// Purchase Order View
+					$getdetailsofpurchase = "SELECT t.fullname as translator, d.deliverfromcountry as country, pm.fullname as projectman, 
+					d.delivertomanageremail as email, d.projectcode as projectcode, j.job as jobtype, l.languagedesc as language,
+					d.startdate as startdate, d.deadline as deadline, d.totalnumofwords as totalnum, ROUND(t.priceperword, 2) as price,
+					te.term as term, ROUND(d.po_total,2) as amount, d.po_no as purchasenum from projectdetails d JOIN translator t on d.translatorid = t.translatorid JOIN projectmanager PM
+					on d.managerid = pm.managerid JOIN job_ref j on d.jobno = j.jobno JOIN language_ref l on d.language = l.language
+					JOIN term_ref te on d.termno = te.termno where d.projectcode = '{$_SESSION[$project]}'";
+					$detailsofpurchase = mysqli_query($dbc, $getdetailsofpurchase);
+					$row30 = mysqli_fetch_array($detailsofpurchase, MYSQL_ASSOC);
 
-				$getcountryname = "SELECT country from countryaddress_ref where countrycode = '{$row30['country']}'";
-				$countryname = mysqli_query($dbc, $getcountryname);
-				$row31 = mysqli_fetch_array($countryname,MYSQL_ASSOC);
+					$getcountryname = "SELECT country from countryaddress_ref where countrycode = '{$row30['country']}'";
+					$countryname = mysqli_query($dbc, $getcountryname);
+					$row31 = mysqli_fetch_array($countryname,MYSQL_ASSOC);
 
-				echo '<div class="modal fade" id="'.$purchase.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-									<h2 class="modal-title"><center>View Purchase Order</center></h2>
-								</div>
-								<div class="modal-body col-md-12">';
-									echo '<div style="float: right;font-size: 50%;">
-												<b>Orange Translations Ltd.</b><br>
-												7/F., Hong Kong Trade Centre<br>
-												161-7 Des Voeux Road Central<br>
+					echo '<div class="modal fade" id="'.$purchase.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										<h2 class="modal-title"><center>View Purchase Order</center></h2>
+									</div>
+									<div class="modal-body col-md-12">';
+										echo '<div style="float: right;font-size: 50%;">
+													<b>Orange Translations Ltd.</b><br>
+													7/F., Hong Kong Trade Centre<br>
+													161-7 Des Voeux Road Central<br>
+													Hong Kong<br>
+													36892487
+													Phone +852-5808-0576<br>
+													pm@orangetranslations.com<br> 
+													www.orangetranslations.com<br>
+												</div>
+
+												<br><br><br><br>
+												
+												<h5 align = "center">Purchase Order # '.$row30['purchasenum'].'</h5>
+												
+												<hr>
+													<div style ="float:right;font-size: 60%;">
+													<b>Deliver to</b><br>
+													'.$row30['projectman'].'<br>
+													'.$row30['email'].'<br>
+													</div>
+													
+													<div style="font-size: 60%;">
+													<b>For the attention of</b><br>
+													'.$row30['translator'].'<br>
+													From '.$row31['country'].'<br>
+													</div>
+												<hr>
+												
+													<table width = 70% align = "center">
+											            <tr>
+											                <th style="font-size: 50%;" align = left>Summary</th>
+											                <td style="font-size: 50%;"align = right>'.$row30['projectcode'].'</td>
+											            </tr>
+											            <tr>
+											                <th style="font-size: 50%;" align = left>Job Type</th>
+											                <td style="font-size: 50%;" align = right>'.$row30['jobtype'].'</td>
+											            </tr>
+											            <tr>
+											                <th style="font-size: 50%;" align = left>Language Pair</th>
+											                <td style="font-size: 50%;" align = right>'.$row30['language'].'</td>
+											            </tr>
+														<tr>
+											                <th style="font-size: 50%;" align = left>Start Date</th>
+											                <td style="font-size: 50%;" align = right>'.$row30['startdate'].'</td>
+											            </tr>
+														<tr>
+											                <th style="font-size: 50%;" align = left>Deadline</th>
+											                <td style="font-size: 50%;" align = right>'.$row30['deadline'].'</td>
+											            </tr>
+											        </table>
+													
+												<br>
+													
+													<table width = 40% align = right>
+														<tr>
+															<th style="font-size: 50%;"><center>Quantity</center></th>
+															<th style="font-size: 50%;"><center>Price</center></th>
+															<th style="font-size: 50%;"><center>Amount</center></th>
+														</tr>
+														<tr>
+															<td style="font-size: 50%;" align = center>'.$row30['totalnum'].'</td>
+															<td style="font-size: 50%;" align = center>'.$row30['price'].'</td>
+															<td style="font-size: 50%;" align = center>'.$row30['amount'].'</td>
+														<tr>
+														<tr>
+															<td></td>
+															<td style="font-size: 50%;" align = center>SUBTOTAL</td>
+															<td style="font-size: 50%;" align = center>'.$row30['amount'].'</td>
+														</tr>
+														<tr>
+															<td></td>
+														</tr>
+														<tr>
+															<td></td>
+															<td style="font-size: 50%;" align = center><b>TOTAL</b>
+															<td style="font-size: 50%;" align = center><b>'.$row30['amount'].'</b>
+													</table>
+													
+													<br><br><br><br>
+													
+													<div style="font-size: 50%;">
+													Payment terms: '.$row30['term'].'<br><br>
+													Payment options:<br><br>
+													1.) If you are billing us in EUR:<br>
+													<p align="justify">
+													a) Bank Transfer (from our bank account in Germany): Please provide your IBAN and BIC (or account number and Swift code if you are located outside of the SEPA areas).<br>
+													b) Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.
+													</p>
+													<br>
+													2.) If you are billing us in USD:<br>
+													<p align="justify">
+													a) Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and
+													SWIFT code.<br>
+													b) Paypal: Please provide your Paypal email address.<br>
+													c) Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.<br>
+													d) If you are located in the US we can pay you by check through our North Carolina office. Please email us your W9
+													form.
+													</p>
+													<br>
+													3) If your are billing us in HKD:<br>
+													<p align="justify">
+													Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and SWIFT code.
+													</p>
+			    		      						</div>
+			    		      						<br>';
+
+			    		      						$getpurchaseorderdetails = "SELECT purchaseorderstatus from purchaseorder where po_no = '{$row30['purchasenum']}' ";
+			    		      						$purchaseorderdetails = mysqli_query($dbc, $getpurchaseorderdetails);
+			    		      						$row35 = mysqli_fetch_array($purchaseorderdetails, MYSQL_ASSOC);
+
+			    		      				echo 	'<div class="col-md-12">
+			    		      							<form method="post">';
+			    		      								$status = null;
+			    		      								if ($row35['purchaseorderstatus'] == 0){
+			    		      									$status = "Unsettled";
+			    		      								} else {
+			    		      									$status = "Settled";
+			    		      								}
+			    		      						echo 	'Transaction Status: '.$status.'';
+			    		      								if ($status == "Unsettled") {
+			    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary"> Settle </button></p>';
+			    		      								} else {
+			    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary" disabled> Settle </button></p>';
+			    		      								}
+			    		      								
+			    		      						echo '<form>
+			    		      						</div>';
+			    		      echo '</div><!-- /.modal-body -->
+									<div class="modal-footer">
+										
+									</div><!-- /.modal-footer -->
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal-dialog -->
+						</div>';
+
+					// Purchaseorder Settle
+					if (isset($_POST['settlePO'])){
+						$updatepurchaseorderstatus = "update purchaseorder set purchaseorderstatus = TRUE where 
+						po_no = '{$row30['purchasenum']}'";
+
+						if ($dbc->query($updatepurchaseorderstatus) == TRUE ){
+							$newmessage = 'Transaction Settled!';
+						}
+
+					}
+
+					// Invoice View
+					$getdetailsofinvoice = "SELECT c.fullname as client, c.countrycode as countrycode, MONTH(i.invoicedate) as invoicedatemonth,
+					DAY(i.invoicedate) as invoicedateday, YEAR(i.invoicedate) as invoicedateyear, d.invoice_no as invoice_no, p.projectname as name,
+					d.startdate as startdate, d.invoicetotal as total, te.term as term from projectdetails d JOIN client c on d.clientid = c.clientid JOIN invoice i on 
+					d.invoice_no = i.invoice_no JOIN project p on d.projectcode = p.projectcode JOIN term_ref te on d.termno = te.termno
+					where d.projectcode = '{$_SESSION[$project]}' ";
+					$detailsofinvoice = mysqli_query($dbc, $getdetailsofinvoice);
+					$row32 = mysqli_fetch_array($detailsofinvoice, MYSQL_ASSOC);
+
+					$getcountryclient = "SELECT country from countryaddress_ref where countrycode = '{$row32['countrycode']}'";
+					$countryclient = mysqli_query($dbc, $getcountryclient);
+					$row33 = mysqli_fetch_array($countryclient, MYSQL_ASSOC);
+
+					$getdelivery = "SELECT datedelivered from projectdetails where projectcode = '{$_SESSION[$project]}' ";
+					$delivery = mysqli_query($dbc, $getdelivery);
+					$row34 = mysqli_fetch_array($delivery, MYSQL_ASSOC);
+
+					echo '<div class="modal fade" id="'.$invoice.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										<h2 class="modal-title"><center>View Invoice</center></h2>
+									</div>
+									<div class="modal-body col-md-12">';
+										echo '<div style="float:right;font-size:50%">
+												Orange Translations Ltd.<br>
+												7/F Hong Kong Trade Centre<br>
+												161 Des Voeux Road Central<br>
 												Hong Kong<br>
-												36892487
-												Phone +852-5808-0576<br>
-												pm@orangetranslations.com<br> 
-												www.orangetranslations.com<br>
-											</div>
-
-											<br><br><br><br>
-											
-											<h5 align = "center">Purchase Order # '.$row30['purchasenum'].'</h5>
-											
-											<hr>
-												<div style ="float:right;font-size: 60%;">
-												<b>Deliver to</b><br>
-												'.$row30['projectman'].'<br>
-												'.$row30['email'].'<br>
+												Tel +852-5808-0576<br>
+												info@orangetranslations.com<br> 
 												</div>
-												
-												<div style="font-size: 60%;">
-												<b>For the attention of</b><br>
-												'.$row30['translator'].'<br>
-												From '.$row31['country'].'<br>
-												</div>
-											<hr>
-											
-												<table width = 70% align = "center">
-										            <tr>
-										                <th style="font-size: 50%;" align = left>Summary</th>
-										                <td style="font-size: 50%;"align = right>'.$row30['projectcode'].'</td>
-										            </tr>
-										            <tr>
-										                <th style="font-size: 50%;" align = left>Job Type</th>
-										                <td style="font-size: 50%;" align = right>'.$row30['jobtype'].'</td>
-										            </tr>
-										            <tr>
-										                <th style="font-size: 50%;" align = left>Language Pair</th>
-										                <td style="font-size: 50%;" align = right>'.$row30['language'].'</td>
-										            </tr>
-													<tr>
-										                <th style="font-size: 50%;" align = left>Start Date</th>
-										                <td style="font-size: 50%;" align = right>'.$row30['startdate'].'</td>
-										            </tr>
-													<tr>
-										                <th style="font-size: 50%;" align = left>Deadline</th>
-										                <td style="font-size: 50%;" align = right>'.$row30['deadline'].'</td>
-										            </tr>
-										        </table>
-												
-											<br>
-												
-												<table width = 40% align = right>
-													<tr>
-														<th style="font-size: 50%;"><center>Quantity</center></th>
-														<th style="font-size: 50%;"><center>Price</center></th>
-														<th style="font-size: 50%;"><center>Amount</center></th>
-													</tr>
-													<tr>
-														<td style="font-size: 50%;" align = center>'.$row30['totalnum'].'</td>
-														<td style="font-size: 50%;" align = center>'.$row30['price'].'</td>
-														<td style="font-size: 50%;" align = center>'.$row30['amount'].'</td>
-													<tr>
-													<tr>
-														<td></td>
-														<td style="font-size: 50%;" align = center>SUBTOTAL</td>
-														<td style="font-size: 50%;" align = center>'.$row30['amount'].'</td>
-													</tr>
-													<tr>
-														<td></td>
-													</tr>
-													<tr>
-														<td></td>
-														<td style="font-size: 50%;" align = center><b>TOTAL</b>
-														<td style="font-size: 50%;" align = center><b>'.$row30['amount'].'</b>
-												</table>
 												
 												<br><br><br><br>
 												
-												<div style="font-size: 50%;">
-												Payment terms: '.$row30['term'].'<br><br>
-												Payment options:<br><br>
-												1.) If you are billing us in EUR:<br>
-												<p align="justify">
-												a) Bank Transfer (from our bank account in Germany): Please provide your IBAN and BIC (or account number and Swift code if you are located outside of the SEPA areas).<br>
-												b) Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.
-												</p>
+												<div align = "left" style="font-size:60%">
+												<b>'.$row32['client'].'</b><br>
+												'.$row33['country'].'<br>	
+												</div>
+												
 												<br>
-												2.) If you are billing us in USD:<br>
-												<p align="justify">
-												a) Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and
-												SWIFT code.<br>
-												b) Paypal: Please provide your Paypal email address.<br>
-												c) Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.<br>
-												d) If you are located in the US we can pay you by check through our North Carolina office. Please email us your W9
-												form.
-												</p>
+												
+												<div align = "right" style="font-size:60%">
+												'.date('F j Y', mktime(0,0,0, $row32['invoicedatemonth'], $row32['invoicedateday'],$row32['invoicedateyear'])).'<br>
+												Invoice # '.$row32['invoice_no'].'<br>
+												</div>
+												
 												<br>
-												3) If your are billing us in HKD:<br>
-												<p align="justify">
-												Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and SWIFT code.
-												</p>
-		    		      						</div>
-		    		      						<br>';
+												
+												<h4><center> Invoice </center></h4>
+												<h5><b><center> Translation of files </center></b></h5>
+												
+												<br>
+												
+												<table width="100%" align = "center" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
+													<tr>
+														<th style="font-size:50%">Subject/Filename</th>
+														<th style="font-size:50%">Requested by</th>
+														<th style="font-size:50%">Date Requested</th>
+														<th style="font-size:50%">Date Delivered</th>
+														<th style="font-size:50%">Amount</th>	
+													</tr>
+													<tr>
+														<td align = "center" style="font-size:50%">'.$row32['name'].'</td>
+														<td align = "center" style="font-size:50%">'.$row32['client'].'</td>
+														<td align = "center" style="font-size:50%">'.$row32['startdate'].'</td>
+														<td align = "center" style="font-size:50%">';
+														if ($row34['datedelivered'] == NULL) {
+															echo 'Not yet delivered';
+														} else {
+															echo $row34['datedelivered'];
+														}
+												   echo '</td>
+														<td align = "right" style="font-size:50%"> PHP '.$row32['total'].'</td>
+													</tr>
+												</table>
+												<br>
+												
+												<h6><b> Grand Total: </b></h6> <div style="float:right;font-size:50%;"> PHP '.$row32['total'].'</div>
 
-		    		      						$getpurchaseorderdetails = "SELECT purchaseorderstatus from purchaseorder where po_no = '{$row30['purchasenum']}' ";
-		    		      						$purchaseorderdetails = mysqli_query($dbc, $getpurchaseorderdetails);
-		    		      						$row35 = mysqli_fetch_array($purchaseorderdetails, MYSQL_ASSOC);
+												<br><br>
+												
+												<div style="font-size:50%">
+												Payment terms: '.$row32['term'].'<br>
+												<br>
+												Bank information: 
+												<br>
+												HSBC Hong Kong<br>
+												Account number 400-301990-838<br>
+												Swift Code HSBCHKHHHKH
+												
+												<br><br>
+												
+												Thank you for your business!
+												</div>
+												<br>';
+
+		    		      						$getinvoicedetails = "SELECT invoicestatus from invoice where invoice_no = '{$row32['invoice_no']}' ";
+		    		      						$invoicedetails = mysqli_query($dbc, $getinvoicedetails);
+		    		      						$row36 = mysqli_fetch_array($invoicedetails, MYSQL_ASSOC);
 
 		    		      				echo 	'<div class="col-md-12">
 		    		      							<form method="post">';
 		    		      								$status = null;
-		    		      								if ($row35['purchaseorderstatus'] == 0){
+		    		      								if ($row36['invoicestatus'] == 0){
 		    		      									$status = "Unsettled";
 		    		      								} else {
 		    		      									$status = "Settled";
 		    		      								}
 		    		      						echo 	'Transaction Status: '.$status.'';
 		    		      								if ($status == "Unsettled") {
-		    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary"> Settle </button></p>';
+		    		      									echo '<p align="right"><button type="submit" name="settleInvoice" class="btn btn-primary"> Settle </button></p>';
 		    		      								} else {
-		    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary" disabled> Settle </button></p>';
+		    		      									echo '<p align="right"><button type="submit" name="settleInvoice" class="btn btn-primary" disabled> Settle </button></p>';
 		    		      								}
 		    		      								
 		    		      						echo '<form>
 		    		      						</div>';
-		    		      echo '</div><!-- /.modal-body -->
-								<div class="modal-footer">
-									
-								</div><!-- /.modal-footer -->
-							</div><!-- /.modal-content -->
-						</div><!-- /.modal-dialog -->
-					</div>';
-
-				// Purchaseorder Settle
-				if (isset($_POST['settlePO'])){
-					$updatepurchaseorderstatus = "update purchaseorder set purchaseorderstatus = TRUE where 
-					po_no = '{$row30['purchasenum']}'";
-
-					if ($dbc->query($updatepurchaseorderstatus) == TRUE ){
-						$newmessage = 'Transaction Settled!';
-					}
-
-				}
-
-				// Invoice View
-				$getdetailsofinvoice = "SELECT c.fullname as client, c.countrycode as countrycode, MONTH(i.invoicedate) as invoicedatemonth,
-				DAY(i.invoicedate) as invoicedateday, YEAR(i.invoicedate) as invoicedateyear, d.invoice_no as invoice_no, p.projectname as name,
-				d.startdate as startdate, d.invoicetotal as total, te.term as term from projectdetails d JOIN client c on d.clientid = c.clientid JOIN invoice i on 
-				d.invoice_no = i.invoice_no JOIN project p on d.projectcode = p.projectcode JOIN term_ref te on d.termno = te.termno
-				where d.projectcode = '{$_SESSION[$project]}' ";
-				$detailsofinvoice = mysqli_query($dbc, $getdetailsofinvoice);
-				$row32 = mysqli_fetch_array($detailsofinvoice, MYSQL_ASSOC);
-
-				$getcountryclient = "SELECT country from countryaddress_ref where countrycode = '{$row32['countrycode']}'";
-				$countryclient = mysqli_query($dbc, $getcountryclient);
-				$row33 = mysqli_fetch_array($countryclient, MYSQL_ASSOC);
-
-				$getdelivery = "SELECT datedelivered from projectdetails where projectcode = '{$_SESSION[$project]}' ";
-				$delivery = mysqli_query($dbc, $getdelivery);
-				$row34 = mysqli_fetch_array($delivery, MYSQL_ASSOC);
-
-				echo '<div class="modal fade" id="'.$invoice.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-									<h2 class="modal-title"><center>View Invoice</center></h2>
-								</div>
-								<div class="modal-body col-md-12">';
-									echo '<div style="float:right;font-size:50%">
-											Orange Translations Ltd.<br>
-											7/F Hong Kong Trade Centre<br>
-											161 Des Voeux Road Central<br>
-											Hong Kong<br>
-											Tel +852-5808-0576<br>
-											info@orangetranslations.com<br> 
-											</div>
-											
-											<br><br><br><br>
-											
-											<div align = "left" style="font-size:60%">
-											<b>'.$row32['client'].'</b><br>
-											'.$row33['country'].'<br>	
-											</div>
-											
-											<br>
-											
-											<div align = "right" style="font-size:60%">
-											'.date('F j Y', mktime(0,0,0, $row32['invoicedatemonth'], $row32['invoicedateday'],$row32['invoicedateyear'])).'<br>
-											Invoice # '.$row32['invoice_no'].'<br>
-											</div>
-											
-											<br>
-											
-											<h4><center> Invoice </center></h4>
-											<h5><b><center> Translation of files </center></b></h5>
-											
-											<br>
-											
-											<table width="100%" align = "center" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
-												<tr>
-													<th style="font-size:50%">Subject/Filename</th>
-													<th style="font-size:50%">Requested by</th>
-													<th style="font-size:50%">Date Requested</th>
-													<th style="font-size:50%">Date Delivered</th>
-													<th style="font-size:50%">Amount</th>	
-												</tr>
-												<tr>
-													<td align = "center" style="font-size:50%">'.$row32['name'].'</td>
-													<td align = "center" style="font-size:50%">'.$row32['client'].'</td>
-													<td align = "center" style="font-size:50%">'.$row32['startdate'].'</td>
-													<td align = "center" style="font-size:50%">';
-													if ($row34['datedelivered'] == NULL) {
-														echo 'Not yet delivered';
-													} else {
-														echo $row34['datedelivered'];
-													}
-											   echo '</td>
-													<td align = "right" style="font-size:50%"> PHP '.$row32['total'].'</td>
-												</tr>
-											</table>
-											<br>
-											
-											<h6><b> Grand Total: </b></h6> <div style="float:right;font-size:50%;"> PHP '.$row32['total'].'</div>
-
-											<br><br>
-											
-											<div style="font-size:50%">
-											Payment terms: '.$row32['term'].'<br>
-											<br>
-											Bank information: 
-											<br>
-											HSBC Hong Kong<br>
-											Account number 400-301990-838<br>
-											Swift Code HSBCHKHHHKH
-											
-											<br><br>
-											
-											Thank you for your business!
-											</div>
-											<br>';
-
-	    		      						$getinvoicedetails = "SELECT invoicestatus from invoice where invoice_no = '{$row32['invoice_no']}' ";
-	    		      						$invoicedetails = mysqli_query($dbc, $getinvoicedetails);
-	    		      						$row36 = mysqli_fetch_array($invoicedetails, MYSQL_ASSOC);
-
-	    		      				echo 	'<div class="col-md-12">
-	    		      							<form method="post">';
-	    		      								$status = null;
-	    		      								if ($row36['invoicestatus'] == 0){
-	    		      									$status = "Unsettled";
-	    		      								} else {
-	    		      									$status = "Settled";
-	    		      								}
-	    		      						echo 	'Transaction Status: '.$status.'';
-	    		      								if ($status == "Unsettled") {
-	    		      									echo '<p align="right"><button type="submit" name="settleInvoice" class="btn btn-primary"> Settle </button></p>';
-	    		      								} else {
-	    		      									echo '<p align="right"><button type="submit" name="settleInvoice" class="btn btn-primary" disabled> Settle </button></p>';
-	    		      								}
-	    		      								
-	    		      						echo '<form>
-	    		      						</div>';
-		    		      echo '</div><!-- /.modal-body -->
-								<div class="modal-footer">
-									
-								</div><!-- /.modal-footer -->
-							</div><!-- /.modal-content -->
-						</div><!-- /.modal-dialog -->
-					</div>';
-			
-				// Invoice Settle
-				if (isset($_POST['settleInvoice'])){
-					$updateinvoicestatus = "update invoice set invoicestatus = TRUE where 
-					invoice_no = '{$row32['invoice_no']}'";
-
-					if ($dbc->query($updateinvoicestatus) == TRUE ){
-						$newmessage = 'Transaction Settled!';
-					}
-
-				}
-
-
-				//Former Translators
+			    		      echo '</div><!-- /.modal-body -->
+									<div class="modal-footer">
+										
+									</div><!-- /.modal-footer -->
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal-dialog -->
+						</div>';
 				
-				echo '<div class="modal fade" id="'.$former.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-									<h2 class="modal-title"><center>Former Translators</center></h2>
-								</div>
-								<div class="modal-body col-md-12">';
-									$getcount = "SELECT formertranslator from projectaudit where projectcode = '{$_SESSION[$project]}'";
-									$count = mysqli_query($dbc, $getcount);
-									
-									$ctr = 0;
-									while ($row27 = mysqli_fetch_array($count, MYSQL_ASSOC)){
-										if ($row27['formertranslator'] != NULL){
-											$ctr++;
-										}
-									}
+					// Invoice Settle
+					if (isset($_POST['settleInvoice'])){
+						$updateinvoicestatus = "update invoice set invoicestatus = TRUE where 
+						invoice_no = '{$row32['invoice_no']}'";
 
-									if ($ctr == 0){
-										echo '<p align="center"> No former translators! </p>';
-									} else {
-										echo '
-										<ul class="list-group" style="text-align:left;">';
-											$count = "SELECT formertranslator from projectaudit where projectcode = '{$_SESSION[$project]}'";
-											$getcount = mysqli_query($dbc, $count);
-
-											while ($row28 = mysqli_fetch_array($getcount, MYSQL_ASSOC)){
-												if ($row28['formertranslator'] != NULL){
-													$getname = "SELECT fullname from translator where translatorid='{$row28['formertranslator']}'";
-													$name = mysqli_query($dbc, $getname);
-													$row29 = mysqli_fetch_array($name, MYSQL_ASSOC);
-
-													echo '<li class="list-group-item">'.$row29['fullname'].'</li>';
-
-												}
-											}	
-											
-								   echo '</ul>';
-									}
-		    		      echo '</div><!-- /.modal-body -->
-								<div class="modal-footer">
-									
-								</div><!-- /.modal-footer -->
-							</div><!-- /.modal-content -->
-						</div><!-- /.modal-dialog -->
-					</div>';
-			
-				
-				// Project Closing
-				if (isset($_POST[$close])){
-					// Project Closing
-						$statud3 = "UPDATE project set projectstatus = 'Closed' where projectcode = '{$_SESSION[$project]}'";
-						if ($dbc->query($statud3) == TRUE) {
-							$getdetails = "select projectcode, translatorid from projectdetails where projectcode = '{$_SESSION[$project]}'";
-							$getdet = mysqli_query($dbc, $getdetails);
-							$details2 = mysqli_fetch_array($getdet, MYSQL_ASSOC);
-
-							$insertaudit = "insert into projectaudit(projectcode, date, newtranslator, typeofaudit)
-							values ('{$details2['projectcode']}',NOW(),'{$details2['translatorid']}','CLOSED')";
-							$auditres = mysqli_query($dbc, $insertaudit);
-
-							$newmessage.= '<p>Project has been Closed!</p>';
-						} 
-
-						$getclient1 = "SELECT clientid from projectdetails where projectcode = '{$_SESSION[$project]}'";
-						$client1 = mysqli_query($dbc, $getclient1);
-						$row9 = mysqli_fetch_array($client1, MYSQL_ASSOC);
-
-						$getclient2 = "SELECT clientid, cstatus from client where clientid = '{$row9['clientid']}'";
-						$client2 = mysqli_query($dbc, $getclient2);
-						$row10 = mysqli_fetch_array($client2, MYSQL_ASSOC);
-
-						// Log Client if new client
-						if ($row10['cstatus'] == 'POTENTIAL'){
-							$statud4 = "UPDATE client set cstatus = 'ACTIVE' where clientid = '{$row10['clientid']}'";
-							if ($dbc->query($statud4) == TRUE) {
-								$newmessage.= '<p>New Client has successfully been recorded!</p>';
-							} 
-
+						if ($dbc->query($updateinvoicestatus) == TRUE ){
+							$newmessage = 'Transaction Settled!';
 						}
 
+					}
 
-						$updatedatedelivered = "UPDATE projectdetails set datedelivered = CURDATE() where projectcode = '{$_SESSION[$project]}'";
-						
-						if ($dbc->query($updatedatedelivered) == TRUE) {
+
+					//Former Translators
+					
+					echo '<div class="modal fade" id="'.$former.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+										<h2 class="modal-title"><center>Former Translators</center></h2>
+									</div>
+									<div class="modal-body col-md-12">';
+										$getcount = "SELECT formertranslator from projectaudit where projectcode = '{$_SESSION[$project]}'";
+										$count = mysqli_query($dbc, $getcount);
+										
+										$ctr = 0;
+										while ($row27 = mysqli_fetch_array($count, MYSQL_ASSOC)){
+											if ($row27['formertranslator'] != NULL){
+												$ctr++;
+											}
+										}
+
+										if ($ctr == 0){
+											echo '<p align="center"> No former translators! </p>';
+										} else {
+											echo '
+											<ul class="list-group" style="text-align:left;">';
+												$count = "SELECT formertranslator from projectaudit where projectcode = '{$_SESSION[$project]}'";
+												$getcount = mysqli_query($dbc, $count);
+
+												while ($row28 = mysqli_fetch_array($getcount, MYSQL_ASSOC)){
+													if ($row28['formertranslator'] != NULL){
+														$getname = "SELECT fullname from translator where translatorid='{$row28['formertranslator']}'";
+														$name = mysqli_query($dbc, $getname);
+														$row29 = mysqli_fetch_array($name, MYSQL_ASSOC);
+
+														echo '<li class="list-group-item">'.$row29['fullname'].'</li>';
+
+													}
+												}	
+												
+									   echo '</ul>';
+										}
+			    		      echo '</div><!-- /.modal-body -->
+									<div class="modal-footer">
+										
+									</div><!-- /.modal-footer -->
+								</div><!-- /.modal-content -->
+							</div><!-- /.modal-dialog -->
+						</div>';
+				
+					
+					// Project Closing
+					if (isset($_POST[$close])){
+						// Project Closing
+							$statud3 = "UPDATE project set projectstatus = 'Closed' where projectcode = '{$_SESSION[$project]}'";
+							if ($dbc->query($statud3) == TRUE) {
+								$getdetails = "select projectcode, translatorid from projectdetails where projectcode = '{$_SESSION[$project]}'";
+								$getdet = mysqli_query($dbc, $getdetails);
+								$details2 = mysqli_fetch_array($getdet, MYSQL_ASSOC);
+
+								$insertaudit = "insert into projectaudit(projectcode, date, newtranslator, typeofaudit)
+								values ('{$details2['projectcode']}',NOW(),'{$details2['translatorid']}','CLOSED')";
+								$auditres = mysqli_query($dbc, $insertaudit);
+
+								$newmessage.= '<p>Project has been Closed!</p>';
+							} 
+
+							$getclient1 = "SELECT clientid from projectdetails where projectcode = '{$_SESSION[$project]}'";
+							$client1 = mysqli_query($dbc, $getclient1);
+							$row9 = mysqli_fetch_array($client1, MYSQL_ASSOC);
+
+							$getclient2 = "SELECT clientid, cstatus from client where clientid = '{$row9['clientid']}'";
+							$client2 = mysqli_query($dbc, $getclient2);
+							$row10 = mysqli_fetch_array($client2, MYSQL_ASSOC);
+
+							// Log Client if new client
+							if ($row10['cstatus'] == 'POTENTIAL'){
+								$statud4 = "UPDATE client set cstatus = 'ACTIVE' where clientid = '{$row10['clientid']}'";
+								if ($dbc->query($statud4) == TRUE) {
+									$newmessage.= '<p>New Client has successfully been recorded!</p>';
+								} 
+
+							}
+
+
+							$updatedatedelivered = "UPDATE projectdetails set datedelivered = CURDATE() where projectcode = '{$_SESSION[$project]}'";
 							
-							// EMAIL PO TO TRANSLATOR
-							$getdetails = "SELECT t.fullname as full, t.email as email, t.countrycode as country, pd.po_no as po_no, 
-												pd.jobno as job_no, pd.termno as termno, pd.language as language, pd.translatorid as id,
-												pd.startdate as startdate, pd.deadline as deadline, pd.totalnumofwords as total, 
-												ROUND(pd.po_total,2) as amount, pm.fullname as pmfull, pd.delivertomanageremail as pmemail, 
-												pd.datedelivered as deliv, pd.projectcode as projectcode, c.fullname as clientfull, 
-												c.email as clientemail, c.countrycode as clientcountry, pd.invoice_no as invoice_no, 
-												ROUND(pd.invoicetotal,2) as invoiceamt
-												from projectdetails pd JOIN translator t on pd.translatorid = t.translatorid
-												JOIN projectmanager pm on pd.managerid = pm.managerid 
-												JOIN client c on pd.clientid = c.clientid
-												where projectcode = '$_SESSION[$project]'";
-							$emailget = mysqli_query($dbc, $getdetails);
-							$row18 = mysqli_fetch_array($emailget, MYSQL_ASSOC);
+							if ($dbc->query($updatedatedelivered) == TRUE) {
+								
+								// EMAIL PO TO TRANSLATOR
+								$getdetails = "SELECT t.fullname as full, t.email as email, t.countrycode as country, pd.po_no as po_no, 
+													pd.jobno as job_no, pd.termno as termno, pd.language as language, pd.translatorid as id,
+													pd.startdate as startdate, pd.deadline as deadline, pd.totalnumofwords as total, 
+													ROUND(pd.po_total,2) as amount, pm.fullname as pmfull, pd.delivertomanageremail as pmemail, 
+													pd.datedelivered as deliv, pd.projectcode as projectcode, c.fullname as clientfull, 
+													c.email as clientemail, c.countrycode as clientcountry, pd.invoice_no as invoice_no, 
+													ROUND(pd.invoicetotal,2) as invoiceamt
+													from projectdetails pd JOIN translator t on pd.translatorid = t.translatorid
+													JOIN projectmanager pm on pd.managerid = pm.managerid 
+													JOIN client c on pd.clientid = c.clientid
+													where projectcode = '$_SESSION[$project]'";
+								$emailget = mysqli_query($dbc, $getdetails);
+								$row18 = mysqli_fetch_array($emailget, MYSQL_ASSOC);
 
-							// Get Price per word ni Translator
-							$getperword = "SELECT priceperword from translator where translatorid = '{$row18['id']}'";
-							$perwordget = mysqli_query($dbc, $getperword);
-							$row26 = mysqli_fetch_array($perwordget, MYSQL_ASSOC);
+								// Get Price per word ni Translator
+								$getperword = "SELECT priceperword from translator where translatorid = '{$row18['id']}'";
+								$perwordget = mysqli_query($dbc, $getperword);
+								$row26 = mysqli_fetch_array($perwordget, MYSQL_ASSOC);
 
-							$getjob = "SELECT job from job_ref where jobno = '{$row18['job_no']}'";
-							$job = mysqli_query($dbc, $getjob);
-							$row19 = mysqli_fetch_array($job, MYSQL_ASSOC);
+								$getjob = "SELECT job from job_ref where jobno = '{$row18['job_no']}'";
+								$job = mysqli_query($dbc, $getjob);
+								$row19 = mysqli_fetch_array($job, MYSQL_ASSOC);
 
-							$getterm = "SELECT term from term_ref where termno = '{$row18['termno']}'";
-							$term = mysqli_query($dbc, $getterm);
-							$row25 = mysqli_fetch_array($term, MYSQL_ASSOC);
+								$getterm = "SELECT term from term_ref where termno = '{$row18['termno']}'";
+								$term = mysqli_query($dbc, $getterm);
+								$row25 = mysqli_fetch_array($term, MYSQL_ASSOC);
 
-							$getlang = "SELECT languagedesc from language_ref where language = '{$row18['language']}' ";
-							$lang = mysqli_query($dbc, $getlang);
-							$row20 = mysqli_fetch_array($lang, MYSQL_ASSOC);
+								$getlang = "SELECT languagedesc from language_ref where language = '{$row18['language']}' ";
+								$lang = mysqli_query($dbc, $getlang);
+								$row20 = mysqli_fetch_array($lang, MYSQL_ASSOC);
 
-							$getcountry = "SELECT country from countryaddress_ref where countrycode = '{$row18['country']}'";
-							$country = mysqli_query($dbc, $getcountry);
-							$row21 = mysqli_fetch_array($country, MYSQL_ASSOC);
+								$getcountry = "SELECT country from countryaddress_ref where countrycode = '{$row18['country']}'";
+								$country = mysqli_query($dbc, $getcountry);
+								$row21 = mysqli_fetch_array($country, MYSQL_ASSOC);
 
-							$clientcountry = "SELECT country from countryaddress_ref where countrycode = '{$row18['clientcountry']}'";
-							$getclientcountry = mysqli_query($dbc, $clientcountry);
-							$row22 = mysqli_fetch_array($getclientcountry, MYSQL_ASSOC);
+								$clientcountry = "SELECT country from countryaddress_ref where countrycode = '{$row18['clientcountry']}'";
+								$getclientcountry = mysqli_query($dbc, $clientcountry);
+								$row22 = mysqli_fetch_array($getclientcountry, MYSQL_ASSOC);
 
-							$invoicedate = "SELECT MONTH(invoicedate) as monthdate, DAY(invoicedate) as daydate,
-											YEAR(invoicedate) as yeardate from invoice where invoice_no = '{$row18['invoice_no']}'";
-							$getdate = mysqli_query($dbc, $invoicedate);
-							$row23 = mysqli_fetch_array($getdate, MYSQL_ASSOC);
+								$invoicedate = "SELECT MONTH(invoicedate) as monthdate, DAY(invoicedate) as daydate,
+												YEAR(invoicedate) as yeardate from invoice where invoice_no = '{$row18['invoice_no']}'";
+								$getdate = mysqli_query($dbc, $invoicedate);
+								$row23 = mysqli_fetch_array($getdate, MYSQL_ASSOC);
 
-							$project = "SELECT projectname from project where projectcode = '{$row18['projectcode']}'";
-							$getproject = mysqli_query($dbc, $project);
-							$row24 = mysqli_fetch_array($getproject, MYSQL_ASSOC);
+								$project = "SELECT projectname from project where projectcode = '{$row18['projectcode']}'";
+								$getproject = mysqli_query($dbc, $project);
+								$row24 = mysqli_fetch_array($getproject, MYSQL_ASSOC);
 
-							// FIX DATE FORMAT PLES
-							require_once 'mailing/PHPMailerAutoload.php';
+								// FIX DATE FORMAT PLES
+								require_once 'mailing/PHPMailerAutoload.php';
 
-							$mailer = new PHPmailer();
-							$mailer->isHTML(true);
+								$mailer = new PHPmailer();
+								$mailer->isHTML(true);
 
-							$mailer -> IsSMTP();
-							$mailer -> SMTPAuth = true;
-							$mailer -> Host = "smtp.gmail.com";
-							$mailer -> Port = 465;
-							$mailer -> SMTPSecure = 'ssl';
-							
-							$mailer -> Username = 'orangestranslations@gmail.com';
-							$mailer -> Password = 'explore.dream.discover';
-							$mailer -> From = 'orangestranslations@gmail.com';
-							$mailer -> FromName = "Orange Translations";
+								$mailer -> IsSMTP();
+								$mailer -> SMTPAuth = true;
+								$mailer -> Host = "smtp.gmail.com";
+								$mailer -> Port = 465;
+								$mailer -> SMTPSecure = 'ssl';
+								
+								$mailer -> Username = 'orangestranslations@gmail.com';
+								$mailer -> Password = 'explore.dream.discover';
+								$mailer -> From = 'orangestranslations@gmail.com';
+								$mailer -> FromName = "Orange Translations";
 
-							
-							$mailer->addAddress($row18['email'], $row18['full']);
+								
+								$mailer->addAddress($row18['email'], $row18['full']);
 
-							$mailer -> Subject = "Purchase Order Form";
+								$mailer -> Subject = "Purchase Order Form";
 
-							$mailmessage = '<div style="float: right;">
-												<b>Orange Translations Ltd.</b><br>
-												7/F., Hong Kong Trade Centre<br>
-												161-7 Des Voeux Road Central<br>
+								$mailmessage = '<div style="float: right;">
+													<b>Orange Translations Ltd.</b><br>
+													7/F., Hong Kong Trade Centre<br>
+													161-7 Des Voeux Road Central<br>
+													Hong Kong<br>
+													36892487
+													Phone +852-5808-0576<br>
+													pm@orangetranslations.com<br> 
+													www.orangetranslations.com<br>
+												</div>
+
+												<br><br><br><br><br><br><br><br>
+												
+												<h1 align = "center">Purchase Order #'.$row18['po_no'].'</h1>
+												
+												<hr>
+													<div style ="float:right;">
+													<b>Deliver to</b><br>
+													'.$row18['pmfull'].'<br>
+													'.$row18['pmemail'].'<br>
+													</div>
+													
+													<b>For the attention of</b><br>
+													'.$row18['full'].'<br>
+													From '.$row21['country'].'<br>
+												<hr>
+												
+												<br><br>
+												
+													<table width = 70% align = "center">
+											            <tr>
+											                <th align = left>Summary</th>
+											                <td align = right>'.$row18['projectcode'].'</td>
+											            </tr>
+											            <tr>
+											                <th align = left>Job Type</th>
+											                <td align = right>'.$row19['job'].'</td>
+											            </tr>
+											            <tr>
+											                <th align = left>Language Pair</th>
+											                <td align = right>'.$row20['languagedesc'].'</td>
+											            </tr>
+														<tr>
+											                <th align = left>Start Date</th>
+											                <td align = right>'.$row18['startdate'].'</td>
+											            </tr>
+														<tr>
+											                <th align = left>Deadline</th>
+											                <td align = right>'.$row18['deadline'].'</td>
+											            </tr>
+											        </table>
+													
+												<br><br>
+													
+													<table width = 40% align = right>
+														<tr>
+															<th>Quantity</th>
+															<th>Price</th>
+															<th>Amount</th>
+														</tr>
+														<tr>
+															<td align = center>'.$row18['total'].'[word]</td>
+															<td align = center>'.$row26['priceperword'].'</td>
+															<td align = center>'.$row18['amount'].'</td>
+														<tr>
+														<tr>
+															<td></td>
+															<td align = center>SUBTOTAL</td>
+															<td align = center>'.$row18['amount'].'</td>
+														</tr>
+														<tr>
+															<td></td>
+														</tr>
+														<tr>
+															<td></td>
+															<td align = center><b>TOTAL</b>
+															<td align = center><b>'.$row18['amount'].'</b>
+													</table>
+													
+													<br><br><br><br><br><br>
+													
+													Payment terms:'.$row25['term'].'<br><br>
+													Payment options:<br><br>
+													1.) If you are billing us in EUR:<br>
+													a) Bank Transfer (from our bank account in Germany): Please provide your IBAN and BIC (or account number and<br>Swift code if you are located outside of the SEPA areas).
+													b) Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.<br><br>
+													
+													2.) If you are billing us in USD:<br>
+													a) Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and<br>
+													SWIFT code.
+													b) Paypal: Please provide your Paypal email address.<br>
+													c)Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.<br>
+													d) If you are located in the US we can pay you by check through our North Carolina office. Please email us your W9<br>
+													form.<br><br>
+													
+													3) If your are billing us in HKD:<br>
+													Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and<br>SWIFT code.';
+								$mailer -> Body = $mailmessage;
+
+								/* USED FOR CHECKING*/
+
+								if ($mailer -> Send()){
+									$newmessage.='Purchase Order has been sent to Translator!';
+								} else $message.='Something went wrong with sending the Purchase Order!';
+
+								$mailer->addAddress($row18['clientemail'], $row18['clientfull']);
+
+								$mailer -> Subject = "Invoice Form for Client";
+
+								$mailmessage = '<div style="float:right;">
+												Orange Translations Ltd.<br>
+												7/F Hong Kong Trade Centre<br>
+												161 Des Voeux Road Central<br>
 												Hong Kong<br>
-												36892487
-												Phone +852-5808-0576<br>
-												pm@orangetranslations.com<br> 
-												www.orangetranslations.com<br>
-											</div>
-
-											<br><br><br><br><br><br><br><br>
-											
-											<h1 align = "center">Purchase Order #'.$row18['po_no'].'</h1>
-											
-											<hr>
-												<div style ="float:right;">
-												<b>Deliver to</b><br>
-												'.$row18['pmfull'].'<br>
-												'.$row18['pmemail'].'<br>
+												Tel +852-5808-0576<br>
+												info@orangetranslations.com<br> 
 												</div>
 												
-												<b>For the attention of</b><br>
-												'.$row18['full'].'<br>
-												From '.$row21['country'].'<br>
-											<hr>
-											
-											<br><br>
-											
-												<table width = 70% align = "center">
-										            <tr>
-										                <th align = left>Summary</th>
-										                <td align = right>'.$row18['projectcode'].'</td>
-										            </tr>
-										            <tr>
-										                <th align = left>Job Type</th>
-										                <td align = right>'.$row19['job'].'</td>
-										            </tr>
-										            <tr>
-										                <th align = left>Language Pair</th>
-										                <td align = right>'.$row20['languagedesc'].'</td>
-										            </tr>
-													<tr>
-										                <th align = left>Start Date</th>
-										                <td align = right>'.$row18['startdate'].'</td>
-										            </tr>
-													<tr>
-										                <th align = left>Deadline</th>
-										                <td align = right>'.$row18['deadline'].'</td>
-										            </tr>
-										        </table>
+												<br><br><br>
+											    <br><br><br>
+												<br><br>
 												
-											<br><br>
+												<div align = "left">
+												<b>'.$row18['clientfull'].'</b><br>
+												'.$row22['country'].'<br>	
+												</div>
 												
-												<table width = 40% align = right>
+												<br>
+												
+												<div align = "right">
+												'.date('F j Y', mktime(0,0,0, $row23['monthdate'], $row23['daydate'], $row23['yeardate'])).'<br>
+												Invoice #'.$row18['invoice_no'].'<br>
+												</div>
+												
+												<br>
+												
+												<h2> Invoice </h2>
+												<b> Translation of files </b>
+												
+												<br>
+												<br>
+												
+												<table width="100%" align = "center" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
 													<tr>
-														<th>Quantity</th>
-														<th>Price</th>
-														<th>Amount</th>
+														<th>Subject/Filename</th>
+														<th>Requested by</th>
+														<th>Date Requested</th>
+														<th>Date Delivered</th>
+														<th>Amount</th>	
 													</tr>
 													<tr>
-														<td align = center>'.$row18['total'].'[word]</td>
-														<td align = center>'.$row26['priceperword'].'</td>
-														<td align = center>'.$row18['amount'].'</td>
-													<tr>
-													<tr>
-														<td></td>
-														<td align = center>SUBTOTAL</td>
-														<td align = center>'.$row18['amount'].'</td>
+														<td align = "center">'.$row24['projectname'].'</td>
+														<td align = "center">'.$row18['clientfull'].'</td>
+														<td align = "center">'.$row18['startdate'].'</td>
+														<td align = "center">'.$row18['deliv'].'</td>
+														<td align = "center"> HK$'.$row18['invoiceamt'].'</td>
 													</tr>
-													<tr>
-														<td></td>
-													</tr>
-													<tr>
-														<td></td>
-														<td align = center><b>TOTAL</b>
-														<td align = center><b>'.$row18['amount'].'</b>
 												</table>
+												<br><br>
 												
-												<br><br><br><br><br><br>
+												<b> Grand Total: </b> <div style="float:right;"> HK$'.$row18['invoiceamt'].'</div>
+
+												<br><br><br>
 												
-												Payment terms:'.$row25['term'].'<br><br>
-												Payment options:<br><br>
-												1.) If you are billing us in EUR:<br>
-												a) Bank Transfer (from our bank account in Germany): Please provide your IBAN and BIC (or account number and<br>Swift code if you are located outside of the SEPA areas).
-												b) Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.<br><br>
+												Payment terms:'.$row25['term'].'<br>
+												<br>
+												Bank information: <br>
+												<br>
+												HSBC Hong Kong<br>
+												Account number 400-301990-838<br>
+												Swift Code HSBCHKHHHKH
 												
-												2.) If you are billing us in USD:<br>
-												a) Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and<br>
-												SWIFT code.
-												b) Paypal: Please provide your Paypal email address.<br>
-												c)Skrill/Moneybookers: Please provide your Skrill/Moneybookers email address.<br>
-												d) If you are located in the US we can pay you by check through our North Carolina office. Please email us your W9<br>
-												form.<br><br>
+												<br><br><br>
 												
-												3) If your are billing us in HKD:<br>
-												Bank Transfer (from our HSBC bank account in Hong Kong): Please provide bank account number, bank name and<br>SWIFT code.';
-							$mailer -> Body = $mailmessage;
+												Thank you for your business!';
 
-							/* USED FOR CHECKING*/
+								$mailer -> Body = $mailmessage;
 
-							if ($mailer -> Send()){
-								$newmessage.='Purchase Order has been sent to Translator!';
-							} else $message.='Something went wrong with sending the Purchase Order!';
+								/* USED FOR CHECKING*/
 
-							$mailer->addAddress($row18['clientemail'], $row18['clientfull']);
+								if ($mailer -> Send()){
+									$newmessage.='Invoice has been sent to Client!';
+								} else $message.='Something went wrong with sending the invoice';
 
-							$mailer -> Subject = "Invoice Form for Client";
+							} 
 
-							$mailmessage = '<div style="float:right;">
-											Orange Translations Ltd.<br>
-											7/F Hong Kong Trade Centre<br>
-											161 Des Voeux Road Central<br>
-											Hong Kong<br>
-											Tel +852-5808-0576<br>
-											info@orangetranslations.com<br> 
-											</div>
-											
-											<br><br><br>
-										    <br><br><br>
-											<br><br>
-											
-											<div align = "left">
-											<b>'.$row18['clientfull'].'</b><br>
-											'.$row22['country'].'<br>	
-											</div>
-											
-											<br>
-											
-											<div align = "right">
-											'.date('F j Y', mktime(0,0,0, $row23['monthdate'], $row23['daydate'], $row23['yeardate'])).'<br>
-											Invoice #'.$row18['invoice_no'].'<br>
-											</div>
-											
-											<br>
-											
-											<h2> Invoice </h2>
-											<b> Translation of files </b>
-											
-											<br>
-											<br>
-											
-											<table width="100%" align = "center" border="1" cellpadding="0" cellspacing="0" bordercolor="#000000">
-												<tr>
-													<th>Subject/Filename</th>
-													<th>Requested by</th>
-													<th>Date Requested</th>
-													<th>Date Delivered</th>
-													<th>Amount</th>	
-												</tr>
-												<tr>
-													<td align = "center">'.$row24['projectname'].'</td>
-													<td align = "center">'.$row18['clientfull'].'</td>
-													<td align = "center">'.$row18['startdate'].'</td>
-													<td align = "center">'.$row18['deliv'].'</td>
-													<td align = "center"> HK$'.$row18['invoiceamt'].'</td>
-												</tr>
-											</table>
-											<br><br>
-											
-											<b> Grand Total: </b> <div style="float:right;"> HK$'.$row18['invoiceamt'].'</div>
+						
 
-											<br><br><br>
-											
-											Payment terms:'.$row25['term'].'<br>
-											<br>
-											Bank information: <br>
-											<br>
-											HSBC Hong Kong<br>
-											Account number 400-301990-838<br>
-											Swift Code HSBCHKHHHKH
-											
-											<br><br><br>
-											
-											Thank you for your business!';
-
-							$mailer -> Body = $mailmessage;
-
-							/* USED FOR CHECKING*/
-
-							if ($mailer -> Send()){
-								$newmessage.='Invoice has been sent to Client!';
-							} else $message.='Something went wrong with sending the invoice';
-
-						} 
+						
+						
+					}
 
 					
-
 					
+
 					
 				}
-
-				
-				
-
-				
 			}
+			
 
 			if (isset($message)){
 				echo "<div  class=\"grid-form1\">

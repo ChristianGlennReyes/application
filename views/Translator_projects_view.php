@@ -200,111 +200,113 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  		<div class="grid-form1" style="margin-bottom: 0px;">
  			<?php
  				$message = NULL;
+ 				if (isset($_SESSION['count'])){
+ 					for ($btn = 0;$btn < $_SESSION['count']; $btn++){
+	 					$upload = 'upload'.$btn;
+	 					$project = 'project'.$btn;
 
- 				for ($btn = 0;$btn < $_SESSION['count']; $btn++){
- 					$upload = 'upload'.$btn;
- 					$project = 'project'.$btn;
-
- 					$this->session->set_userdata('projectcode', $_SESSION[$project]);
+	 					$this->session->set_userdata('projectcode', $_SESSION[$project]);
 
 
- 					// Project Upload
-					echo '<div class="modal fade" id="upload'.$btn.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-										<center><h2 class="modal-title">Upload Translated Document</h2></center>
-									</div>
-									<div class="modal-body col-md-12">
-										<div class="form-group col-md-12">
-											<form action="'.$_SERVER['PHP_SELF'].'" method="post" enctype="multipart/form-data">
-												<div class="col-md-12">
-													<div class="col-md-9 col-md-offset-3">
-														<label> Document:</label>
-														<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
-														<label><input type="file" name="uploaded" id="InputFile" required> </label>
+	 					// Project Upload
+						echo '<div class="modal fade" id="upload'.$btn.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											<center><h2 class="modal-title">Upload Translated Document</h2></center>
+										</div>
+										<div class="modal-body col-md-12">
+											<div class="form-group col-md-12">
+												<form action="'.$_SERVER['PHP_SELF'].'" method="post" enctype="multipart/form-data">
+													<div class="col-md-12">
+														<div class="col-md-9 col-md-offset-3">
+															<label> Document:</label>
+															<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+															<label><input type="file" name="uploaded" id="InputFile" required> </label>
+														</div>
+														
 													</div>
-													
-												</div>
-												<br><br><br>
-										        <div class="form-group col-md-12">
-													<center>
-														<button type="submit" name="create" class="btn btn-primary">Submit</button>
-													</center>
-											    </div>
-											</form>
-				    					</div>														
-		        		        	</div>
-									<div class="modal-footer">
-										
-									</div>
-								</div><!-- /.modal-content -->
-							</div><!-- /.modal-dialog -->
-						</div>';
+													<br><br><br>
+											        <div class="form-group col-md-12">
+														<center>
+															<button type="submit" name="create" class="btn btn-primary">Submit</button>
+														</center>
+												    </div>
+												</form>
+					    					</div>														
+			        		        	</div>
+										<div class="modal-footer">
+											
+										</div>
+									</div><!-- /.modal-content -->
+								</div><!-- /.modal-dialog -->
+							</div>';
 
-						if(isset($_POST['create'])){
-							if ($_FILES['uploaded']['size'] == 0){
-								$message.='<p> File is Empty!';
-							} else {
-								$fileName = $_FILES['uploaded']['name'];
-								$tmpName  = $_FILES['uploaded']['tmp_name'];
-								$fileSize = $_FILES['uploaded']['size'];
-								$fileType = $_FILES['uploaded']['type'];
+							if(isset($_POST['create'])){
+								if ($_FILES['uploaded']['size'] == 0){
+									$message.='<p> File is Empty!';
+								} else {
+									$fileName = $_FILES['uploaded']['name'];
+									$tmpName  = $_FILES['uploaded']['tmp_name'];
+									$fileSize = $_FILES['uploaded']['size'];
+									$fileType = $_FILES['uploaded']['type'];
 
-								$fp      = fopen($tmpName, 'r');
-								$content = fread($fp, filesize($tmpName));
-								$content = addslashes($content);
-								fclose($fp);
+									$fp      = fopen($tmpName, 'r');
+									$content = fread($fp, filesize($tmpName));
+									$content = addslashes($content);
+									fclose($fp);
 
-								if(!get_magic_quotes_gpc())
-								{
-								    $fileName = addslashes($fileName);
+									if(!get_magic_quotes_gpc())
+									{
+									    $fileName = addslashes($fileName);
+									}
+
+									$docu = "insert into translateddocument (docuname, docusize, docutype, documentcontent) 
+									values ('$fileName', '$fileSize', '$fileType', '$content') ";
+
+									$status = mysqli_query($dbc, $docu) or die(mysqli_error($dbc)); 
+
+									$docu2 = "select MAX(translatedid) as docuid from translateddocument";
+									$docures = mysqli_query($dbc, $docu2);
+									$row = mysqli_fetch_array($docures,MYSQL_ASSOC);
+
+									$updatedocu = "update project set translatedid = '{$row['docuid']}' where projectcode = '{$_SESSION[$project]}'";
+
+									if ($dbc->query($updatedocu) == TRUE){
+
+										// Notification
+										$getdetails = "SELECT d.managerid as managerid, t.fullname as translator, p.projectname as projectname
+										FROM projectdetails d JOIN translator t on d.translatorid = t.translatorid JOIN project p on d.projectcode = p.projectcode
+										where d.projectcode = '{$_SESSION[$project]}' ";
+										$details = mysqli_query($dbc, $getdetails);
+										$row1 = mysqli_fetch_array($details, MYSQL_ASSOC);
+
+										date_default_timezone_set('Asia/Manila');
+										$time = date('H:i:s');
+										$date = date('Y-m-d');
+										$text = "Translator ".$row1['translator']." has uploaded a file to Project ".$row1['projectname']."";
+
+										$insertuploadnotification = "INSERT INTO notifications (time, date, notificationtext, managerid) 
+										VALUES ('$time', '$date', '$text', '{$row1['managerid']}')";
+										$uploadnotification = mysqli_query($dbc, $insertuploadnotification);
+
+
+										$message.="Translated Document Uploaded!";
+									}
+
 								}
 
-								$docu = "insert into translateddocument (docuname, docusize, docutype, documentcontent) 
-								values ('$fileName', '$fileSize', '$fileType', '$content') ";
-
-								$status = mysqli_query($dbc, $docu) or die(mysqli_error($dbc)); 
-
-								$docu2 = "select MAX(translatedid) as docuid from translateddocument";
-								$docures = mysqli_query($dbc, $docu2);
-								$row = mysqli_fetch_array($docures,MYSQL_ASSOC);
-
-								$updatedocu = "update project set translatedid = '{$row['docuid']}' where projectcode = '{$_SESSION[$project]}'";
-
-								if ($dbc->query($updatedocu) == TRUE){
-
-									// Notification
-									$getdetails = "SELECT d.managerid as managerid, t.fullname as translator, p.projectname as projectname
-									FROM projectdetails d JOIN translator t on d.translatorid = t.translatorid JOIN project p on d.projectcode = p.projectcode
-									where d.projectcode = '{$_SESSION[$project]}' ";
-									$details = mysqli_query($dbc, $getdetails);
-									$row1 = mysqli_fetch_array($details, MYSQL_ASSOC);
-
-									date_default_timezone_set('Asia/Manila');
-									$time = date('H:i:s');
-									$date = date('Y-m-d');
-									$text = "Translator ".$row1['translator']." has uploaded a file to Project ".$row1['projectname']."";
-
-									$insertuploadnotification = "INSERT INTO notifications (time, date, notificationtext, managerid) 
-									VALUES ('$time', '$date', '$text', '{$row1['managerid']}')";
-									$uploadnotification = mysqli_query($dbc, $insertuploadnotification);
-
-
-									$message.="Translated Document Uploaded!";
+								if (isset($message)){
+									echo '<font color="green">'.$message.'</font>';
+									
 								}
 
 							}
 
-							if (isset($message)){
-								echo '<font color="green">'.$message.'</font>';
-								
-							}
-
-						}
-
+	 				}
  				}
+ 				
  			?>
 	 		<h3 id="forms-example" class="">Project</h3>
 	 		<p>You can only see projects that have a deadline before this day.</p>
