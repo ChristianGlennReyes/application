@@ -265,7 +265,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<div class="modal-content">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-										<h2 class="modal-title"><center>View Purchase Order</center></h2>
+										<h2 class="modal-title"><center></center></h2>
 									</div>
 									<div class="modal-body col-md-12">';
 										echo '<div style="float: right;font-size: 50%;">
@@ -390,8 +390,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    		      						echo 	'Transaction Status: '.$status.'';
 			    		      								if ($status == "Unsettled") {
 			    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary"> Settle </button></p>';
+			    		      									//To be fixed
+			    		      									echo '<input type="button" onclick="window.print()" value="Print" />';
+
 			    		      								} else {
 			    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary" disabled> Settle </button></p>';
+			    		      									// To be fixed
+			    		      									echo '<input type="button" onclick="window.print()" value="Print" />';
 			    		      								}
 			    		      								
 			    		      						echo '<form>
@@ -437,7 +442,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<div class="modal-content">
 									<div class="modal-header">
 										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-										<h2 class="modal-title"><center>View Invoice</center></h2>
+										<h2 class="modal-title"><center></center></h2>
 									</div>
 									<div class="modal-body col-md-12">';
 										echo '<div style="float:right;font-size:50%">
