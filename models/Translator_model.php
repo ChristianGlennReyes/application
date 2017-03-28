@@ -96,8 +96,8 @@ class Translator_model extends CI_model {
 		$this->db->where('eventid', $eventid)->update("event", array('estatus' => "Cancelled"));
 	}
 
-	public function getProjectDetails($id, $currentdate) {
-		$query = $this->db->select("p.projectcode as 'projectcode', p.projectname as 'projectname', c.fullname as 'clientname', l.languagedesc as 'languagepair', d.deadline as 'deadline'")->from('projectdetails as d')->where('d.deadline >', $currentdate)->where(array('d.translatorid' => $id, 'p.projectstatus' => "Active"))->join('project as p', 'd.projectcode = p.projectcode', 'LEFT')->join('client as c', 'd.clientid = c.clientid', 'LEFT')->join('language_ref as l', 'd.language = l.language', 'LEFT')->get();
+	public function getProjectDetails($id) {
+		$query = $this->db->select("p.projectcode as 'projectcode', p.projectname as 'projectname', c.fullname as 'clientname', l.languagedesc as 'languagepair', d.deadline as 'deadline'")->from('projectdetails as d')->where(array('d.translatorid' => $id, 'p.projectstatus' => "Active"))->join('project as p', 'd.projectcode = p.projectcode', 'LEFT')->join('client as c', 'd.clientid = c.clientid', 'LEFT')->join('language_ref as l', 'd.language = l.language', 'LEFT')->get();
 		return $data = $query->result_array();
 	}
 

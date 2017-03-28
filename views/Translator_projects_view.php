@@ -309,7 +309,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  				
  			?>
 	 		<h3 id="forms-example" class="">Project</h3>
-	 		<p>You can only see projects that have a deadline before this day.</p>
+	 		<p> All active projects are displayed here </p>
 	 		<br>
 	 		<table id="myTable" class="display">
 			    <thead>
@@ -324,7 +324,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    </thead>
 			    <tbody>
 			    	<?php
-			    		$projectdetails = $this->Translator_model->getProjectDetails($this->session->userdata("id"), date("Y/m/d"));
+			    		$projectdetails = $this->Translator_model->getProjectDetails($this->session->userdata("id"));
 			    		
 			    		for($count = 0; $count < count($projectdetails); $count++) {
 			    			${'project'.$count} = $projectdetails[$count]['projectcode'];
