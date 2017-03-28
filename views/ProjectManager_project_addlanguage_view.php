@@ -231,7 +231,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 						if (empty($_POST['newlang'])){
 							$_SESSION['newlang'] = NULL;
-							$message.='<p> No Language Chosen! </p>';
+							$message.='<p> No language chosen! </p>';
 						} 
 						else {
 							$validate = "SELECT projectcode, projectname from project";
@@ -250,7 +250,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									$row11 = mysqli_fetch_array($getvalidate3,MYSQL_ASSOC);
 
 									if ($row10['projectname'] == $row8['projectname'] && $_POST['newlang'] == $row11['language']){
-										$message.='<p> Language Translation was already created from the Project!';
+										$message.='<p> Language translation was already created from the project. ';
 									}
 								}
 							}
@@ -264,12 +264,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 						if (empty($_POST['duedate'])){
 							$_SESSION['duedate'] = NULL;
-							$message.='<p> Deadline was not selected!';
+							$message.='<p> Deadline was not selected ';
 						} else if ( $_POST['duedate'] > date('Y-m-d')) {
 							$_SESSION['duedate'] = $_POST['duedate'];
 						} else {
 							$_SESSION['duedate'] = NULL;
-							$message.='<p> Invalid Date! Must be Date Later than today!';
+							$message.='<p> Invalid date! Must be date later than today. ';
 						}
 
 						if (!isset($message)){
@@ -399,16 +399,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 							$newmessage = NULL;
 							if ($insert1 && $insert2 && $mailer -> Send()){
-								$newmessage.='<p> Language Translation has been sucessfully added!
-								Quotation has been sent to Client!';
+								$newmessage.='<p> Language translation has been sucessfully added. Quotation has been sent to client!';
 
 								echo "<div  class=\"grid-form1\">
 				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        				<strong>Well done!</strong>".$newmessage."
+					        				<strong>Well done! </strong>".$newmessage."
 					       				</div>
 				 					  </div>";
 							} else {
-								$message.="Something went wrong with sending the Quotation to client";
+								$message.="Something went wrong with sending the quotation to client! ";
 							}
 
 
@@ -418,7 +417,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						if (isset($message)){
 							echo "<div  class=\"grid-form1\">
 				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Oops!</strong> ".$message."
+					        	<strong>Oops! </strong> ".$message."
 					       	</div>
 				 		</div>";
 						}

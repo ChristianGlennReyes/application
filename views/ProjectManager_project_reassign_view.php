@@ -264,14 +264,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 							echo "<div  class=\"grid-form1\">
 				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        				<strong>Well done!</strong>".$newmessage."
+					        				<strong>Well done! </strong>".$newmessage."
 					       				</div>
 				 					  </div>";
 						} 
 						if (isset($message)){
 							echo "<div  class=\"grid-form1\">
 				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Oops!</strong> ".$message."
+					        	<strong>Oops! </strong> ".$message."
 					       	</div>
 				 		</div>";
 						}

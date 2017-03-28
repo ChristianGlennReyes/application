@@ -245,7 +245,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 							if(isset($_POST['create'])){
 								if ($_FILES['uploaded']['size'] == 0){
-									$message.='<p> File is Empty!';
+									$message.='<p> File is empty. ';
 								} else {
 									$fileName = $_FILES['uploaded']['name'];
 									$tmpName  = $_FILES['uploaded']['tmp_name'];
@@ -291,15 +291,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										VALUES ('$time', '$date', '$text', '{$row1['managerid']}')";
 										$uploadnotification = mysqli_query($dbc, $insertuploadnotification);
 
-
-										$message.="Translated Document Uploaded!";
+										$newmessage = NULL;
+										$newmessage.="Translated document uploaded!";
 									}
 
 								}
 
 								if (isset($message)){
-									echo '<font color="green">'.$message.'</font>';
+									echo "<div  class=\"grid-form1\">
+								 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+									        	<strong>Oops! </strong> ".$message."
+									       	</div>
+								 		</div>";
 									
+								} else (isset($newmessage)){
+									echo "<div  class=\"grid-form1\">
+				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+								        	<strong>Well done! </strong> Translated document uploaded!
+								       	</div>
+							 		</div>";
 								}
 
 							}

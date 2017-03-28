@@ -207,21 +207,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  				if($this->session->userdata("sentagreementform") == "true") {
 	 				echo "<div  class=\"grid-form1\">
 				 			<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Well done!</strong> Successfully sent translation agreement via email.
+					        	<strong>Well done! </strong> Successfully sent translation agreement via email.
 					       	</div>
 				 		</div>";
 	 			}
 	 			elseif($this->session->userdata("sentagreementform") == "false") {
 	 				echo "<div  class=\"grid-form1\">
 				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Oops!</strong> Something went wrong in sending the agreement form.
+					        	<strong>Oops! </strong> Something went wrong in sending the agreement form.
 					       	</div>
 				 		</div>";
 	 			}
 	 			elseif($this->session->userdata("sentagreementform") == "existing") {
 	 				echo "<div  class=\"grid-form1\">
 				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Oops!</strong> Already sent an email to the translator.
+					        	<strong>Oops! </strong> Already sent an email to the translator.
 					       	</div>
 				 		</div>";
 	 			}

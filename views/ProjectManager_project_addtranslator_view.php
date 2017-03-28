@@ -280,8 +280,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 							if ($dbc->query($updatepono) == TRUE && $dbc->query($updatepototal) == TRUE 
 								&& $dbc->query($updateterm) == TRUE ){
-								$newmessage.= 'Translator has been added to Project!';
-								$newmessage.= 'Purchase Order has been created!';
+								$newmessage.= 'Translator has been added to project. ';
+								$newmessage.= 'Purchase order has been created. ';
 
 								$results = $this->ProjectManager_model->getDetailsForProjectProgression($_SESSION[$code]);
 

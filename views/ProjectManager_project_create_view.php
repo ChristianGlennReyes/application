@@ -215,6 +215,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	 		</form>
 	 		<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
 	 			<?php
+	 				if (isset($message)){
+						echo "<div  class=\"grid-form1\">
+				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        	<strong>Oops! </strong> ".$message."
+					       	</div>
+				 		</div>";
+					} else if (isset($newmessage)){
+						echo "<div  class=\"grid-form1\">
+				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        				<strong>Well done! </strong>".$newmessage."
+					       				</div>
+				 					  </div>";
+					}
+
 	 				if (isset($_POST['yes'])){
 	 					echo '<div class="form-group col-md-12">
 	 							<div class="col-md-6"> 
@@ -391,14 +405,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 						if (empty($_POST['projectname'])){
 							$_SESSION['projectname'] = NULL;
-							$message.='<p> You did not enter a Project Name!!';
+							$message.='<p> You did not enter a project name! ';
 						} else {
 							$_SESSION['projectname'] = $_POST['projectname'];
 						}
 
 						if (empty($_POST['language'])){
 							$_SESSION['language'] = NULL;
-							$message.='<p> You did not select a language translation!';
+							$message.='<p> You did not select a language translation! ';
 						} else {
 							$_SESSION['language'] = $_POST['language'];
 						}
@@ -409,7 +423,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						} else if ( $_POST['deadline'] >= date('Y-m-d')) {
 							$_SESSION['deadline'] = $_POST['deadline'];
 						} else {
-							$message.='<p> Invalid Date! Must be Date Today or Later!';
+							$message.='<p> Invalid Date! Must be Date Today or Later! ';
 						}
 
 						if (empty($_POST['client']) && !empty($_POST['newclient'])){
@@ -441,7 +455,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						}
 
 						if ($_FILES['uploaded']['size'] == 0){
-							$message.='<p> File is Empty!';
+							$message.='<p> File is empty!';
 						} else {
 							$fileName = $_FILES['uploaded']['name'];
 							$tmpName  = $_FILES['uploaded']['tmp_name'];
@@ -743,26 +757,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 							$newmessage = NULL;
 							if ($mailer -> Send()){
-								$newmessage.='<p> Quotation Form is sent to Client! Project has been Created!';
+								$newmessage.='<p> Quotation form is sent to client. Project has been created!';
 
-								echo "<div  class=\"grid-form1\">
-				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        				<strong>Well done!</strong>".$newmessage."
-					       				</div>
-				 					  </div>";
+								
 							}
 							$_SESSION['clientemail'] = NULL;
 
 						}
 
 					}
-					if (isset($message)){
-						echo "<div  class=\"grid-form1\">
-				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Oops!</strong> ".$message."
-					       	</div>
-				 		</div>";
-					}
+
 				?>
 		</div>
 		<div class="clearfix"> </div>

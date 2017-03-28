@@ -239,7 +239,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					} else if (isset($_POST[$deact])){
 						$update2 = "UPDATE translator set translatorstatus = 'Inactive' where translatorid = '{$_SESSION[$code]}' ";
 						if ($dbc->query($update2) == TRUE) {
-							$message.= '<p>Translator has been Deactivated!</p>';
+							$message.= '<p>Translator has been deactivated!</p>';
 						} 
 					}
 				}
