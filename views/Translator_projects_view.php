@@ -303,10 +303,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									        	<strong>Oops! </strong> ".$message."
 									       	</div>
 								 		</div>";
-<<<<<<< HEAD
-=======
-									
->>>>>>> origin/master
 								} else if (isset($newmessage)){
 									echo "<div  class=\"grid-form1\">
 				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
