@@ -188,6 +188,7 @@ class Start_model extends CI_model {
 			'time' => date('H:i:s'),
 			'date' => date('Y-m-d'),
 			'notificationtext' => "The client has said ".$status." to the project progression",
+			'viewed' => "0",
 			'managerid' => $this->Start_model->getprojectmanager($projectcode)
 		);
 		$this->db->insert("notifications", $notifdata);

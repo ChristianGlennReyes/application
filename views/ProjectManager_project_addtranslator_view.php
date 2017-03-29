@@ -256,8 +256,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							$date = date('Y-m-d');
 							$text = "You have been assigned to Project ".$details3['projname']."!";
 
-							$inserttranslatorassigned = "INSERT INTO notifications (time, date, notificationtext, translatorid) 
-							VALUES ('$time', '$date', '$text', '{$details2['translatorid']}')";
+							$inserttranslatorassigned = "INSERT INTO notifications (time, date, notificationtext, translatorid, viewed) 
+							VALUES ('$time', '$date', '$text', '{$details2['translatorid']}', FALSE)";
 							$translatorassigned = mysqli_query($dbc, $inserttranslatorassigned);
 
 							// Purchase Order
@@ -420,7 +420,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																		 		<thead>
 																		 			<tr>
 																		 				<th><center>Translator</center></th>
-																		 				<th><center>Projects Ongoing</center></th>
+																		 				<th><center>Projects On-going</center></th>
 																		 				<th><center></center></th>
 																		 				<th><center></center></th>
 																		 			</tr>

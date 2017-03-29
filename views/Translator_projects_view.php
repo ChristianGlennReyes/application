@@ -204,10 +204,47 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  					for ($btn = 0;$btn < $_SESSION['count']; $btn++){
 	 					$upload = 'upload'.$btn;
 	 					$project = 'project'.$btn;
+	 					$progress = 'progress'.$btn;
 
 	 					$this->session->set_userdata('projectcode', $_SESSION[$project]);
 
+	 					//Progress Tracker
+	 					echo '<div class="modal fade" id="progress'.$btn.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+											<center><h2 class="modal-title"></h2></center>
+										</div>
+										<div class="modal-body col-md-12">
+											<div class="form-group col-md-12">
+												<form action="'.$_SERVER['PHP_SELF'].'" method="post" enctype="multipart/form-data">
+													<div class="col-md-12">
+														<h4><center>Enter Number of Words Translated</center></h4>
+													</div>
+													<br><br>
+													<div class="col-md-4 col-md-offset-4">
+														<input type="number" class="form-control" name="progressnum" id="progressnum" required>
+													</div>
+													<br><br>
+											        <div class="form-group col-md-12">
+														<center>
+															<button type="submit" name="prog" class="btn btn-primary">Enter</button>
+														</center>
+												    </div>
+												</form>
+					    					</div>														
+			        		        	</div>
+										<div class="modal-footer">
+											
+										</div>
+									</div><!-- /.modal-content -->
+								</div><!-- /.modal-dialog -->
+							</div>';
 
+						if (isset($_POST['prog'])){
+
+						}
 	 					// Project Upload
 						echo '<div class="modal fade" id="upload'.$btn.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 								<div class="modal-dialog">
@@ -287,8 +324,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										$date = date('Y-m-d');
 										$text = "Translator ".$row1['translator']." has uploaded a file to Project ".$row1['projectname']."";
 
-										$insertuploadnotification = "INSERT INTO notifications (time, date, notificationtext, managerid) 
-										VALUES ('$time', '$date', '$text', '{$row1['managerid']}')";
+										$insertuploadnotification = "INSERT INTO notifications (time, date, notificationtext, managerid, viewed) 
+										VALUES ('$time', '$date', '$text', '{$row1['managerid']}', FALSE)";
 										$uploadnotification = mysqli_query($dbc, $insertuploadnotification);
 
 										$newmessage = NULL;
@@ -297,21 +334,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 								}
 
-								if (isset($message)){
-									echo "<div  class=\"grid-form1\">
-								 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-									        	<strong>Oops! </strong> ".$message."
-									       	</div>
-								 		</div>";
-									
-								} else if (isset($newmessage)){
-									echo "<div  class=\"grid-form1\">
-				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-								        	<strong>Well done! </strong> Translated document uploaded!
+								
+
+							}
+
+							if (isset($message)){
+								echo "<div  class=\"grid-form1\">
+							 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+								        	<strong>Oops! </strong> ".$message."
 								       	</div>
 							 		</div>";
-								}
-
+								
+							} else if (isset($newmessage)){
+								echo "<div  class=\"grid-form1\">
+			 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+							        	<strong>Well done! </strong> Translated document uploaded!
+							       	</div>
+						 		</div>";
 							}
 
 	 				}
@@ -321,13 +360,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	 		<h3 id="forms-example" class="">Project</h3>
 	 		<p> All active projects are displayed here </p>
 	 		<br>
-	 		<table id="myTable" class="display">
+	 		<table id="myTable" data-toggle="table">
 			    <thead>
-			        <tr>
+			        <tr style='font-size:15px'>
 			            <th><center>Project</center></th>
 			            <th><center>Client</center></th>
 			            <th><center>Language Pair</center></th>
 			            <th><center>Deadline</center></th>
+			            <th><center></center></th>
 			            <th><center></center></th>
 			            <th><center></center></th>
 			        </tr>
@@ -339,13 +379,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    		for($count = 0; $count < count($projectdetails); $count++) {
 			    			${'project'.$count} = $projectdetails[$count]['projectcode'];
 
-			    			echo "<tr>";
+			    			echo "<tr style='font-size:12px'>";
 			    			echo "<td>".$projectdetails[$count]['projectname']."</td>";
 			    			echo "<td>".$projectdetails[$count]['clientname']."</td>";
 			    			echo "<td>".$projectdetails[$count]['languagepair']."</td>";
-			    			echo "<td>".$projectdetails[$count]['deadline']."</td>";
-			    			echo '<td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#upload'.$count.'"> Upload</button></td>';
-			    			echo '<td><a href="'.site_url("Translator/DownloadUntranslatedDocument").'"><button type="buttton" class="btn btn-default" name="#download'.$count.'"> Download</button></a></td>';
+			    			echo "<td>".date('F j Y D', mktime(0,0,0, $projectdetails[$count]['month'], $projectdetails[$count]['day'], $projectdetails[$count]['year']))."</td>";
+			    			echo '<td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#upload'.$count.'" style="width:65px; height:24px; font-size:11px;"> Upload</button></td>';
+			    			echo '<td><a href="'.site_url("Translator/DownloadUntranslatedDocument").'"><button type="buttton" class="btn btn-default" name="#download'.$count.'" style="width:85px; height:24px; font-size:11px;"> Download</button></a></td>';
+			    			echo '<td><button type="button" class="btn btn-default" data-toggle="modal" data-target="#progress'.$count.'" style="width:75px; height:24px; font-size:11px;"> Progress </button></td>';
 			    			echo "</tr>";
 
 			    		}
@@ -383,7 +424,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		$(function () {
 			$(document).ready(function(){
 			    $('#myTable').DataTable( {
-			        "order": [[ 3, "asc" ]]
+			        "order": [[ 3, "asc" ]],
+
+			        "columnDefs": [
+					   { "orderable": false, 
+					     "targets": 4},
+					   { "orderable": false, 
+					     "targets": 5},
+					   { "orderable": false, 
+					     "targets": 6}
+					]
 			    });
 			});
 		});

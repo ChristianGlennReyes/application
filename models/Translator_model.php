@@ -56,6 +56,7 @@ class Translator_model extends CI_model {
 			'time' => date('H:i:s'),
 			'date' => date('Y-m-d'),
 			'notificationtext' => "Translator ".$this->gettranslatorname($id)." has succesfully registered their account!",
+			'viewed' => "0",
 			'managerid' => $this->getmanagerid($id)
 		);
 		$this->db->insert("notifications", $notifdata);
@@ -97,7 +98,7 @@ class Translator_model extends CI_model {
 	}
 
 	public function getProjectDetails($id) {
-		$query = $this->db->select("p.projectcode as 'projectcode', p.projectname as 'projectname', c.fullname as 'clientname', l.languagedesc as 'languagepair', d.deadline as 'deadline'")->from('projectdetails as d')->where(array('d.translatorid' => $id, 'p.projectstatus' => "Active"))->join('project as p', 'd.projectcode = p.projectcode', 'LEFT')->join('client as c', 'd.clientid = c.clientid', 'LEFT')->join('language_ref as l', 'd.language = l.language', 'LEFT')->get();
+		$query = $this->db->select("p.projectcode as 'projectcode', p.projectname as 'projectname', c.fullname as 'clientname', l.languagedesc as 'languagepair', d.deadline as 'deadline', month(d.deadline) as 'month', day(d.deadline) as 'day', year(d.deadline) as 'year' ")->from('projectdetails as d')->where(array('d.translatorid' => $id, 'p.projectstatus' => "Active"))->join('project as p', 'd.projectcode = p.projectcode', 'LEFT')->join('client as c', 'd.clientid = c.clientid', 'LEFT')->join('language_ref as l', 'd.language = l.language', 'LEFT')->get();
 		return $data = $query->result_array();
 	}
 
