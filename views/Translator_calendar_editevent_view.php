@@ -246,7 +246,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    <tbody>
 			    	<?php
 			    		$currentDate = date("Y-m-d");
-			    		//$events = $this->Translator_model->getEvent($this->session->userdata("id"));
 			    		$events = $this->Translator_model->getEventWithCurrentDate($this->session->userdata("id"), $currentDate);
 
 			    		if (!empty($events))

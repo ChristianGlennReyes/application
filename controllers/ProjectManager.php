@@ -58,6 +58,24 @@ class ProjectManager extends CI_Controller {
 	}
 
 	public function PerformanceReport() {
+		if($this->input->post("startdate") && $this->input->post("enddate")) {
+			if($this->input->post("startdate") <= $this->input->post("enddate")) {
+				$this->session->set_userdata('performancestartdate', $this->input->post("startdate"));
+				$this->session->set_userdata('performanceenddate', $this->input->post("enddate"));
+			}
+			else {
+				$this->session->set_userdata('errormessage', TRUE);
+			}
+		}
+
+		if($this->session->userdata('performancestartdate') && $this->session->userdata('performanceenddate')) {
+			
+		}
+		else {
+			$this->session->set_userdata('performancestartdate', date("Y-m-d", strtotime("-30 days")));
+			$this->session->set_userdata('performanceenddate', date("Y-m-d"));
+		}
+
 		if($this->session->userdata("projectmanager") == TRUE) {
 			$this->load->view("ProjectManager_translator_performancereport_view");
 		}

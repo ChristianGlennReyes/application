@@ -45,15 +45,18 @@ class ProjectManager_model extends CI_model {
 		return $query->result_array();
 	}
 
-
-
-
 	public function getTranslatedDocument($projectcode) {
 		$query = $this->db->select('td.documentcontent, td.docuname, td.docutype, td.docusize')->from('translateddocument as td')->where('p.projectcode', $projectcode)->join('project as p', 'p.translatedid = td.translatedid', 'LEFT')->get();
 		return $query->result_array();
-
 	}
 
+	public function getPerformanceReportDetails($startdate, $enddate) {
+		$query = $this->db->select('t.fullname as translator, p.projectname, lr.languagedesc, c.fullname as client, pd.deadline')->from('translator as t')->where('p.projectstatus', 'closed')->where('pd.deadline >=', $startdate)->where('pd.deadline <=', $enddate)->join('projectdetails as pd', 't.translatorid = pd.translatorid', 'LEFT')->join('project as p', 'p.projectcode = pd.projectcode', 'LEFT')->join('client as c', 'pd.clientid = c.clientid', 'LEFT')->join('language_ref as lr', 'pd.language = lr.language', "LEFT")->get();
+		return $query->result_array();
+	}
 
-
+	public function getPerformanceReportChart($startdate, $enddate) {
+		$query = $this->db->select('t.fullname as translator, count(t.fullname) as count')->from('translator as t')->where('p.projectstatus', 'closed')->where('pd.deadline >=', $startdate)->where('pd.deadline <=', $enddate)->join('projectdetails as pd', 't.translatorid = pd.translatorid', 'LEFT')->join('project as p', 'p.projectcode = pd.projectcode', 'LEFT')->join('client as c', 'pd.clientid = c.clientid', 'LEFT')->join('language_ref as lr', 'pd.language = lr.language', "LEFT")->group_by('translator')->get();
+		return $query->result_array();
+	}
 }
