@@ -203,196 +203,207 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</h2>
 		    </div>
 		<!--//banner-->
+	
  	<!--grid-->
  	<div class="grid-form">
+ 		<?php
+			if (isset($_SESSION['message'])){
+				echo "<div  class=\"grid-form1\">
+			 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+				        	<strong>Oops! </strong> ".$_SESSION['message']."
+				       	</div>
+			 		</div>";
+			} else if (isset($_SESSION['newmessage'])){
+				echo "<div  class=\"grid-form1\">
+ 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+	        				<strong>Well done! </strong>".$_SESSION['newmessage']."
+	       				</div>
+ 					  </div>";
+			}
+
+		?>
  		<div class="grid-form1 col-md-12" style="margin-bottom: 0px;">
 	 		<h3 id="forms-example" class="">Create Project</h3>
-	 		<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-	 			<div class="form-group col-md-12"> 
-		 				<label class="col-md-6"><input type="submit" class="form-control" name="yes" value="For New Client"/> </label>
-		 				<label class="col-md-6"><input type="submit" class="form-control" name="no" value="For Old Client"/> </label>
-	 			</div>
-	 		</form>
-	 		<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
-	 			<?php
-	 				if (isset($message)){
-						echo "<div  class=\"grid-form1\">
-				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Oops! </strong> ".$message."
-					       	</div>
-				 		</div>";
-					} else if (isset($newmessage)){
-						echo "<div  class=\"grid-form1\">
-				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        				<strong>Well done! </strong>".$newmessage."
-					       				</div>
-				 					  </div>";
-					}
+	 		
+	 			
+			    <div class="but_list">
+			        <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
+						<ul id="myTab" class="nav nav-tabs" role="tablist">
+						  	<li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">New Client</a></li>
+						  	<li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Old Client</a></li>
+						</ul>
 
-	 				if (isset($_POST['yes'])){
-	 					echo '<div class="form-group col-md-12">
-	 							<div class="col-md-6"> 
-									<input type="text" class="form-control" name="newclient" id="clientname" placeholder="Client Name" required>
-								</div>
+						<div id="myTabContent" class="tab-content">
+					 		<div role="tabpanel" class="tab-pane fade in active" id="home" aria-labelledby="home-tab">
+					 			<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
+					    		<?php
+					    			echo '<div class="form-group col-md-12">
+				 							<div class="col-md-6"> 
+												<input type="text" class="form-control" name="newclient" id="clientname" placeholder="Client Name" required>
+											</div>
 
-								<div class="col-md-6"> 
-								<input type="email" class="form-control" name="clientemail" id="clientemail" placeholder="Client Email" required>
-								</div>
-								
-								
-							  </div>';
-						echo '<div class="form-group col-md-12">
-								<div class="col-md-6">
-									<input type="text" class="form-control" name="projectname" id="projectname" placeholder="Project Name" required>
-								</div>
+											<div class="col-md-6"> 
+											<input type="email" class="form-control" name="clientemail" id="clientemail" placeholder="Client Email" required>
+											</div>
+											
+											
+										  </div>';
+									echo '<div class="form-group col-md-12">
+											<div class="col-md-6">
+												<input type="text" class="form-control" name="projectname" id="projectname" placeholder="Project Name" required>
+											</div>
 
-								<div class="col-md-6">
-									<select name = "country" class="form-control" required>
-									<option value="">Select Client\'s Country Address</option>';
+											<div class="col-md-6">
+												<select name = "country" class="form-control" required>
+												<option value="">Select Client\'s Country Address</option>';
 
-									$country = "select countrycode, country from countryaddress_ref;";
-									$cty = mysqli_query($dbc,$country);
+												$country = "select countrycode, country from countryaddress_ref;";
+												$cty = mysqli_query($dbc,$country);
 
-									if ($cty){
-										while ($row = mysqli_fetch_array($cty,MYSQL_ASSOC)) {
-											$country = $row['countrycode'];
-											echo '<option value="'. $country . '">';
-											echo $row['country'];
-											echo '</option>';
-										}
-									}
-						echo '		</select>
-								</div>
+												if ($cty){
+													while ($row = mysqli_fetch_array($cty,MYSQL_ASSOC)) {
+														$country = $row['countrycode'];
+														echo '<option value="'. $country . '">';
+														echo $row['country'];
+														echo '</option>';
+													}
+												}
+									echo '		</select>
+											</div>
 
-								
-							  </div>';
-						echo '<div class="form-group col-md-12">
-								<div class="col-md-6">
-									<select name = "language" class="form-control" required>
-									<option value="">Select Language Translation</option>';
+											
+										  </div>';
+									echo '<div class="form-group col-md-12">
+											<div class="col-md-6">
+												<select name = "language" class="form-control" required>
+												<option value="">Select Language Translation</option>';
 
-									$language = "select language, languagedesc from language_ref;";
-									$lang = mysqli_query($dbc,$language);
+												$language = "select language, languagedesc from language_ref;";
+												$lang = mysqli_query($dbc,$language);
 
-									if ($lang){
-										while ($row = mysqli_fetch_array($lang,MYSQL_ASSOC)) {
-											$language = $row['language'];
-											echo '<option value="'. $language . '">';
-											echo $row['languagedesc'];
-											echo '</option>';
-										}
-									}
-						echo '		</select>
-								</div>
+												if ($lang){
+													while ($row = mysqli_fetch_array($lang,MYSQL_ASSOC)) {
+														$language = $row['language'];
+														echo '<option value="'. $language . '">';
+														echo $row['languagedesc'];
+														echo '</option>';
+													}
+												}
+									echo '		</select>
+											</div>
 
-								<div class="col-md-2">
-									<label for="deadline">Deadline:</label>
-									
-								</div>
+											<div class="col-md-2">
+												<label for="deadline">Deadline:</label>
+												
+											</div>
 
-								<div class="col-md-4">
-									<input type="date" name="deadline" class="form-control" required>
-								</div>
-								
-							  </div>';
+											<div class="col-md-4">
+												<input type="date" name="deadline" class="form-control" required>
+											</div>
+											
+										  </div>';
 
-						echo '<div class="col-md-12">
-								<div class="col-md-6">
-									<label> Document:</label>
-									<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
-									<label><input type="file" name="uploaded" id="InputFile" required> </label>
-								</div>
-								
-							  </div>';
-						echo '<div class="form-group col-md-12">
-								<div class="col-md-12">
-									<button type="submit" name="create" class="btn btn-primary col-md-2">Submit</button>
-								</div>
-							  </div>';
+									echo '<div class="col-md-12">
+											<div class="col-md-6">
+												<label> Document:</label>
+												<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+												<label><input type="file" name="uploaded" id="InputFile" required> </label>
+											</div>
+											
+										  </div>';
+									echo '<div class="form-group col-md-12">
+											<div class="col-md-12">
+												<button type="submit" name="create" class="btn btn-primary col-md-2">Submit</button>
+											</div>
+										  </div>';
+					    		?>
+					    		</form>
+					  		</div>
+					  		<div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+					  			<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
+					    		<?php
+					    			echo '<div class="form-group col-md-12">
+				 							<div class="col-md-6">
+				 								<select name = "client" class="form-control" required>
+				 								<option value="">Select Client</option>';
 
-	 				}
-	 				else if (isset($_POST['no'])){
-	 					echo '<div class="form-group col-md-12">
-	 							<div class="col-md-6">
-	 								<select name = "client" class="form-control" required>
-	 								<option value="">Select Client</option>';
+				 								$client = "select clientid, fullname, cstatus from client order by 2 ASC;";
+												$clnt = mysqli_query($dbc,$client);
 
-	 								$client = "select clientid, fullname, cstatus from client order by 2 ASC;";
-									$clnt = mysqli_query($dbc,$client);
+												if ($clnt){
+													while ($row = mysqli_fetch_array($clnt,MYSQL_ASSOC)) {
+														if ($row['cstatus'] == 'ACTIVE'){
+															$client = $row['clientid'];
+															echo "<option value=\"".$client."\">";
+															echo $row['fullname']; 
+															echo '</option>';
+														}
+													}
+												}
+									echo ' 		<select>
+											</div>
 
-									if ($clnt){
-										while ($row = mysqli_fetch_array($clnt,MYSQL_ASSOC)) {
-											if ($row['cstatus'] == 'ACTIVE'){
-												$client = $row['clientid'];
-												echo "<option value=\"".$client."\">";
-												echo $row['fullname']; 
-												echo '</option>';
-											}
-										}
-									}
-						echo ' 		<select>
-								</div>
+											<div class="col-md-6">
+												<input type="text" class="form-control" name="projectname" id="projectname" placeholder="Project Name" required>
+											</div>
 
-								<div class="col-md-6">
-									<input type="text" class="form-control" name="projectname" id="projectname" placeholder="Project Name" required>
-								</div>
+											
+										  </div>';
+									echo '<div class="form-group col-md-12">
+											<div class="col-md-6">
+												<select name = "language" class="form-control" required>
+												<option value="">Select Language Translation</option>';
 
-								
-							  </div>';
-						echo '<div class="form-group col-md-12">
-								<div class="col-md-6">
-									<select name = "language" class="form-control" required>
-									<option value="">Select Language Translation</option>';
+												$language = "select language, languagedesc from language_ref;";
+												$lang = mysqli_query($dbc,$language);
 
-									$language = "select language, languagedesc from language_ref;";
-									$lang = mysqli_query($dbc,$language);
+												if ($lang){
+													while ($row = mysqli_fetch_array($lang,MYSQL_ASSOC)) {
+														$language = $row['language'];
+														echo '<option value="'. $language . '">';
+														echo $row['languagedesc'];
+														echo '</option>';
+													}
+												}
+									echo '		</select>
+											</div>
 
-									if ($lang){
-										while ($row = mysqli_fetch_array($lang,MYSQL_ASSOC)) {
-											$language = $row['language'];
-											echo '<option value="'. $language . '">';
-											echo $row['languagedesc'];
-											echo '</option>';
-										}
-									}
-						echo '		</select>
-								</div>
+											<div class="col-md-6">
+												<select name="projtype" class="form-control" required>
+													<option value=""> Select Project Job Type </option>
+													<option value="1"> Translation </option>
+													<option value="2"> Proofreading </option>
+												</select>
+											</div>
+											
+										  </div>';
+									echo '<div class="form-group col-md-12">
+											<div class="col-md-2">
+												<label for="deadline">Deadline: </label>
+												
+											</div>
 
-								<div class="col-md-6">
-									<select name="projtype" class="form-control" required>
-										<option value=""> Select Project Job Type </option>
-										<option value="1"> Translation </option>
-										<option value="2"> Proofreading </option>
-									</select>
-								</div>
-								
-							  </div>';
-						echo '<div class="form-group col-md-12">
-								<div class="col-md-2">
-									<label for="deadline">Deadline: </label>
-									
-								</div>
+											<div class="col-md-4">
+												<input type="date" name="deadline" class="form-control" required>
+											</div>
 
-								<div class="col-md-4">
-									<input type="date" name="deadline" class="form-control" required>
-								</div>
-
-								<div class="col-md-6">
-									<label> Document:</label>
-									<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
-									<label><input type="file" name="uploaded" id="InputFile" required> </label>
-								</div>
-							  </div>';
-						echo '<div class="form-group col-md-12">
-								<div class="col-md-12">
-									<button type="submit" name="create" class="btn btn-primary col-md-2">Submit</button>
-								</div>
-							  </div>';
-	 				}
-	 			?>
-			    
-			</form>
-
+											<div class="col-md-6">
+												<label> Document:</label>
+												<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
+												<label><input type="file" name="uploaded" id="InputFile" required> </label>
+											</div>
+										  </div>';
+									echo '<div class="form-group col-md-12">
+											<div class="col-md-12">
+												<button type="submit" name="create" class="btn btn-primary col-md-2">Submit</button>
+											</div>
+										  </div>';
+					    		?>
+					    		</form>
+					  		</div>
+						</div>
+		   			</div>
+		   		</div>
 				<?php
 					if(isset($_POST['create'])){
 						$message = NULL;
@@ -509,7 +520,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							}
 						}
 						
-
 
 						if (!isset($message)){
 							$proj = "insert into project (projectname, documentid, numberofwordstranslated) 
@@ -763,13 +773,22 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							}
 							$_SESSION['clientemail'] = NULL;
 
+							
+
 						}
 
+						if (isset($message)){
+							$_SESSION['message'] = $message;
+						}if (isset($newmessage)){
+							$_SESSION['newmessage'] = $newmessage;
+						}
+						
 					}
 
 				?>
 		</div>
 		<div class="clearfix"> </div>
+
 	<!--//grid-->
 
 	<div class="clearfix"> </div>

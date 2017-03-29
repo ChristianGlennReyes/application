@@ -304,7 +304,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									       	</div>
 								 		</div>";
 									
-								} else (isset($newmessage)){
+								} else if (isset($newmessage)){
 									echo "<div  class=\"grid-form1\">
 				 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
 								        	<strong>Well done! </strong> Translated document uploaded!
