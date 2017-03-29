@@ -200,6 +200,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  		<div class="grid-form1" style="margin-bottom: 0px;">
  			<?php
  				$message = NULL;
+ 				$newmessage = NULL;
  				if (isset($_SESSION['count'])){
  					for ($btn = 0;$btn < $_SESSION['count']; $btn++){
 	 					$upload = 'upload'.$btn;
@@ -243,8 +244,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</div>';
 
 						if (isset($_POST['prog'])){
+							$updatetranslatedwords = "UPDATE project set numberofwordstranslated = '{$_POST['progressnum']}' where projectcode = '{$_SESSION[$project]}'";
 
+							if ($dbc->query($updatetranslatedwords) == TRUE){
+								$newmessage.="Number of words translated has been updated. ";
+							}
 						}
+
 	 					// Project Upload
 						echo '<div class="modal fade" id="upload'.$btn.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 								<div class="modal-dialog">
@@ -328,7 +334,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										VALUES ('$time', '$date', '$text', '{$row1['managerid']}', FALSE)";
 										$uploadnotification = mysqli_query($dbc, $insertuploadnotification);
 
-										$newmessage = NULL;
+										
 										$newmessage.="Translated document uploaded!";
 									}
 
@@ -348,7 +354,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							} else if (isset($newmessage)){
 								echo "<div  class=\"grid-form1\">
 			 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-							        	<strong>Well done! </strong> Translated document uploaded!
+							        	<strong>Well done! </strong>".$newmessage."
 							       	</div>
 						 		</div>";
 							}

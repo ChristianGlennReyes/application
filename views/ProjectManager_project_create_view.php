@@ -322,7 +322,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					  		<div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
 					  			<form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
 					    		<?php
-					    			echo '<div class="form-group col-md-12">
+					    			echo '<br><br>
+					    				  <div class="form-group col-md-12">
 				 							<div class="col-md-6">
 				 								<select name = "client" class="form-control" required>
 				 								<option value="">Select Client</option>';

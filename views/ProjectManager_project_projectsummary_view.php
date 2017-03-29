@@ -264,7 +264,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					// Purchase Order View
 					$getdetailsofpurchase = "SELECT t.fullname as translator, d.deliverfromcountry as country, pm.fullname as projectman, 
 					d.delivertomanageremail as email, d.projectcode as projectcode, j.job as jobtype, l.languagedesc as language,
-					d.startdate as startdate, d.deadline as deadline, d.totalnumofwords as totalnum, ROUND(t.priceperword, 2) as price,
+					month(d.startdate) as strtmonth, day(d.startdate) as strtday, year(d.startdate) as strtyr, month(d.deadline) as endmonth, 
+					day(d.deadline) as endday, year(d.deadline) as endyr, d.totalnumofwords as totalnum, ROUND(t.priceperword, 2) as price,
 					te.term as term, ROUND(d.po_total,2) as amount, d.po_no as purchasenum from projectdetails d JOIN translator t on d.translatorid = t.translatorid JOIN projectmanager PM
 					on d.managerid = pm.managerid JOIN job_ref j on d.jobno = j.jobno JOIN language_ref l on d.language = l.language
 					JOIN term_ref te on d.termno = te.termno where d.projectcode = '{$_SESSION[$project]}'";
@@ -329,11 +330,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											            </tr>
 														<tr>
 											                <th style="font-size: 50%;" align = left>Start Date</th>
-											                <td style="font-size: 50%;" align = right>'.$row30['startdate'].'</td>
+											                <td style="font-size: 50%;" align = right>'.date('j F Y', mktime(0,0,0, $row30['strtmonth'], $row30['strtday'], $row30['strtyr'])).'</td>
 											            </tr>
+											            
 														<tr>
 											                <th style="font-size: 50%;" align = left>Deadline</th>
-											                <td style="font-size: 50%;" align = right>'.$row30['deadline'].'</td>
+											                <td style="font-size: 50%;" align = right>'.date('j F Y', mktime(0,0,0, $row30['endmonth'], $row30['endday'], $row30['endyr'])).'</td>
 											            </tr>
 											        </table>
 													
@@ -440,7 +442,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					// Invoice View
 					$getdetailsofinvoice = "SELECT c.fullname as client, c.countrycode as countrycode, MONTH(i.invoicedate) as invoicedatemonth,
 					DAY(i.invoicedate) as invoicedateday, YEAR(i.invoicedate) as invoicedateyear, d.invoice_no as invoice_no, p.projectname as name,
-					d.startdate as startdate, d.invoicetotal as total, te.term as term from projectdetails d JOIN client c on d.clientid = c.clientid JOIN invoice i on 
+					month(d.startdate) as strtmonth, day(d.startdate) as strtday, year(d.startdate) as strtyr, d.invoicetotal as total, 
+					te.term as term from projectdetails d JOIN client c on d.clientid = c.clientid JOIN invoice i on 
 					d.invoice_no = i.invoice_no JOIN project p on d.projectcode = p.projectcode JOIN term_ref te on d.termno = te.termno
 					where d.projectcode = '{$_SESSION[$project]}' ";
 					$detailsofinvoice = mysqli_query($dbc, $getdetailsofinvoice);
@@ -481,7 +484,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 												<br>
 												
 												<div align = "right" style="font-size:60%">
-												'.date('F j Y', mktime(0,0,0, $row32['invoicedatemonth'], $row32['invoicedateday'],$row32['invoicedateyear'])).'<br>
+												'.date('j F Y', mktime(0,0,0, $row32['invoicedatemonth'], $row32['invoicedateday'],$row32['invoicedateyear'])).'<br>
 												Invoice # '.$row32['invoice_no'].'<br>
 												</div>
 												
@@ -503,7 +506,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													<tr>
 														<td align = "center" style="font-size:50%">'.$row32['name'].'</td>
 														<td align = "center" style="font-size:50%">'.$row32['client'].'</td>
-														<td align = "center" style="font-size:50%">'.$row32['startdate'].'</td>
+														<td align = "center" style="font-size:50%">'.date('j F Y', mktime(0,0,0, $row32['strtmonth'], $row32['strtday'],$row32['strtyr'])).'</td>
 														<td align = "center" style="font-size:50%">';
 														if ($row34['datedelivered'] == NULL) {
 															echo 'Not yet delivered';
@@ -667,8 +670,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								// EMAIL PO TO TRANSLATOR
 								$getdetails = "SELECT t.fullname as full, t.email as email, t.countrycode as country, pd.po_no as po_no, 
 													pd.jobno as job_no, pd.termno as termno, pd.language as language, pd.translatorid as id,
-													pd.startdate as startdate, pd.deadline as deadline, pd.totalnumofwords as total, 
-													ROUND(pd.po_total,2) as amount, pm.fullname as pmfull, pd.delivertomanageremail as pmemail, 
+													month(pd.startdate) as strtmonth, day(pd.startdate) as strtday, year(pd.startdate) as strtyr,
+													month(pd.deadline) as endmonth, day(pd.deadline) as endday, year(pd.deadline) as endyr,
+													pd.totalnumofwords as total, ROUND(pd.po_total,2) as amount, pm.fullname as pmfull, pd.delivertomanageremail as pmemail, 
 													pd.datedelivered as deliv, pd.projectcode as projectcode, c.fullname as clientfull, 
 													c.email as clientemail, c.countrycode as clientcountry, pd.invoice_no as invoice_no, 
 													ROUND(pd.invoicetotal,2) as invoiceamt
@@ -779,11 +783,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											            </tr>
 														<tr>
 											                <th align = left>Start Date</th>
-											                <td align = right>'.$row18['startdate'].'</td>
+											                <td align = right>'.date('j F Y', mktime(0,0,0, $row18['strtmonth'], $row18['strtday'],$row18['strtyr'])).'</td>
 											            </tr>
 														<tr>
 											                <th align = left>Deadline</th>
-											                <td align = right>'.$row18['deadline'].'</td>
+											                <td align = right>'.date('j F Y', mktime(0,0,0, $row18['endmonth'], $row18['endday'],$row18['endyr'])).'</td>
 											            </tr>
 											        </table>
 													
@@ -888,7 +892,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													<tr>
 														<td align = "center">'.$row24['projectname'].'</td>
 														<td align = "center">'.$row18['clientfull'].'</td>
-														<td align = "center">'.$row18['startdate'].'</td>
+														<td align = "center">'.date('j F Y', mktime(0,0,0, $row18['strtmonth'], $row18['strtday'],$row18['strtyr'])).'</td>
 														<td align = "center">'.$row18['deliv'].'</td>
 														<td align = "center"> HK$'.$row18['invoiceamt'].'</td>
 													</tr>
