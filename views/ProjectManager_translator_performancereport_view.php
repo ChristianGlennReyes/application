@@ -77,7 +77,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         }
                     },
                     series: [{
-                        name: 'Translators',
+                        name: 'Projects',
                         colorByPoint: true,
                         data: [
 
