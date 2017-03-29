@@ -224,6 +224,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  	 <!--faq-->
  	<div class="grid-form">
 		<div class="grid-form1 col-md-12" >
+
+		<script language="javascript">
+		   function printPage(id) {
+			    var html="<html>";
+			    html+= document.getElementById(id).innerHTML;
+			    html+="</html>";
+			    var printWin = window.open('','','left=0,top=0,width=1,height=1,toolbar=0,scrollbars=0,status =0');
+			    printWin.document.write(html);
+			    printWin.document.close();
+			    printWin.focus();
+			    printWin.print();
+			    printWin.close();
+			}
+		</script>
+			
 		<?php
 			$newmessage = NULL;
 			// For loop in checking which button was clicked
@@ -260,6 +275,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					$countryname = mysqli_query($dbc, $getcountryname);
 					$row31 = mysqli_fetch_array($countryname,MYSQL_ASSOC);
 
+					$purchase2 = $purchase;
+
 					echo '<div class="modal fade" id="'.$purchase.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -267,7 +284,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 										<h2 class="modal-title"><center></center></h2>
 									</div>
-									<div class="modal-body col-md-12">';
+									<div class="modal-body col-md-12" id="'.$purchase2.'">';
 										echo '<div style="float: right;font-size: 50%;">
 													<b>Orange Translations Ltd.</b><br>
 													7/F., Hong Kong Trade Centre<br>
@@ -391,13 +408,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    		      								if ($status == "Unsettled") {
 			    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary"> Settle </button></p>';
 			    		      									//To be fixed
-			    		      									echo '<input type="button" onclick="window.print()" value="Print" />';
+			    		      									echo '<input type="button" onclick="printpage($purchase2);" value="Print" />';
 
 			    		      								} else {
 			    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary" disabled> Settle </button></p>';
 			    		      									// To be fixed
-			    		      									echo '<input type="button" onclick="window.print()" value="Print" />';
-			    		      								}
+			    		      									echo '<input type="button" onclick="printpage($purchase2);" value="Print" />';
+			    		      								}	
 			    		      								
 			    		      						echo '<form>
 			    		      						</div>';
@@ -1622,6 +1639,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<li class="list-group-item"><b>Status: </b>'.$row6['projectstatus'].'</li>
 									<li class="list-group-item"><b>Document\'s Total Number of Words: </b>'.$row7['totalnumofwords'].'</li>
 								</ul>
+
+								<p>Project Progress: </p>
+								<p style="font-size:9px"> Calculated by number of words translated </p>
+				                <div class="progress">';
+				                	$selectnumberofwords = "SELECT p.numberofwordstranslated as translated, d.totalnumofwords as total
+				                	from projectdetails d JOIN project p on p.projectcode = d.projectcode where d.projectcode = '{$row6['projectcode']}' ";
+				                	$numberofwords = mysqli_query($dbc, $selectnumberofwords);
+				                	$row37 = mysqli_fetch_array($numberofwords, MYSQL_ASSOC);
+
+				                	$percent = ($row37['translated'] / $row37['total']) * 100;
+
+				                	echo '<div class="progress-bar progress-bar-warning" style="width: '.$percent.'%"> <span>'.$percent.'</span>% </div>';
+				    echo 		'</div>
+
 								<form action="'.$_SERVER['PHP_SELF'].'" method="post">
 								
 								<button type="submit" name="close'.$cnt.'" class="btn btn-default"> Close Project </button>
