@@ -20,6 +20,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="<?php echo base_url('assets/css/font-awesome.css')?>" rel="stylesheet"> 
 <script src="<?php echo base_url('assets/js/jquery.min.js')?>"> </script>
 <script src="<?php echo base_url('assets/js/bootstrap.min.js')?>"> </script>
+<link href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 <!-- Mainly scripts -->
 <script src="<?php echo base_url('assets/js/jquery.metisMenu.js')?>"></script>
 <script src="<?php echo base_url('assets/js/jquery.slimscroll.min.js')?>"></script>
@@ -46,112 +48,59 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		</script>
 
 		<script type="text/javascript">
-$(function () {
-    // Create the chart
-    $('#pie-chart').highcharts({
-        chart: {
-            type: 'pie'
-        },
-        title: {
-            text: 'Performance Report: <?php echo date('Y-m-d', strtotime("-30 days"));?> to <?php echo date('Y-m-d');?>'
-        },
-        subtitle: {
-            text: 'Click the slices to view the projects translated.'
-        },
-        plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}: {point.y:.1f}%'
-                }
-            }
-        },
+            $(function () {
+                // Create the chart
+                $('#pie-chart').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Performance Report from <?php echo $this->session->userdata('performancestartdate')." to ".$this->session->userdata('performanceenddate');?>'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Translators',
+                        colorByPoint: true,
+                        data: [
 
-        tooltip: {
-            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
-        },
-        series: [{
-            name: 'Projects',
-            colorByPoint: true,
-            data: [{
-                name: 'Sheila Owens',
-                y: 56.33,
-                drilldown: 'Sheila Owens'
-            }, {
-                name: 'Marco Ramon',
-                y: 24.03,
-                drilldown: 'Marco Ramon'
-            }, {
-                name: 'Marie Matringe',
-                y: 10.38,
-                drilldown: 'Marie Matringe'
-            }, {
-                name: 'Akira Yuki',
-                y: 4.77,
-                drilldown: 'Akira Yuki'
-            }]
-        }],
-        drilldown: {
-            series: [{
-                name: 'Projects',
-                id: 'Sheila Owens',
-                data: [
-                    ['v11.0', 24.13],
-                    ['v8.0', 17.2],
-                    ['v9.0', 8.11],
-                    ['v10.0', 5.33],
-                    ['v6.0', 1.06],
-                    ['Project name', 0.5]
-                ]
-            }, {
-                name: 'Projects',
-                id: 'Marco Ramon',
-                data: [
-                    ['v40.0', 5],
-                    ['v41.0', 4.32],
-                    ['v42.0', 3.68],
-                    ['v39.0', 2.96],
-                    ['v36.0', 2.53],
-                    ['v43.0', 1.45],
-                    ['v31.0', 1.24],
-                    ['v35.0', 0.85],
-                    ['v38.0', 0.6],
-                    ['v32.0', 0.55],
-                    ['v37.0', 0.38],
-                    ['v33.0', 0.19],
-                    ['v34.0', 0.14],
-                    ['v30.0', 0.14]
-                ]
-            }, {
-                name: 'Projects',
-                id: 'Marie Matringe',
-                data: [
-                    ['v35', 2.76],
-                    ['v36', 2.32],
-                    ['v37', 2.31],
-                    ['v34', 1.27],
-                    ['v38', 1.02],
-                    ['v31', 0.33],
-                    ['v33', 0.22],
-                    ['v32', 0.15]
-                ]
-            }, {
-                name: 'Projects',
-                id: 'Akira Yuki',
-                data: [
-                    ['v8.0', 2.56],
-                    ['v7.1', 0.77],
-                    ['v5.1', 0.42],
-                    ['v5.0', 0.3],
-                    ['v6.1', 0.29],
-                    ['v7.0', 0.26],
-                    ['v6.2', 0.17]
-                ]
-            }]
-        }
-    });
-});
+                        <?php
+                            $data = $this->ProjectManager_model->getPerformanceReportChart($this->session->userdata('performancestartdate'), $this->session->userdata('performanceenddate'));
+                            $total = 0;
+
+                            for($count = 0; $count < count($data); $count++) {
+                                $total += $data[$count]['count'];
+                            }
+
+                            for($count = 0; $count < count($data); $count++) {
+                                echo "{";
+                                echo "name: '".$data[$count]['translator']."',";
+                                $percentage = $data[$count]['count'] / $total * 100;
+                                echo "y: ".$percentage;
+                                echo "},";
+                            }
+                        ?>
+                        ]
+                    }]
+                });
+            });
 		</script>
 
 <!----->
@@ -308,37 +257,82 @@ $(function () {
 		<!--//banner-->
  	<!--grid-->
  	<div class="grid-form">
+        <?php
+            if($this->session->userdata("errormessage")) {
+                if($this->session->userdata("errormessage") == TRUE) {
+                    echo "<div  class=\"grid-form1\">
+                            <div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+                                <strong>Oops!</strong> Start date must be before or the same as end date.
+                            </div>
+                        </div>";
+                }
+            }
+        ?>
+
+        <div class="grid-form1">
+            <form action="<?php echo site_url("ProjectManager/PerformanceReport"); ?>" class="form-horizontal" method="post">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label hor-form">Date Range</label>
+                    <div class="col-sm-2">
+                        <select name="daterange" class="form-control" required="" id="daterangelist">
+                            <option value="1">Today</option>;
+                            <option value="2">Yesterday</option>;
+                            <option value="3">Last 7 Days</option>;
+                            <option value="4" selected="">Last 30 Days</option>;
+                            <option value="5">This Month</option>;
+                            <option value="6">Last Month</option>;
+                            <option value="7">Custom Range</option>;
+                        </select>
+                    </div>
+                    <div id="customrange" style="display:none;">
+                        <label class="col-sm-1 control-label hor-form">Start</label>
+                        <div class="col-sm-3">
+                            <input type="date" class="form-control" name="startdate" required="" id="startdate" value="">
+                        </div>
+                        <label class="col-sm-1 control-label hor-form">End</label>
+                        <div class="col-sm-3">
+                            <input type="date" class="form-control" name="enddate" required="" id="enddate">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
  		<div class="grid-form1">
- 			<h3>Date Range</h3>
- 			<?php echo $this->input->post("startdate");?>
-			<form action="<?php echo site_url('ProjectManager/PerformanceReport');?>" class="form-horizontal" method="post" enctype="multipart/form-data">
-				<div class="form-group">
-			    	<label class="col-sm-2 control-label hor-form">Start Date</label>
-			    	<div class="col-sm-3">
-			      		<input type="date" class="form-control" name="startdate" required="" max="<?php echo date('Y-m-d');?>">
-			    	</div>
-
-			    	<label class="col-sm-2 control-label hor-form">End Date</label>
-			    	<div class="col-sm-3">
-			      		<input type="date" class="form-control" name="enddate" required="" max="<?php echo date('Y-m-d');?>">
-			    	</div>
-
-			    	<div class="col-sm-2">
-			    		<button type="submit" class="btn btn-primary">Go!</button>
-			    	</div>
-		
-			  	</div>
-			</form>
-		</div>
-
- 		<div class="grid-form1" style="margin-bottom: 0px;">
-	 		<script src="https://code.highcharts.com/highcharts.js"></script>
-			<script src="https://code.highcharts.com/modules/data.js"></script>
-			<script src="https://code.highcharts.com/modules/drilldown.js"></script>
-
 			<div id="pie-chart"></div>
-			
 		</div>
+
+        <div class="grid-form1" style="margin-bottom: 0px">
+            <table id="myTable" class="display">
+                <thead>
+                    <th><center>Translator</center></th>
+                    <th><center>Project</center></th>
+                    <th><center>Language</center></th>
+                    <th><center>Client</center></th>
+                    <th><center>Deadline</center></th>
+                </thead>
+                <tbody>
+                    <?php
+                        $data = $this->ProjectManager_model->getPerformanceReportDetails($this->session->userdata('performancestartdate'), $this->session->userdata('performanceenddate'));
+
+                        for($count = 0; $count < count($data); $count++) {
+                            echo "<tr>";
+                            echo "<td><center>".$data[$count]['translator']."</center></td>";
+                            echo "<td><center>".$data[$count]['projectname']."</center></td>";
+                            echo "<td><center>".$data[$count]['languagedesc']."</center></td>";
+                            echo "<td><center>".$data[$count]['client']."</center></td>";
+                            echo "<td><center>".$data[$count]['deadline']."</center></td>";
+                            echo "</tr>";
+                        }
+                    ?>
+                </tbody>
+            </table>
+        </div>
 	<!--//grid-->
 		<div class="clearfix"> </div>
 	</div>
@@ -355,7 +349,229 @@ $(function () {
 	<script src="<?php echo base_url('assets/js/jquery.nicescroll.js')?>"></script>
 	<script src="<?php echo base_url('assets/js/scripts.js')?>"></script>
 	<!--//scrolling js-->
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $(document).ready(function(){
+                $('#myTable').DataTable();
+            });
+
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+
+            var yyyy = today.getFullYear();
+            if(dd<10){
+                dd='0'+dd;
+            } 
+            if(mm<10){
+                mm='0'+mm;
+            } 
+            var today = yyyy+'-'+mm+'-'+dd;
+
+            var last = new Date();
+            last.setDate(last.getDate() - 30);
+            var dd = last.getDate();
+            var mm = last.getMonth()+1; //January is 0!
+
+            var yyyy = last.getFullYear();
+            if(dd<10){
+                dd='0'+dd;
+            } 
+            if(mm<10){
+                mm='0'+mm;
+            } 
+            var last = yyyy+'-'+mm+'-'+dd;
+
+            document.getElementById("startdate").defaultValue = last;
+            document.getElementById("enddate").defaultValue = today;
+
+            $('#daterangelist').on('change',function() {
+                var value =$(this).val(); 
+
+                $('#customrange').hide();
+
+                if (value == 1) { // Today
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+
+                    var yyyy = today.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var today = yyyy+'-'+mm+'-'+dd;
+
+                    document.getElementById("startdate").defaultValue = today;
+                    document.getElementById("enddate").defaultValue = today;
+                }
+                else if (value == 2) { // Yesterday
+                    var today = new Date();
+                    today.setDate(today.getDate() - 1);
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+
+                    var yyyy = today.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var today = yyyy+'-'+mm+'-'+dd;
+
+                    document.getElementById("startdate").defaultValue = today;
+                    document.getElementById("enddate").defaultValue = today;
+                }
+                else if (value == 3) { // Last 7 Days
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+
+                    var yyyy = today.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var today = yyyy+'-'+mm+'-'+dd;
+
+                    var last = new Date();
+                    last.setDate(last.getDate() - 7);
+                    var dd = last.getDate();
+                    var mm = last.getMonth()+1; //January is 0!
+
+                    var yyyy = last.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var last = yyyy+'-'+mm+'-'+dd;
+
+                    document.getElementById("startdate").defaultValue = last;
+                    document.getElementById("enddate").defaultValue = today;
+                }
+                else if (value == 4) { // Last 30 Days
+                    var today = new Date();
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+
+                    var yyyy = today.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var today = yyyy+'-'+mm+'-'+dd;
+
+                    var last = new Date();
+                    last.setDate(last.getDate() - 30);
+                    var dd = last.getDate();
+                    var mm = last.getMonth()+1; //January is 0!
+
+                    var yyyy = last.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var last = yyyy+'-'+mm+'-'+dd;
+
+                    document.getElementById("startdate").defaultValue = last;
+                    document.getElementById("enddate").defaultValue = today;
+                }
+                else if (value == 5) { // This Month
+                    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+                    var today = new Date(y, m, 1);
+                    var last = new Date(y, m + 1, 0);
+
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+
+                    var yyyy = today.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var today = yyyy+'-'+mm+'-'+dd;
+
+                    var dd = last.getDate();
+                    var mm = last.getMonth()+1; //January is 0!
+
+                    var yyyy = last.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var last = yyyy+'-'+mm+'-'+dd;
+
+                    document.getElementById("startdate").defaultValue = today;
+                    document.getElementById("enddate").defaultValue = last;
+                }
+                else if (value == 6) { // Last Month
+                    var date = new Date();
+                    date.setDate(date.getDate() - 31);
+                    var y = date.getFullYear(), m = date.getMonth();
+                    var today = new Date(y, m, 1);
+                    var last = new Date(y, m + 1, 0);
+
+                    var dd = today.getDate();
+                    var mm = today.getMonth()+1; //January is 0!
+
+                    var yyyy = today.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var today = yyyy+'-'+mm+'-'+dd;
+
+                    var dd = last.getDate();
+                    var mm = last.getMonth()+1; //January is 0!
+
+                    var yyyy = last.getFullYear();
+                    if(dd<10){
+                        dd='0'+dd;
+                    } 
+                    if(mm<10){
+                        mm='0'+mm;
+                    } 
+                    var last = yyyy+'-'+mm+'-'+dd;
+
+                    document.getElementById("startdate").defaultValue = today;
+                    document.getElementById("enddate").defaultValue = last;
+                }
+                else if(value == 7) { // Custom Range
+                    $('#customrange').show();
+                    document.getElementById("startdate").defaultValue = "";
+                    document.getElementById("enddate").defaultValue = "";
+                }
+            })
+        });
+    </script>
 <!---->
+
+<?php
+    $this->session->unset_userdata('errormessage');
+    $this->session->unset_userdata('performancestartdate');
+    $this->session->unset_userdata('performanceenddate');
+?>
 
 </body>
 </html>

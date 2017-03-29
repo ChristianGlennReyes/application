@@ -206,14 +206,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	 			elseif($this->session->userdata("addevent") == "wrongdate") {
 	 				echo "<div  class=\"grid-form1\">
 				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Oops!</strong> Start Date must be before or the same as End Date.
+					        	<strong>Oops!</strong> Start date must be before or the same as end date.
 					       	</div>
 				 		</div>";
 	 			}
 	 			elseif($this->session->userdata("addevent") == "wrongtime") {
 	 				echo "<div  class=\"grid-form1\">
 				 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-					        	<strong>Oops!</strong> Start Time must be before End Time.
+					        	<strong>Oops!</strong> Start time must be before end time.
 					       	</div>
 				 		</div>";
 	 			}
