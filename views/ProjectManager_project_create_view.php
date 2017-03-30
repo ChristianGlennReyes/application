@@ -150,22 +150,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	
  	<!--grid-->
  	<div class="grid-form">
- 		<?php
-			if (isset($_SESSION['message'])){
-				echo "<div  class=\"grid-form1\">
-			 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-				        	<strong>Oops! </strong> ".$_SESSION['message']."
-				       	</div>
-			 		</div>";
-			} else if (isset($_SESSION['newmessage'])){
-				echo "<div  class=\"grid-form1\">
- 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-	        				<strong>Well done! </strong>".$_SESSION['newmessage']."
-	       				</div>
- 					  </div>";
-			}
-
-		?>
+ 		
  		<div class="grid-form1 col-md-12" style="margin-bottom: 0px;">
 	 		<h3 id="forms-example" class="">Create Project</h3>
 	 		
@@ -665,7 +650,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									$getquotedetails = "SELECT pm.fullname as 'pmfull', pm.email as 'pmemail', p.projectname as 'projectname',
 														d.projectcode as 'projectcode', l.languagedesc as 'languagedesc', d.startdate as 'startdate'
 														FROM projectdetails d JOIN project p on p.projectcode = d.projectcode JOIN projectmanager pm
-														on pm.managerid = d.managerid JOIN language_ref l on l.language = d.language where d.projectcode = '{$row2['code']}' ";
+														on pm.managerid = d.managerid JOIN language_ref l on l.language = d.language where d.projectcode = '{$details2['projectcode']}' ";
 									$quotedetails = mysqli_query($dbc, $getquotedetails);
 									$row10 = mysqli_fetch_array($quotedetails, MYSQL_ASSOC);
 
@@ -756,14 +741,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								
 							}
 							$_SESSION['clientemail'] = NULL;
-
+							$_SESSION['projectname'] = NULL;
+							$_SESSION['projtype'] = NULL;
+							$_SESSION['language'] = NULL;
+							$_SESSION['deadline'] = NULL;	
+							$_SESSION['client'] = NULL;
+							$_SESSION['country'] = NULL;
 							
 
 						}
 
 						if (isset($message)){
 							$_SESSION['message'] = $message;
-						}if (isset($newmessage)){
+						} else if (isset($newmessage)){
 							$_SESSION['newmessage'] = $newmessage;
 						}
 						
@@ -772,6 +762,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				?>
 		</div>
 		<div class="clearfix"> </div>
+
+		<?php
+			if (isset($_SESSION['message'])){
+				echo "<div  class=\"grid-form1\">
+			 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+				        	<strong>Oops! </strong> ".$_SESSION['message']."
+				       	</div>
+			 		</div>";
+			 		$_SESSION['message'] = NULL;
+			} else if (isset($_SESSION['newmessage'])){
+				echo "<div  class=\"grid-form1\">
+ 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+	        				<strong>Well done! </strong>".$_SESSION['newmessage']."
+	       				</div>
+ 					  </div>";
+ 					  $_SESSION['newmessage'] = NULL;
+			}
+
+		?>
 
 	<!--//grid-->
 
