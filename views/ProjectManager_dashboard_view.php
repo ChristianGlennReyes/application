@@ -256,7 +256,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script src="<?php echo base_url('assets/js/jquery.nicescroll.js')?>"></script>
 	<script src="<?php echo base_url('assets/js/scripts.js')?>"></script>
 	<!--//scrolling js-->
-<<<<<<< HEAD
 
 	<script>
 		get();
@@ -299,8 +298,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			});
 		});
 		
-		/*var interval = 5000;
-		setInterval(get, interval);*/
+		var interval = 5000;
+		setInterval(get, interval);
 	</script>
 
 	<!-- <?php
@@ -320,9 +319,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		echo "<br>";
 		echo $time_in_12_hour_format;
 	?> -->
-
-=======
->>>>>>> origin/master
 </body>
 </html>
 
