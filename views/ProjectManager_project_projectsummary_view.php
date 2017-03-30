@@ -72,54 +72,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			
 		});
 		</script>
-
-		<script>
-		get();
-
-		function get() {
-			$('#notifs').empty();
-
-			$.ajax({
-				type: 'POST',
-				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/GetOldNotifs',
-				success: function (data) {
-					for (i = 0; i < data.length; i++) {
-						$('#notifs').prepend('<li><a href="#"><div class="user-new"><p style="white-space: normal;">'+data[i]['notificationtext']+'</p><span>'+data[i]['date']+' at '+data[i]['time']+'</span></div><div class="user-new-left"></div><div class="clearfix"></div></a></li>');
-					}
-				}
-			});
-
-			$.ajax({
-				type: 'POST',
-				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/GetNewNotifs',
-				success: function (data) {
-					for (i = 0; i < data.length; i++) {
-						$('#notifs').prepend('<li style="background: #ffe4cd;"><a href="#"><div class="user-new"><p style="white-space: normal;">'+data[i]['notificationtext']+'</p><span>'+data[i]['date']+' at '+data[i]['time']+'</span></div><div class="user-new-left"></div><div class="clearfix"></div></a></li>');
-					}
-					$('#number').empty();
-					$('#number').append(data.length);
-				}
-			});
-		}
-
-		$('#butt').on('click',function(){
-			$('#number').empty();
-			$('#number').append(0);
-			$.ajax({
-				type: 'POST',
-				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/SetNotifsSeen',	
-				success: function (data) {
-					
-				}
-			});
-		});
-		
-		var interval = 5000;
-		setInterval(get, interval);
-	</script>
-
-
-
 </head>
 <body>
 <div id="wrapper">
@@ -1685,6 +1637,51 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script src="<?php echo base_url('assets/js/jquery.nicescroll.js')?>"></script>
 	<script src="<?php echo base_url('assets/js/scripts.js')?>"></script>
 	<!--//scrolling js-->
+
+	<script>
+		get();
+
+		function get() {
+			$('#notifs').empty();
+
+			$.ajax({
+				type: 'POST',
+				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/GetOldNotifs',
+				success: function (data) {
+					for (i = 0; i < data.length; i++) {
+						$('#notifs').prepend('<li><a href="#"><div class="user-new"><p style="white-space: normal;">'+data[i]['notificationtext']+'</p><span>'+data[i]['date']+' at '+data[i]['time']+'</span></div><div class="user-new-left"></div><div class="clearfix"></div></a></li>');
+					}
+				}
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/GetNewNotifs',
+				success: function (data) {
+					for (i = 0; i < data.length; i++) {
+						$('#notifs').prepend('<li style="background: #ffe4cd;"><a href="#"><div class="user-new"><p style="white-space: normal;">'+data[i]['notificationtext']+'</p><span>'+data[i]['date']+' at '+data[i]['time']+'</span></div><div class="user-new-left"></div><div class="clearfix"></div></a></li>');
+					}
+					$('#number').empty();
+					$('#number').append(data.length);
+				}
+			});
+		}
+
+		$('#butt').on('click',function(){
+			$('#number').empty();
+			$('#number').append(0);
+			$.ajax({
+				type: 'POST',
+				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/SetNotifsSeen',	
+				success: function (data) {
+					
+				}
+			});
+		});
+		
+		var interval = 5000;
+		setInterval(get, interval);
+	</script>
 </body>
 </html>
 
