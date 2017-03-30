@@ -144,7 +144,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  			<?php
  				$message = NULL;
  				$newmessage = NULL;
- 				if (isset($_SESSION['count'])){
+ 				//if (isset($_SESSION['count'])){
  					for ($btn = 0;$btn < $_SESSION['count']; $btn++){
 	 					$upload = 'upload'.$btn;
 	 					$project = 'project'.$btn;
@@ -152,8 +152,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 	 					$this->session->set_userdata('projectcode', $_SESSION[$project]);
 
+	 					$getproject = "SELECT projectcode from project where projectcode = '{$_SESSION[$project]}'";
+	 					$project = mysqli_query($dbc, $getproject);
+	 					$row2 = mysqli_fetch_array($project, MYSQL_ASSOC);
+
 	 					//Progress Tracker
-	 					echo '<div class="modal fade" id="progress'.$btn.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	 					echo '<div class="modal fade" id="'.$progress.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -162,7 +166,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										</div>
 										<div class="modal-body col-md-12">
 											<div class="form-group col-md-12">
-												<form action="'.$_SERVER['PHP_SELF'].'" method="post" enctype="multipart/form-data">
+												<form method="post">
 													<div class="col-md-12">
 														<h4><center>Enter Number of Words Translated</center></h4>
 													</div>
@@ -173,7 +177,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													<br><br>
 											        <div class="form-group col-md-12">
 														<center>
-															<button type="submit" name="prog" class="btn btn-primary">Enter</button>
+															<button type="submit" name="progress'.$btn.'" class="btn btn-primary">Enter</button>
 														</center>
 												    </div>
 												</form>
@@ -185,17 +189,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									</div><!-- /.modal-content -->
 								</div><!-- /.modal-dialog -->
 							</div>';
-
-						if (isset($_POST['prog'])){
-							$updatetranslatedwords = "UPDATE project set numberofwordstranslated = '{$_POST['progressnum']}' where projectcode = '{$_SESSION[$project]}'";
+							
+						if (isset($_POST['progress'.$btn.''])){
+							$updatetranslatedwords = "UPDATE project set numberofwordstranslated = '{$_POST['progressnum']}' where projectcode = '{$row2['projectcode']}'";
 
 							if ($dbc->query($updatetranslatedwords) == TRUE){
 								$newmessage.="Number of words translated has been updated. ";
+								$_POST['progress'] = NULL;
 							}
 						}
 
 	 					// Project Upload
-						echo '<div class="modal fade" id="upload'.$btn.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+						echo '<div class="modal fade" id="'.$upload.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 								<div class="modal-dialog">
 									<div class="modal-content">
 										<div class="modal-header">
@@ -216,7 +221,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													<br><br><br>
 											        <div class="form-group col-md-12">
 														<center>
-															<button type="submit" name="create" class="btn btn-primary">Submit</button>
+															<button type="submit" name="create'.$btn.'" class="btn btn-primary">Submit</button>
 														</center>
 												    </div>
 												</form>
@@ -229,7 +234,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								</div><!-- /.modal-dialog -->
 							</div>';
 
-							if(isset($_POST['create'])){
+							if(isset($_POST['create'.$btn.''])){
 								if ($_FILES['uploaded']['size'] == 0){
 									$message.='<p> File is empty. ';
 								} else {
@@ -257,14 +262,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									$docures = mysqli_query($dbc, $docu2);
 									$row = mysqli_fetch_array($docures,MYSQL_ASSOC);
 
-									$updatedocu = "update project set translatedid = '{$row['docuid']}' where projectcode = '{$_SESSION[$project]}'";
+									$updatedocu = "update project set translatedid = '{$row['docuid']}' where projectcode = '{$row2['projectcode']}'";
 
 									if ($dbc->query($updatedocu) == TRUE){
 
 										// Notification
 										$getdetails = "SELECT d.managerid as managerid, t.fullname as translator, p.projectname as projectname
 										FROM projectdetails d JOIN translator t on d.translatorid = t.translatorid JOIN project p on d.projectcode = p.projectcode
-										where d.projectcode = '{$_SESSION[$project]}' ";
+										where d.projectcode = '{$row2['projectcode']}' ";
 										$details = mysqli_query($dbc, $getdetails);
 										$row1 = mysqli_fetch_array($details, MYSQL_ASSOC);
 
@@ -279,6 +284,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 										
 										$newmessage.="Translated document uploaded!";
+										$_POST['create'] = NULL;
 									}
 
 								}
@@ -287,23 +293,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 							}
 
-							if (isset($message)){
-								echo "<div  class=\"grid-form1\">
-							 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
-								        	<strong>Oops! </strong> ".$message."
-								        </div>
-								      </div>";
-								
-							} else if (isset($newmessage)){
-								echo "<div  class=\"grid-form1\">
-			 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
-							        	<strong>Well done! </strong>".$newmessage."
-							       	</div>
-						 		</div>";
-							}
 
 	 				}
- 				}
+
+					if (isset($message)){
+						echo "<div  class=\"grid-form1\">
+					 			<div class=\"alert alert-danger\" role=\"alert\" style=\"margin-bottom: 0px;\">
+						        	<strong>Oops! </strong> ".$message."
+						        </div>
+						      </div>";
+						
+					} else if (isset($newmessage)){
+						echo "<div  class=\"grid-form1\">
+	 						<div class=\"alert alert-success\" role=\"alert\" style=\"margin-bottom: 0px;\">
+					        	<strong>Well done! </strong>".$newmessage."
+					       	</div>
+				 		</div>";
+					}
+ 				//}
  				
  			?>
 	 		<h3 id="forms-example" class="">Project</h3>
