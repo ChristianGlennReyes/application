@@ -1606,6 +1606,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				                	$percent = round(($row37['translated'] / $row37['total']) * 100, 0);
 
 				                	echo '<div class="progress-bar progress-bar-warning" style="width: '.$percent.'%"> <span>'.$percent.'</span>% </div>';
+
+
 				    echo 		'</div>
 
 								<form action="'.$_SERVER['PHP_SELF'].'" method="post">
@@ -1613,8 +1615,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<button type="submit" name="close'.$cnt.'" class="btn btn-default"> Close Project </button>
 								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#purchase'.$cnt.'"> View Purchase Order </button>
 								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#invoice'.$cnt.'"> View Invoice </button>
-								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#former'.$cnt.'"> View Former Translators </button>
-								<a href="'.site_url("ProjectManager/DownloadTranslatedDocument").'"><button type="button" name="download'.$cnt.'" class="btn btn-default"> Download Translated Document </button></a>
+								<button type="button" class="btn btn-default" data-toggle="modal" data-target="#former'.$cnt.'"> View Former Translators </button>';
+
+								$data = $this->ProjectManager_model->getTranslatedDocument($this->session->userdata('projectcode'));
+								if(count($data) > 0) {
+									echo '
+									<a href="'.site_url("ProjectManager/DownloadTranslatedDocument").'"><button type="button" name="download'.$cnt.'" class="btn btn-default"> Download Translated Document </button></a>';
+								}
+								else {
+									echo '
+									<button type="button" name="download'.$cnt.'" class="btn btn-default" disabled=""> Download Translated Document </button>';
+								}
+
+					echo '
 								</form>
 							 </div>
 						</div>

@@ -255,7 +255,7 @@ class ProjectManager extends CI_Controller {
 
 	public function DownloadTranslatedDocument() {
 		$data = $this->ProjectManager_model->getTranslatedDocument($this->session->userdata('projectcode'));
-
+		
 		$size = $data[0]['docusize'];
 		$type = $data[0]['docutype'];
 		$file = $data[0]['documentcontent'];

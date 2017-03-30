@@ -38,7 +38,6 @@ class ProjectManager_model extends CI_model {
 		return $query->num_rows();
 	}
 
-
 	public function getDetailsForProjectProgression($projectcode) {
 		$query = $this->db->select('d.projectcode, p.projectname, c.fullname, c.email')->from('projectdetails as d')->where('d.projectcode', $projectcode)->join('projectmanager as pm', 'd.managerid = pm.managerid', 'LEFT')->join('project as p', 'p.projectcode = d.projectcode', 'LEFT')->join('client as c', 'd.clientid = c.clientid', 'LEFT')->get();
 
