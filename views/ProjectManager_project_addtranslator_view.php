@@ -372,7 +372,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																		 			while ($row4 = mysqli_fetch_array($gettrans,MYSQL_ASSOC)) {
 																						
 																						$getnumofprojects = "SELECT count(d.projectcode) as projects from projectdetails d 
-																						join project p on p.projectcode = d.projectcode WHERE d.translatorid = 'T000001' 
+																						join project p on p.projectcode = d.projectcode WHERE d.translatorid = '{$row4['translatorid']}' 
 																						and p.projectstatus ='Active'";
 																						$getnum = mysqli_query($dbc, $getnumofprojects);
 																						$row7 = mysqli_fetch_array($getnum, MYSQL_ASSOC);
@@ -390,8 +390,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																			 				</td>
 																			 			</tr>';
 																				
-																						$getnumofprojectss = "SELECT projectcode, totalnumofwords as total, deadline from projectdetails 
-																						WHERE translatorid = '{$row4['translatorid']}' ";
+																						$getnumofprojectss = "SELECT d.projectcode, d.totalnumofwords as total, d.deadline from projectdetails d
+																						join project p on p.projectcode = d.projectcode WHERE d.translatorid = '{$row4['translatorid']}' and
+																						p.projectstatus = 'Active'";
 																						$getnumm = mysqli_query($dbc, $getnumofprojectss);
 																						
 																				   echo '<div class="modal fade" id="details'.$cnt.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">

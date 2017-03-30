@@ -310,8 +310,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																		 		<tbody>';
 																		 			while ($row6 = mysqli_fetch_array($gettrans,MYSQL_ASSOC)) {
 																					
-																							$getnumofprojects = "SELECT count(projectcode) as projects from projectdetails 
-																							WHERE translatorid = '{$row6['translatorid']}' ";
+																							$getnumofprojects = "SELECT count(d.projectcode) as projects from projectdetails d 
+																							join project p on p.projectcode = d.projectcode WHERE d.translatorid = '{$row6['translatorid']}' AND
+																							p.projectstatus = 'Active' ";
 																							$getnum = mysqli_query($dbc, $getnumofprojects);
 																							$row9 = mysqli_fetch_array($getnum, MYSQL_ASSOC);
 
@@ -328,8 +329,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																				 				</td>
 																				 			</tr>';
 																						
-																						$getnumofprojectss = "SELECT projectcode, totalnumofwords as total, deadline from projectdetails 
-																						WHERE translatorid = '{$row6['translatorid']}' ";
+																						$getnumofprojectss = "SELECT d.projectcode, d.totalnumofwords as total, d.deadline from projectdetails d
+																						join project p on p.projectcode = d.projectcode WHERE translatorid = '{$row6['translatorid']}' AND
+																						p.projectstatus = 'Active'";
 																						$getnumm = mysqli_query($dbc, $getnumofprojectss);
 
 																				   echo '<div class="modal fade" id="details'.$cnt.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -383,7 +385,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																										<div class="form-group col-md-12">';
 
 																											if (!empty($num_rows)){
-																												echo'<p> Hi';
+																												while ($row8 = mysqli_fetch_array($get3, MYSQL_ASSOC)){
+																													if ($row8['startdate'] >= $row7['startdate'] && $row8['startdate'] <= $row7['deadline'] || 
+																														$row8['enddate'] >= $row7['startdate'] && $row8['enddate'] <= $row7['deadline']){
+																														
+																															$start = new DateTime($row8['startdate'].'T'.$row8['starttime']);
+																															$end = new DateTime($row8['enddate'].'T'.$row8['endtime']);
+
+																															$time = $end->diff($start);
+
+																															$hours = $time->h;
+																															$hours = $hours + ($time->days*24);
+																															echo '<ul class="list-group">
+																																<li class="list-group-item"> Start Date: '.$row8['startdate'].'</li>
+																														  		<li class="list-group-item"> End Date: '.$row8['enddate'].'</li>
+																														  		<li class="list-group-item"> Number of Hours: '.$hours.'</li>
+																													  		</ul>';
+																													}
+																													echo '<br>';
+																													
+																												}
 																												
 																											} else {
 																												echo '<p> Nothing to show </p>';
