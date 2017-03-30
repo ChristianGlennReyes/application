@@ -144,7 +144,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  			<?php
  				$message = NULL;
  				$newmessage = NULL;
- 				//if (isset($_SESSION['count'])){
+ 				if (isset($_SESSION['count'])){
  					for ($btn = 0;$btn < $_SESSION['count']; $btn++){
 	 					$upload = 'upload'.$btn;
 	 					$project = 'project'.$btn;
@@ -152,7 +152,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 	 					$this->session->set_userdata('projectcode', $_SESSION[$project]);
 
-	 					$getproject = "SELECT projectcode from project where projectcode = '{$_SESSION[$project]}'";
+	 					$getproject = "SELECT projectcode, totalnumofwords from projectdetails where projectcode = '{$_SESSION[$project]}'";
 	 					$project = mysqli_query($dbc, $getproject);
 	 					$row2 = mysqli_fetch_array($project, MYSQL_ASSOC);
 
@@ -263,8 +263,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									$row = mysqli_fetch_array($docures,MYSQL_ASSOC);
 
 									$updatedocu = "update project set translatedid = '{$row['docuid']}' where projectcode = '{$row2['projectcode']}'";
+									$updatetranslatedwords = "UPDATE project set numberofwordstranslated = '{$row2['totalnumofwords']}' where projectcode = '{$row2['projectcode']}'";
 
-									if ($dbc->query($updatedocu) == TRUE){
+									if ($dbc->query($updatedocu) == TRUE && $dbc->query($updatetranslatedwords) == TRUE){
 
 										// Notification
 										$getdetails = "SELECT d.managerid as managerid, t.fullname as translator, p.projectname as projectname
@@ -310,7 +311,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					       	</div>
 				 		</div>";
 					}
- 				//}
+ 				}
  				
  			?>
 	 		<h3 id="forms-example" class="">Project</h3>

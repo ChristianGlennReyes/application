@@ -371,8 +371,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 																		 		<tbody>';
 																		 			while ($row4 = mysqli_fetch_array($gettrans,MYSQL_ASSOC)) {
 																						
-																						$getnumofprojects = "SELECT count(projectcode) as projects from projectdetails 
-																						WHERE translatorid = '{$row4['translatorid']}' ";
+																						$getnumofprojects = "SELECT count(d.projectcode) as projects from projectdetails d 
+																						join project p on p.projectcode = d.projectcode WHERE d.translatorid = 'T000001' 
+																						and p.projectstatus ='Active'";
 																						$getnum = mysqli_query($dbc, $getnumofprojects);
 																						$row7 = mysqli_fetch_array($getnum, MYSQL_ASSOC);
 
