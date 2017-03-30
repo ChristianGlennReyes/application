@@ -214,7 +214,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  	<!--banner-->	
 		   <div class="banner">
 				<h2>
-				<a href="index.html">Home</a>
+				<a href="<?php echo site_url("ProjectManager");?>">Home</a>
 				<i class="fa fa-angle-right"></i>
 				<span>Project Summary</span>
 				</h2>
@@ -1652,7 +1652,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				                	$numberofwords = mysqli_query($dbc, $selectnumberofwords);
 				                	$row37 = mysqli_fetch_array($numberofwords, MYSQL_ASSOC);
 
-				                	$percent = ($row37['translated'] / $row37['total']) * 100;
+				                	$percent = round(($row37['translated'] / $row37['total']) * 100, 0);
 
 				                	echo '<div class="progress-bar progress-bar-warning" style="width: '.$percent.'%"> <span>'.$percent.'</span>% </div>';
 				    echo 		'</div>

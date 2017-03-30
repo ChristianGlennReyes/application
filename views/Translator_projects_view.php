@@ -225,7 +225,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													</div>
 													<br><br>
 													<div class="col-md-4 col-md-offset-4">
-														<input type="number" class="form-control" name="progressnum" id="progressnum" required>
+														<input type="number" class="form-control" name="progressnum" id="progressnum" min="1" required>
 													</div>
 													<br><br>
 											        <div class="form-group col-md-12">

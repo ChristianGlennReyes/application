@@ -32,6 +32,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <link href="<?php echo base_url('assets/css/custom.css')?>" rel="stylesheet">
 <script src="<?php echo base_url('assets/js/custom.js')?>"></script>
 <script src="<?php echo base_url('assets/js/screenfull.js')?>"></script>
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 		<script>
 		$(function () {
 			$('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
@@ -229,8 +230,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    <div class="but_list">
 			        <div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
 						<ul id="myTab" class="nav nav-tabs" role="tablist">
-						  	<li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">New Client</a></li>
-						  	<li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">Old Client</a></li>
+						  	<li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">For New client</a></li>
+						  	<li role="presentation"><a href="#profile" role="tab" id="profile-tab" data-toggle="tab" aria-controls="profile">For Old client</a></li>
 						</ul>
 
 						<div id="myTabContent" class="tab-content">
@@ -583,6 +584,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 								if ($dbc->query($updateinvoiceno) == TRUE && $dbc->query($updateinvoicetotal) == TRUE ){
 
+									//For Quote
+									$getquotedetails = "SELECT pm.fullname as 'pmfull', pm.email as 'pmemail', p.projectname as 'projectname',
+														d.projectcode as 'projectcode', l.languagedesc as 'languagedesc', d.startdate as 'startdate'
+														FROM projectdetails d JOIN project p on p.projectcode = d.projectcode JOIN projectmanager pm
+														on pm.managerid = d.managerid JOIN language_ref l on l.language = d.language where d.projectcode = '{$row2['code']}' ";
+									$quotedetails = mysqli_query($dbc, $getquotedetails);
+									$row9 = mysqli_fetch_array($quotedetails, MYSQL_ASSOC);
+
 									$mailer = new PHPmailer();
 									$mailer->isHTML(true);
 
@@ -602,52 +611,64 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 									$mailer -> Subject = "Quotation from Orange Translations";
 
-									$mailmessage = '<div>'.$_SESSION['newclient'].'<br>'.$_SESSION['clientemail'].'</div>	
+									$mailmessage = '<div style="float: right;">
+														<b>Orange Translations Ltd.</b><br>
+														7/F., Hong Kong Trade Centre<br>
+														161-7 Des Voeux Road Central<br>
+														Hong Kong<br>
+														36892487
+														Phone +852-5808-0576<br>
+														pm@orangetranslations.com<br> 
+														www.orangetranslations.com<br>
+													</div>
 
-													<h2>Quotation</h2>
+													<br><br><br><br><br><br><br><br>
 
-													<h4><u>Project Details</u></h4>
-													 
-													<p align="justify">Your translations will be performed by professional translators who are native speakers of the languages. All our translators have a college level degree and at least 3 years of translation experience. For your project we will assign translators who are able to produce professionally written texts suited for your target audience.As an option, we can have the translations reviewed and edited by a second translator (proofreader) to ensure the highest level of accuracy and editorial quality. We recommend this for any texts that will be published. 
-													 
-													We will be happy to provide you with the CVs of all translators who work on your projects before starting the translations. </p>
-													 
-													<h4><u>Translation Memory (TM) Technology</u></h4>
+													<h2 align = "center">Quote</h2>
 
-													<p align="justify">For your translation project we will use MemSource, a leading Translation Memory (TM) tool. It keeps track of and allows the reuse of text that is repetitive, both within the current projects and for future projects. This saves costs and time, as repeat text does not need to be translated over and over again. As your TM database grows over time, your savings increase with every project. Plus, TM technology ensures accurate and consistent translations throughout each project and over time.  
-													 
-													We will analyze each new file you send us against the existing TM database. We will only charge you for new texts. Any text that has already been translated previously will be deducted automatically from the cost. You do not need to mark up in your documents what is new and what is repetitive. Numbers are excluded from the word count unless they appear as part of a text segment.</p>
+													<hr>
+													<div style ="float:right;">
+													<b>Project Manager:</b><br>
+													'.$row9['pmfull'].'<br>
+													'.$row9['pmemail'].'<br>
+													</div>
 
-													<h4><u>Terminology Management</u></h4>
+													<b>For the attention of</b><br>
+													'.$_SESSION['newclient'].'<br>
+													'.$_SESSION['clientemail'].'<br>
+													<hr>
 
-													<p align="justify">We will create and maintain a term base which contains all industry terms, product names or any other words that should be kept consistent in every translation. Our Translation Memory (TM) system Memsource allows us to track the correct usage of these terms over time to ensure consistent wording. The term base is also an excellent tool for your in-country native speakers and subject matter experts to provide feedback regarding the technical accuracy of our translations. </p>
+													<br><br>
 
-													<h4><u>Pricing</u></h4>
+													<table width = 70% align = "center">
+													    <tr>
+													        <th align = left>Summary</th>
+													        <td align = right>'.$row9['projectname'].'</td>
+													    </tr>
+													    <tr>
+													        <th align = left>Your Reference Number</th>
+													        <td align = right>'.$row9['projectcode'].'</td>
+													    </tr>
+													    <tr>
+													        <th align = left>Language Pair</th>
+													        <td align = right>'.$row9['languagedesc'].'</td>
+													    </tr>
+														<tr>
+													        <th align = left>Start Date</th>
+													        <td align = right>'.$row9['startdate'].'</td>
+													    </tr>
+													</table>
 
-													<p align="justify">A minimum fee of Php 2,500.00 will be paid for small projects that has less than 2,500 words. For each word that exceeds the 2,500 word count, a rate of Php 8.00 will be added to the payment. The total payment for the project will be Php '.$total.'.00</p>
+													<br><br>
 
-													<h4><u>Delivery Format</u></h4>
+													<table width = 40% align = right>
+														<tr>
+															<th>TOTAL</th>
+															<th>'.$total.'</th>
+														</tr>
+														
+													</table>
 
-													<p align="justify">File format to be discussed. </p>
-													 
-													<h4><u>Delivery Time</u></h4>
-													 
-													<p align="justify">Approximately 3-4 days.</p>  
-													 
-													<h4><u>Quality Assurance</u></h4>
-
-													<p align="justify">Orange Translations has a stringent quality assurance process in place – covering both the linguistic quality and the quality of our business processes. This includes how we select and supervise our translators and editors as well as how we train and equip our project managers. We guarantee the quality of all of our translations. </p>
-													 
-													<h4><u>Compliance/Ethics</u></h4>
-													<p align="justify">To ensure a professional quality translation process we adhere to the European Quality Standard EN 15038 and the American Translators Associations Code of Ethics and Professional Practice. </p>
-													 
-													<h4><u>Payment Terms</u></h4>
-													<p align="justify">30 days after invoice date. Payment method to be discussed. Please note that if we bill through your office in Manila, we will have to add 12% VAT. If we bill through our office in the US or Hong Kong, no VAT applies. </p> 
-													 
-													<h4><u>Questions</u></h4>
-													<p align="justify">Feel free to contact us if you have any questions or would like to discuss your project in further detail. </p>  
-													 
-													<p>We are looking forward to working with you!</p>
 													';
 									$mailer -> Body = $mailmessage;
 								}
@@ -697,6 +718,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 								if ($dbc->query($updateinvoiceno) == TRUE && $dbc->query($updateinvoicetotal) == TRUE ){
 
+									//For Quote
+									$getquotedetails = "SELECT pm.fullname as 'pmfull', pm.email as 'pmemail', p.projectname as 'projectname',
+														d.projectcode as 'projectcode', l.languagedesc as 'languagedesc', d.startdate as 'startdate'
+														FROM projectdetails d JOIN project p on p.projectcode = d.projectcode JOIN projectmanager pm
+														on pm.managerid = d.managerid JOIN language_ref l on l.language = d.language where d.projectcode = '{$row2['code']}' ";
+									$quotedetails = mysqli_query($dbc, $getquotedetails);
+									$row10 = mysqli_fetch_array($quotedetails, MYSQL_ASSOC);
+
 									$mailer = new PHPmailer();
 									$mailer->isHTML(true);
 
@@ -716,52 +745,63 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 									$mailer -> Subject = "Quotation from Orange Translations";
 
-									$mailmessage = '<div>'.$clientdeet['fullname'].'<br>'.$clientdeet['email'].'</div>	
+									$mailmessage = '<div style="float: right;">
+														<b>Orange Translations Ltd.</b><br>
+														7/F., Hong Kong Trade Centre<br>
+														161-7 Des Voeux Road Central<br>
+														Hong Kong<br>
+														36892487
+														Phone +852-5808-0576<br>
+														pm@orangetranslations.com<br> 
+														www.orangetranslations.com<br>
+													</div>
 
-													<h2>Quotation</h2>
+													<br><br><br><br><br><br><br><br>
 
-													<h4><u>Project Details</u></h4>
-													 
-													<p align="justify">Your translations will be performed by professional translators who are native speakers of the languages. All our translators have a college level degree and at least 3 years of translation experience. For your project we will assign translators who are able to produce professionally written texts suited for your target audience.As an option, we can have the translations reviewed and edited by a second translator (proofreader) to ensure the highest level of accuracy and editorial quality. We recommend this for any texts that will be published. 
-													 
-													We will be happy to provide you with the CVs of all translators who work on your projects before starting the translations. </p>
-													 
-													<h4><u>Translation Memory (TM) Technology</u></h4>
+													<h2 align = "center">Quote</h2>
 
-													<p align="justify">For your translation project we will use MemSource, a leading Translation Memory (TM) tool. It keeps track of and allows the reuse of text that is repetitive, both within the current projects and for future projects. This saves costs and time, as repeat text does not need to be translated over and over again. As your TM database grows over time, your savings increase with every project. Plus, TM technology ensures accurate and consistent translations throughout each project and over time.  
-													 
-													We will analyze each new file you send us against the existing TM database. We will only charge you for new texts. Any text that has already been translated previously will be deducted automatically from the cost. You do not need to mark up in your documents what is new and what is repetitive. Numbers are excluded from the word count unless they appear as part of a text segment.</p>
+													<hr>
+													<div style ="float:right;">
+													<b>Project Manager:</b><br>
+													'.$row10['pmfull'].'<br>
+													'.$row10['pmemail'].'<br>
+													</div>
 
-													<h4><u>Terminology Management</u></h4>
+													<b>For the attention of</b><br>
+													'.$clientdeet['fullname'].'<br>
+													'.$clientdeet['email'].'<br>
+													<hr>
 
-													<p align="justify">We will create and maintain a term base which contains all industry terms, product names or any other words that should be kept consistent in every translation. Our Translation Memory (TM) system Memsource allows us to track the correct usage of these terms over time to ensure consistent wording. The term base is also an excellent tool for your in-country native speakers and subject matter experts to provide feedback regarding the technical accuracy of our translations. </p>
+													<br><br>
 
-													<h4><u>Pricing</u></h4>
+													<table width = 70% align = "center">
+													    <tr>
+													        <th align = left>Summary</th>
+													        <td align = right>'.$row10['projectname'].'</td>
+													    </tr>
+													    <tr>
+													        <th align = left>Your Reference Number</th>
+													        <td align = right>'.$row10['projectcode'].'</td>
+													    </tr>
+													    <tr>
+													        <th align = left>Language Pair</th>
+													        <td align = right>'.$row10['languagedesc'].'</td>
+													    </tr>
+														<tr>
+													        <th align = left>Start Date</th>
+													        <td align = right>'.$row10['startdate'].'</td>
+													    </tr>
+													</table>
 
-													<p align="justify">A minimum fee of Php 2,500.00 will be paid for small projects that has less than 2,500 words. For each word that exceeds the 2,500 word count, a rate of Php 8.00 will be added to the payment. The total payment for the project will be Php '.$total.'.00</p>
+													<br><br>
 
-													<h4><u>Delivery Format</u></h4>
-
-													<p align="justify">File format to be discussed. </p>
-													 
-													<h4><u>Delivery Time</u></h4>
-													 
-													<p align="justify">Approximately 3-4 days.</p>  
-													 
-													<h4><u>Quality Assurance</u></h4>
-
-													<p align="justify">Orange Translations has a stringent quality assurance process in place – covering both the linguistic quality and the quality of our business processes. This includes how we select and supervise our translators and editors as well as how we train and equip our project managers. We guarantee the quality of all of our translations. </p>
-													 
-													<h4><u>Compliance/Ethics</u></h4>
-													<p align="justify">To ensure a professional quality translation process we adhere to the European Quality Standard EN 15038 and the American Translators Associations Code of Ethics and Professional Practice. </p>
-													 
-													<h4><u>Payment Terms</u></h4>
-													<p align="justify">30 days after invoice date. Payment method to be discussed. Please note that if we bill through your office in Manila, we will have to add 12% VAT. If we bill through our office in the US or Hong Kong, no VAT applies. </p> 
-													 
-													<h4><u>Questions</u></h4>
-													<p align="justify">Feel free to contact us if you have any questions or would like to discuss your project in further detail. </p>  
-													 
-													<p>We are looking forward to working with you!</p>';
+													<table width = 40% align = right>
+														<tr>
+															<th>TOTAL</th>
+															<th>'.$total.'</th>
+														</tr>
+														
+													</table>';
 									$mailer -> Body = $mailmessage;
 								}
 							} 
