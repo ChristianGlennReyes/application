@@ -94,65 +94,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		    <div class="drop-men" >
 		        <ul class=" nav_1">
 		        	<li class="dropdown at-drop">
-		              <a href="#" class="dropdown-toggle dropdown-at " data-toggle="dropdown"><i class="fa fa-globe"></i> <span class="number">5</span></a>
-		              <ul class="dropdown-menu menu1 " role="menu">
-		                <li><a href="#">
-		               
-		                	<div class="user-new">
-		                	<p>New user registered</p>
-		                	<span>40 seconds ago</span>
-		                	</div>
-		                	<div class="user-new-left">
-		                
-		                	<i class="fa fa-user-plus"></i>
-		                	</div>
-		                	<div class="clearfix"> </div>
-		                	</a></li>
-		                <li><a href="#">
-		                	<div class="user-new">
-		                	<p>Someone special liked this</p>
-		                	<span>3 minutes ago</span>
-		                	</div>
-		                	<div class="user-new-left">
-		                
-		                	<i class="fa fa-heart"></i>
-		                	</div>
-		                	<div class="clearfix"> </div>
-		                </a></li>
-		                <li><a href="#">
-		                	<div class="user-new">
-		                	<p>John cancelled the event</p>
-		                	<span>4 hours ago</span>
-		                	</div>
-		                	<div class="user-new-left">
-		                
-		                	<i class="fa fa-times"></i>
-		                	</div>
-		                	<div class="clearfix"> </div>
-		                </a></li>
-		                <li><a href="#">
-		                	<div class="user-new">
-		                	<p>The server is status is stable</p>
-		                	<span>yesterday at 08:30am</span>
-		                	</div>
-		                	<div class="user-new-left">
-		                
-		                	<i class="fa fa-info"></i>
-		                	</div>
-		                	<div class="clearfix"> </div>
-		                </a></li>
-		                <li><a href="#">
-		                	<div class="user-new">
-		                	<p>New comments waiting approval</p>
-		                	<span>Last Week</span>
-		                	</div>
-		                	<div class="user-new-left">
-		                
-		                	<i class="fa fa-rss"></i>
-		                	</div>
-		                	<div class="clearfix"> </div>
-		                </a></li>
-		                <li><a href="#" class="view">View all messages</a></li>
+		              <a href="#" class="dropdown-toggle dropdown-at " data-toggle="dropdown" id="butt"><i class="fa fa-globe"></i><span class="number" id="number">0</span></a>
+		              <ul class="dropdown-menu menu1 " role="menu" id="notifs">
 		              </ul>
 		            </li>
 					<li class="dropdown">
@@ -554,6 +497,51 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script src="<?php echo base_url('assets/js/scripts.js')?>"></script>
 	<!--//scrolling js-->
 <!---->
+
+	<script>
+		get();
+
+		function get() {
+			$('#notifs').empty();
+
+			$.ajax({
+				type: 'POST',
+				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/GetOldNotifs',
+				success: function (data) {
+					for (i = 0; i < data.length; i++) {
+						$('#notifs').prepend('<li><a href="#"><div class="user-new"><p style="white-space: normal;">'+data[i]['notificationtext']+'</p><span>'+data[i]['date']+' at '+data[i]['time']+'</span></div><div class="user-new-left"></div><div class="clearfix"></div></a></li>');
+					}
+				}
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/GetNewNotifs',
+				success: function (data) {
+					for (i = 0; i < data.length; i++) {
+						$('#notifs').prepend('<li style="background: #ffe4cd;"><a href="#"><div class="user-new"><p style="white-space: normal;">'+data[i]['notificationtext']+'</p><span>'+data[i]['date']+' at '+data[i]['time']+'</span></div><div class="user-new-left"></div><div class="clearfix"></div></a></li>');
+					}
+					$('#number').empty();
+					$('#number').append(data.length);
+				}
+			});
+		}
+
+		$('#butt').on('click',function(){
+			$('#number').empty();
+			$('#number').append(0);
+			$.ajax({
+				type: 'POST',
+				url: 'http://localhost/OrangeTranslations/index.php/ProjectManager/SetNotifsSeen',	
+				success: function (data) {
+					
+				}
+			});
+		});
+		
+		var interval = 5000;
+		setInterval(get, interval);
+	</script>
 
 </body>
 </html>
