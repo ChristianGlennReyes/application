@@ -107,4 +107,23 @@ class Translator_model extends CI_model {
 		return $query->result_array();
 
 	}
+
+	public function getOldNotifications($id) {
+		$query = $this->db->select('time, date, notificationtext')->where(array('viewed' => 1, 'translatorid' => $id))->from('notifications')->get();
+		return $query->result_array();
+	}
+
+	public function getNewNotifications($id) {
+		$query = $this->db->select('time, date, notificationtext')->where(array('viewed' => 0, 'translatorid' => $id))->from('notifications')->get();
+		return $query->result_array();
+	}
+
+	public function getAllNotifications($id) {
+		$query = $this->db->select('time, date, notificationtext, viewed')->where(array('translatorid' => $id))->from('notifications')->get();
+		return $query->result_array();
+	}
+
+	public function updateNotifications($id) {
+		$this->db->where('translatorid', $id)->update("notifications", array('viewed' => 1));
+	}
 }

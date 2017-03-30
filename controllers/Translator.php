@@ -191,6 +191,32 @@ class Translator extends CI_Controller {
 		flush();
 		echo $file;
 	}
+
+	public function GetOldNotifs() {
+		header("Content-type: application/json");
+		$data = $this->Translator_model->GetOldNotifications($this->session->userdata('id'));
+
+		echo json_encode($data);
+	}
+
+	public function GetNewNotifs() {
+		header("Content-type: application/json");
+		$data = $this->Translator_model->GetNewNotifications($this->session->userdata('id'));
+
+		echo json_encode($data);
+	}
+
+	public function GetAllNotifs() {
+		header("Content-type: application/json");
+		$data = $this->Translator_model->GetAllNotifications($this->session->userdata('id'));
+
+		echo json_encode($data);
+	}
+
+	public function SetNotifsSeen() {
+		$this->Translator_model->updateNotifications($this->session->userdata('id'));
+		return true;
+	}
 }
 
 ?>
