@@ -165,9 +165,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  	<div class="grid-form">
 		<div class="grid-form1 col-md-12" >
 
-		<script language="javascript">
-		   function printPage(id) {
+		<script>
+			function printPage(id) {
 			    var html="<html>";
+			    html+="<head>";
+			    html+="<style type='text/css'>#noprint {display:none}    </style>";
+			    html+="<link rel='Stylesheet' type='text/css' href='css/print.css' media='print' />";
+			    html+="</head>";
 			    html+= document.getElementById(id).innerHTML;
 			    html+="</html>";
 			    var printWin = window.open('','','left=0,top=0,width=1,height=1,toolbar=0,scrollbars=0,status =0');
@@ -178,6 +182,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    printWin.close();
 			}
 		</script>
+
 			
 		<?php
 			$newmessage = NULL;
@@ -338,7 +343,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    		      						$purchaseorderdetails = mysqli_query($dbc, $getpurchaseorderdetails);
 			    		      						$row35 = mysqli_fetch_array($purchaseorderdetails, MYSQL_ASSOC);
 
-			    		      				echo 	'<div class="col-md-12">
+			    		      				echo 	'<div class="col-md-12" id="noprint">
 			    		      							<form method="post">';
 			    		      								$status = null;
 			    		      								if ($row35['purchaseorderstatus'] == 0){
@@ -349,13 +354,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			    		      						echo 	'Transaction Status: '.$status.'';
 			    		      								if ($status == "Unsettled") {
 			    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary"> Settle </button></p>';
-			    		      									//To be fixed
-			    		      									echo '<input type="button" onclick="printpage($purchase2);" value="Print" />';
+			    		      									
+			    		      									echo "<input type=\"button\" onclick=\"printPage('$purchase2');\" value=\"Print\" />";
 
 			    		      								} else {
 			    		      									echo '<p align="right"><button type="submit" name="settlePO" class="btn btn-primary" disabled> Settle </button></p>';
-			    		      									// To be fixed
-			    		      									echo '<input type="button" onclick="printpage($purchase2);" value="Print" />';
+			    		      									
+			    		      									echo "<input type=\"button\" onclick=\"printPage('$purchase2');\" value=\"Print\" />";
 			    		      								}	
 			    		      								
 			    		      						echo '<form>
@@ -397,6 +402,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					$delivery = mysqli_query($dbc, $getdelivery);
 					$row34 = mysqli_fetch_array($delivery, MYSQL_ASSOC);
 
+					$invoice2 = $invoice;
+
 					echo '<div class="modal fade" id="'.$invoice.'" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 							<div class="modal-dialog">
 								<div class="modal-content">
@@ -405,7 +412,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<h2 class="modal-title"><center></center></h2>
 									</div>
 									<div class="modal-body col-md-12">';
-										echo '<div style="float:right;font-size:50%">
+										echo '<div style="float:right;font-size:50%" class="'.$invoice2.'">
 												Orange Translations Ltd.<br>
 												7/F Hong Kong Trade Centre<br>
 												161 Des Voeux Road Central<br>
@@ -482,7 +489,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		    		      						$invoicedetails = mysqli_query($dbc, $getinvoicedetails);
 		    		      						$row36 = mysqli_fetch_array($invoicedetails, MYSQL_ASSOC);
 
-		    		      				echo 	'<div class="col-md-12">
+		    		      				echo 	'<div class="col-md-12" id="noprint">
 		    		      							<form method="post">';
 		    		      								$status = null;
 		    		      								if ($row36['invoicestatus'] == 0){
@@ -493,8 +500,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		    		      						echo 	'Transaction Status: '.$status.'';
 		    		      								if ($status == "Unsettled") {
 		    		      									echo '<p align="right"><button type="submit" name="settleInvoice" class="btn btn-primary"> Settle </button></p>';
+		    		      									
+		    		      									echo "<input type=\"button\" onclick=\"printPage('$invoice2');\" value=\"Print\" />";
 		    		      								} else {
 		    		      									echo '<p align="right"><button type="submit" name="settleInvoice" class="btn btn-primary" disabled> Settle </button></p>';
+		    		      									
+		    		      									echo "<input type=\"button\" onclick=\"printPage('$invoice2');\" value=\"Print\" />";
 		    		      								}
 		    		      								
 		    		      						echo '<form>
