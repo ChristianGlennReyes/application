@@ -59,4 +59,23 @@ class ProjectManager_model extends CI_model {
 		$query = $this->db->select('t.fullname as translator, count(t.fullname) as count')->from('translator as t')->where('p.projectstatus', 'closed')->where('pd.deadline >=', $startdate)->where('pd.deadline <=', $enddate)->join('projectdetails as pd', 't.translatorid = pd.translatorid', 'LEFT')->join('project as p', 'p.projectcode = pd.projectcode', 'LEFT')->join('client as c', 'pd.clientid = c.clientid', 'LEFT')->join('language_ref as lr', 'pd.language = lr.language', "LEFT")->group_by('translator')->get();
 		return $query->result_array();
 	}
+
+	public function getOldNotifications($id) {
+		$query = $this->db->select('time, date, notificationtext')->where(array('viewed' => 1, 'managerid' => $id))->from('notifications')->get();
+		return $query->result_array();
+	}
+
+	public function getNewNotifications($id) {
+		$query = $this->db->select('time, date, notificationtext')->where(array('viewed' => 0, 'managerid' => $id))->from('notifications')->get();
+		return $query->result_array();
+	}
+
+	public function getAllNotifications($id) {
+		$query = $this->db->select('time, date, notificationtext, viewed')->where(array('managerid' => $id))->from('notifications')->get();
+		return $query->result_array();
+	}
+
+	public function updateNotifications($id) {
+		$this->db->where('managerid', $id)->update("notifications", array('viewed' => 1));
+	}
 }

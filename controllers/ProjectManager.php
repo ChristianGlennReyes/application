@@ -57,6 +57,32 @@ class ProjectManager extends CI_Controller {
 		else redirect("Login");
 	}
 
+	public function GetOldNotifs() {
+		header("Content-type: application/json");
+		$data = $this->ProjectManager_model->GetOldNotifications($this->session->userdata('id'));
+
+		echo json_encode($data);
+	}
+
+	public function GetNewNotifs() {
+		header("Content-type: application/json");
+		$data = $this->ProjectManager_model->GetNewNotifications($this->session->userdata('id'));
+
+		echo json_encode($data);
+	}
+
+	public function GetAllNotifs() {
+		header("Content-type: application/json");
+		$data = $this->ProjectManager_model->GetAllNotifications($this->session->userdata('id'));
+
+		echo json_encode($data);
+	}
+
+	public function SetNotifsSeen() {
+		$this->ProjectManager_model->updateNotifications($this->session->userdata('id'));
+		return true;
+	}
+
 	public function PerformanceReport() {
 		if($this->input->post("startdate") && $this->input->post("enddate")) {
 			if($this->input->post("startdate") <= $this->input->post("enddate")) {
